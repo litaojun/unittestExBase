@@ -58,6 +58,7 @@ def getModulByabspath(path='',sign="load"):
     #加载绝对路径下的所有模块文件，格式["com\\bestv\\kafka\\kafkacon",]
     lsn = walk_absdir_modul_file(curpath,sign=sign,endstr=".py")
     a = map(lfunc,lsn)
+    print "lsn=",lsn
     #将(.com.bestv.kafka,.kafkacon)转换为(com.bestv.kafka.kafkacon,com.bestv.kafka)
     d = tuple([(x[1:]+y,[x[1:]]) for x,y in a])
     #将(com.bestv.kafka.kafkacon,com.bestv.kafka)转换为模块
