@@ -8,7 +8,7 @@ Created on 2017年7月9日
 import os
 from dynload import Dynload
 from fileOper import walk_absdir_modul_file
-from isSystemType import splict
+from isSystemType import splict,getPlatfromType
 
 #===============================================================================
 # getModul
@@ -61,7 +61,10 @@ def getModulByabspath(path='',sign="load"):
     print "lsn=",lsn
     print "a=",a
     #将(.com.bestv.kafka,.kafkacon)转换为(com.bestv.kafka.kafkacon,com.bestv.kafka)
-    d = tuple([(x[1:]+y,[x[1:]]) for x,y in a])
+    if getPlatfromType() == 1:
+       d = tuple([(x[1:]+y,[x[1:]]) for x,y in a ])
+    else:
+       d = tuple([(x[0:]+y,[x[0:]]) for x,y in a ])
     print "d=",d
     #将(com.bestv.kafka.kafkacon,com.bestv.kafka)转换为模块
     mdlist = map(nfunc,[a[0] for a in d],[a[1] for a in d])
