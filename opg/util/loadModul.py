@@ -8,6 +8,7 @@ Created on 2017年7月9日
 import os
 from dynload import Dynload
 from fileOper import walk_absdir_modul_file
+from isSystemType import splict
 
 #===============================================================================
 # getModul
@@ -17,10 +18,12 @@ from fileOper import walk_absdir_modul_file
 # return 返回相对path路径下py文件名包含"load"字符的所有模块
 # <module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\a\unittestExtend\com\tao\opg\util\dynload.pyc'>]
 #===============================================================================
+s = splict
+print "s=",s
 def getModul(path='../../../',sign="load"):
     #定义lambda函数，将com\\bestv\\kafka\\kafkacon转换为(.com.bestv.kafka,.kafkacon)
-    lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace("\\","."))) 
-    mfunc = lambda  x : x.replace("\\",".")
+    lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(s,"."))) 
+    mfunc = lambda  x : x.replace(s,".")
     #定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
     nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject()
     print os.getcwd()
@@ -44,8 +47,8 @@ def getModul(path='../../../',sign="load"):
 #===============================================================================
 def getModulByabspath(path='',sign="load"):
     #定义lambda函数，将com\\bestv\\kafka\\kafkacon转换为(.com.bestv.kafka,.kafkacon)
-    lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace("\\","."))) 
-    mfunc = lambda  x : x.replace("\\",".")
+    lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(s,"."))) 
+    mfunc = lambda  x : x.replace(s,".")
     #定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
     nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject()
     print os.getcwd()
