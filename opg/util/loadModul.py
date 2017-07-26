@@ -59,10 +59,13 @@ def getModulByabspath(path='',sign="load"):
     lsn = walk_absdir_modul_file(curpath,sign=sign,endstr=".py")
     a = map(lfunc,lsn)
     print "lsn=",lsn
+    print "a=",a
     #将(.com.bestv.kafka,.kafkacon)转换为(com.bestv.kafka.kafkacon,com.bestv.kafka)
     d = tuple([(x[1:]+y,[x[1:]]) for x,y in a])
+    print "d=",d
     #将(com.bestv.kafka.kafkacon,com.bestv.kafka)转换为模块
     mdlist = map(nfunc,[a[0] for a in d],[a[1] for a in d])
+    print "mdlist=",mdlist
     return mdlist 
     
     
