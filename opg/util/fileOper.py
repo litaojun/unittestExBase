@@ -7,8 +7,9 @@ Created on 2017年7月8日
 '''
 import os
 
-
-
+from isSystemType import splict
+s = splict
+print "s=",s
 #===============================================================================
 #dir  搜索目录
 #sign 文件标识，文件名包含sign
@@ -26,7 +27,7 @@ def walk_dir_test(dir,topdown=True,sign='case',endstr='.csv'):
         #root = root.replace(dir,"")
         for name in files:
           if name.find(sign)>0 and name.endswith(endstr) > 0 :
-              modelnm.append(root+"\\"+name)
+              modelnm.append(root+s+name)
     return modelnm
 
 
@@ -45,7 +46,7 @@ def walk_absdir_modul_file(dir,topdown=True,sign='con',endstr='.py'):
         root = root.replace(dir,"")
         for name in files:
           if name.find(sign)>0 and name.endswith(endstr) > 0 :
-              modelnm.append(root+"\\"+name.replace(endstr,""))
+              modelnm.append(root+s+name.replace(endstr,""))
     return modelnm
 
 
