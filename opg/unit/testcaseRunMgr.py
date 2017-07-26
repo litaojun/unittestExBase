@@ -14,7 +14,7 @@ from opg.util.testcaseTool import  creatTestCaseByPath
 from testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
 import os,sys
-
+from opg.util.isSystemType import splict,getPlatfromType
 def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     #moduls = getModul(path='../../../../',sign="Test")
     sys.path.append(moduleabspath)
@@ -37,7 +37,7 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
             else:
                 print "%s接口对于的类不存在" % infacename
     print "suites.tests=",suites._tests
-    HtmlFile = moduleabspath+"\\testresult\HTMLtemplate.html"
+    HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
     print "HtmlFile = %s" % HtmlFile
     print HtmlFile
     fp = file(HtmlFile, "wb")
