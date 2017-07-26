@@ -20,7 +20,7 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     sys.path.append(moduleabspath)
     print sys.path
     moduls = getModulByabspath(path=moduleabspath,sign="Test")
-    #print moduls
+    print moduls
     cls = loadTestClassFromModules(moduls)
     #print cls
     dictCls = tranListClassToDict(cls)
