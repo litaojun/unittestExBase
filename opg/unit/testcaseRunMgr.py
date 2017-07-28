@@ -22,11 +22,11 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     moduls = getModulByabspath(path=moduleabspath,sign="Test")
     print moduls
     cls = loadTestClassFromModules(moduls)
-    #print cls
+    print cls
     dictCls = tranListClassToDict(cls)
-    #print dictCls
+    print dictCls
     casedict = creatTestCaseByPath(path=moduleabspath)
-    #print casedict
+    print casedict
     suites = unittest.TestSuite()
     for casets in casedict:
         infaces = casets.keys()

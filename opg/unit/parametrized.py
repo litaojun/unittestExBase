@@ -31,7 +31,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
                      print "%s类不存在%s方法" % (testcase_klass.__name__,name)
         return suite
     def id(self):
-        return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[4])
+        return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[4]+"--"+self.param[3])
 #     def __repr__(self):
 #         return "<%s testMethod=%s>" % \
 #                (self.param[1], self.param[0])
