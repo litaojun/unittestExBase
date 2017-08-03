@@ -20,7 +20,6 @@ class ParametrizedTestCase(unittest.case.TestCase):
             subclass, passing them the parameter 'param'.
         """
         suite = unittest.TestSuite()
-        
         testnames = param.keys()
         for name in testnames:
             casels = param[name]
