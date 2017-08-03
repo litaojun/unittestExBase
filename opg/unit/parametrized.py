@@ -14,15 +14,18 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def __init__(self, methodName='runTest', param=None):
         super(ParametrizedTestCase, self).__init__(methodName)
         self.param = param
+    
+    
+
     @staticmethod
-    def parametrize(testcase_klass, param={}):
+    def parametrize(testcase_klass, params={}):
         """ Create a suite containing all tests taken from the given
             subclass, passing them the parameter 'param'.
         """
         suite = unittest.TestSuite()
-        testnames = param.keys()
+        testnames = params.keys()
         for name in testnames:
-            casels = param[name]
+            casels = params[name]
             for onecase in casels:
                  if hasattr(testcase_klass, name):
                      suite.addTest(testcase_klass(name,onecase))
