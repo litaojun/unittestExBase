@@ -726,7 +726,7 @@ class HTMLTestRunner(Template_mixin):
             if cls.__module__ == "__main__":
                 name = cls.__name__
             else:
-                #璇AME涓烘祴璇曟姤鍛婂浜庣殑绫伙紝鍏堜慨鏀逛负鎺ュ彛鍚嶇О2017-07-12
+                #该NAME为测试报告对于的类，先修改为接口名称2017-07-12
                 name = cls.__interfaceName__
                 #name = "%s.%s" % (cls.__module__, cls.__name__)
             doc = cls.__doc__ and cls.__doc__.split("\n")[0] or ""
@@ -760,8 +760,8 @@ class HTMLTestRunner(Template_mixin):
         # e.g. 'pt1.1', 'ft1.1', etc
         has_output = bool(o or e)
         tid = (n == 0 and 'p' or 'f') + 't%s.%s' % (cid+1,tid+1)
-        #t.id()鏈潵鍙杣nittest.case.TestCase.id()鏂规硶锛屼负鈥樼被.鏂规硶鈥�
-        #鐩墠鍦╬arametrized绫讳腑閲嶆柊id()鏂规硶锛岃繑鍥炩�樻帴鍙ｅ悕.鐢ㄤ緥ID鈥�
+        #t.id()本来取unittest.case.TestCase.id()方法，为'类.方法'
+        #在parametrized类中重载id()方法，返回'接口名.用例ID'
         #2017-7-12
         name = t.id().split('.')[-1]
         doc = t.shortDescription() or ""

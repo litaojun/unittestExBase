@@ -19,14 +19,19 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     #moduls = getModul(path='../../../../',sign="Test")
     sys.path.append(moduleabspath)
     print sys.path
+    #获取所有测试类模块
     moduls = getModulByabspath(path=moduleabspath,sign="Test")
-    print moduls
+    #print moduls
+    #重模块中提取所有测试类（（继承了ParametrizedTestCase））
     cls = loadTestClassFromModules(moduls)
-    print cls
+    #print cls
+    #将测试类（继承了ParametrizedTestCase）转换为DICT，其中键值为对应的接口名称
     dictCls = tranListClassToDict(cls)
     print dictCls
+    #通过文件路径获取用例数据
     casedict = creatTestCaseByPath(path=moduleabspath)
     print casedict
+    #new一个测试套件，通过测试数据和测试类组合成测试用例TestCase，加入到测试套件中
     suites = unittest.TestSuite()
     for casets in casedict:
         infaces = casets.keys()
@@ -41,6 +46,7 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     print "HtmlFile = %s" % HtmlFile
     print HtmlFile
     fp = file(HtmlFile, "wb")
+    #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"百度测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
     #unitresult = unittest.TextTestRunner(verbosity=2).run(suites)

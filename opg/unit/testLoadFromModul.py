@@ -25,7 +25,10 @@ def loadTestClassFromModule(module, use_load_tests=True):
         #if issubclass(obj, case.TestCase):c
                 tests = obj
     return tests
-
+#===============================================================================
+# 从模块中获取所有测试测试类（继承了ParametrizedTestCase）
+# 
+#===============================================================================
 def loadTestClassFromModules(modules):
     testClass = []
     for mod in modules:
@@ -34,6 +37,9 @@ def loadTestClassFromModules(modules):
            testClass.append(tcls)
     return testClass
 
+#===============================================================================
+# 将测试类（继承了ParametrizedTestCase）转换为DICT，其中键值为对应的接口名称
+#===============================================================================
 def tranListClassToDict(testClass=[]):    
     func = lambda x:(x.__interfaceName__,x) if hasattr(x, "__interfaceName__")  else None
     tuplea = map(func,testClass)

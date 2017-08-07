@@ -18,6 +18,10 @@ class ParametrizedTestCase(unittest.case.TestCase):
     
 
     @staticmethod
+    #===========================================================================
+    # parametrize
+    #根据测试类（继承了ParametrizedTestCase）和测试数据（从excel读取）构成TestCase
+    #===========================================================================
     def parametrize(testcase_klass, params={}):
         """ Create a suite containing all tests taken from the given
             subclass, passing them the parameter 'param'.
