@@ -10,7 +10,7 @@ from parametrized import ParametrizedTestCase
 from unittest.loader import TestLoader
 from unittest import case
 from opg.util.loadModul import getModul,getModulByabspath
-from opg.util.testcaseTool import  creatTestCaseByPath
+from opg.util.testcaseTool import  creatTestCaseDataByPath
 from testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
 import os,sys
@@ -29,7 +29,7 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     dictCls = tranListClassToDict(cls)
     print dictCls
     #通过文件路径获取用例数据
-    casedict = creatTestCaseByPath(path=moduleabspath)
+    casedict = creatTestCaseDataByPath(path=moduleabspath)
     print casedict
     #new一个测试套件，通过测试数据和测试类组合成测试用例TestCase，加入到测试套件中
     suites = unittest.TestSuite()

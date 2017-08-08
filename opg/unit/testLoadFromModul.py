@@ -8,7 +8,8 @@ Created on 2017��7��10��
 from unittest.loader import TestLoader
 from unittest import case
 from opg.util.loadModul import getModul
-from opg.util.testcaseTool import  creatTestCaseByPath
+
+from opg.util.testcaseTool import  creatTestCaseDataByPath
 #===============================================================================
 # loadTestClassFromModule
 # module ģ��<module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\unittestExtend\com\tao\opg\util\dynload.pyc'>
@@ -56,5 +57,5 @@ if __name__ == '__main__':
     print cls
     di = tranListClassToDict(cls)
     print di
-    casedict = creatTestCaseByPath()
+    casedict = creatTestCaseDataByPath()
     print casedict
