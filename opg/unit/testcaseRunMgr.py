@@ -10,7 +10,7 @@ from parametrized import ParametrizedTestCase
 from unittest.loader import TestLoader
 from unittest import case
 from opg.util.loadModul import getModul,getModulByabspath
-from opg.util.testcaseTool import  creatTestCaseDataByPath
+from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile
 from testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
 import os,sys
@@ -51,6 +51,20 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     unitresult = runner.run(suites)
     #unitresult = unittest.TextTestRunner(verbosity=2).run(suites)
     return unitresult
+
+def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
+    casedictcls = creatTestCaseDataByFile(casefilepath)
+    print casedictcls
+    suites = unittest.TestSuite()
+    suites.addTest(ParametrizedTestCase.parametrize(testclse, casedictcls[testclse.__interfaceName__]))
+    HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
+    print "HtmlFile = %s" % HtmlFile
+    print HtmlFile
+    fp = file(HtmlFile, "wb")
+    #new一个Runner
+    runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"百度测试报告", description=u"用例测试情况")
+    unitresult = runner.run(suites)
+
 if __name__ == '__main__':
     leng = len(sys.argv)
     curpath = None
