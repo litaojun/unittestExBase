@@ -14,8 +14,14 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def __init__(self, methodName='runTest', param=None):
         super(ParametrizedTestCase, self).__init__(methodName)
         self.param = param
-    
-    
+    def getInputData(self):
+        return self.param[5]
+    def getCaseid(self):
+        return self.param[0]
+    def getTestPoint(self):
+        return self.param[1]
+    def getExpectData(self):
+        return self.param[6]
 
     @staticmethod
     #===========================================================================
