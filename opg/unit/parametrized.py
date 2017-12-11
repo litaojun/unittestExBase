@@ -40,11 +40,11 @@ class ParametrizedTestCase(unittest.case.TestCase):
                  if hasattr(testcase_klass, name):
                      suite.addTest(testcase_klass(name,onecase))
                  else:
-                     print "%s类不存在%s方法" % (testcase_klass.__name__,name)
+                     print("%s类不存在%s方法" % (testcase_klass.__name__,name))
         return suite
     def id(self):
         return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[2])
-        #return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[4]+"--"+self.param[2])
+#     return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[4]+"--"+self.param[2])
 #     def __repr__(self):
 #         return "<%s testMethod=%s>" % \
 #                (self.param[1], self.param[0])
@@ -55,8 +55,10 @@ class ParametrizedTestCase(unittest.case.TestCase):
 #####################################################
 class TestOneZgr(ParametrizedTestCase):
     __interfaceName__ = "baomingzgr"
+#     def __init__(self,num):
+#         self.num = num
     def test_something(self):
-        print 'param =', self.param
+        #print 'param =', self.param
         self.assertEqual(1, 1)
 
     def test_something_else(self):
@@ -64,6 +66,6 @@ class TestOneZgr(ParametrizedTestCase):
 
 if __name__ == "__main__":
     suite = unittest.TestSuite()
-    suite.addTest(ParametrizedTestCase.parametrize(TestOneZgr, param=42))
-    suite.addTest(ParametrizedTestCase.parametrize(TestOneZgr, param=13))
+    suite.addTest(ParametrizedTestCase.parametrize(TestOneZgr, params={"test_something":[6,22,33]}))
+    suite.addTest(ParametrizedTestCase.parametrize(TestOneZgr, params={"test_something_else":[6,22,33]}))
     unittest.TextTestRunner(verbosity=2).run(suite)

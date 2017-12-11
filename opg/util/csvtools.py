@@ -7,7 +7,8 @@ Created on 2017年7月8日
 '''
 
 import csv,os
-from fileOper import walk_dir_test
+from .fileOper import walk_dir_test
+from .excelOper import excel_table_byindex
 casehear = ("caseid","interfaceName","testPoint","preConditions","operationSteps","testData","expectedResult","actualResult")
 
 #===============================================================================
@@ -29,6 +30,21 @@ casehear = ("caseid","interfaceName","testPoint","preConditions","operationSteps
 def csvReadToDict(filepath):
     with open(filepath) as csvfile:
          reader = csv.DictReader(csvfile)
+         rtdict = {}
+         for row in reader:
+             f = lambda x : row[x]
+             xcurl = map(f,casehear)
+             methodname = xcurl[4]
+             if not rtdict.has_key(methodname) :
+                 rtdict[methodname] = []
+             rtdict[methodname].append(xcurl)
+         return rtdict
+     
+def excelReadToDict(filepath):
+    #with open(filepath) as excelfile:
+         #reader = csv.DictReader(excelfile)
+         #print "filepath=%s" % filepath
+         reader = excel_table_byindex(filepath)
          rtdict = {}
          for row in reader:
              f = lambda x : row[x]
@@ -69,15 +85,15 @@ def a():
     
 if __name__ == '__main__':
     pathcase = os.path.abspath("../../../../"+"\\testcase")
-    print pathcase
+    #print pathcase
 #     
 #     casedict = csvReadToDict(filepath = pathcase + "\\" + "testcase.csv" )
 #     print casedict
     filepaths = walk_dir_test(pathcase)
-    print filepaths
+    #print filepaths
     func = lambda x: csvReadToDict(x)
     funcm = lambda x: dictToInfaceDict(x)
     casedictlist = map(func,filepaths)
-    print casedictlist
+    #print casedictlist
     x = map(funcm,casedictlist)
-    print x
+    #print x

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-Created on 2017��7��10��
+Created on 2017
 
 @author: li.taojun
 '''
@@ -13,7 +13,7 @@ from opg.util.testcaseTool import  creatTestCaseDataByPath
 #===============================================================================
 # loadTestClassFromModule
 # module ģ��<module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\unittestExtend\com\tao\opg\util\dynload.pyc'>
-# desc ��ָ��ģ���л�ȡcase.TestCase�������
+# desc case.TestCase
 # return 
 #===============================================================================
 def loadTestClassFromModule(module, use_load_tests=True):
@@ -52,10 +52,10 @@ def tranListClassToDict(testClass=[]):
 
 if __name__ == '__main__':
     moduls = getModul(path='../../../../',sign="t")
-    print moduls
+    #print moduls
     cls = loadTestClassFromModules(moduls)
-    print cls
+    #print cls
     di = tranListClassToDict(cls)
-    print di
+    #print di
     casedict = creatTestCaseDataByPath()
-    print casedict
+    #print casedict

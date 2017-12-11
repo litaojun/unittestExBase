@@ -54,4 +54,4 @@ splict = getfileopertr()
 if __name__ == '__main__':
     TestPlatform()
     UsePlatform()
-    print getPlatfromType()
+    #print getPlatfromType()

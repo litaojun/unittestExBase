@@ -6,11 +6,11 @@ Created on 2017年7月9日
 @author: ｌｉｔａｏｊｕｎ
 '''
 import os
-from fileOper import walk_dir_test
-from opg.util.csvtools import  csvReadToDict, dictToInfaceDict
-from isSystemType import splict,getPlatfromType
+from .fileOper import walk_dir_test
+from opg.util.csvtools import  csvReadToDict, dictToInfaceDict,excelReadToDict
+from .isSystemType import splict,getPlatfromType
+from .excelOper import excel_table_byindex
 s = splict
-print "s=",s
 #path  测试用例文件所在根目录
 #desc  读取相对路径path目录下的所有测试用例，并将测试用例转换为{"interfacename":{"method":[["caseid","interfaceName","testPoint","preConditions","operationSteps","testData","expectedResult","actualResult"][]...[]]}}格式
 def creatTestCaseDataByPath(path="../../../../"):
@@ -29,11 +29,12 @@ def creatTestCaseDataByFile(filepath="../../../../"):
     #pathcase = os.path.abspath(path+"\\"+"testcase")
     pathcase = filepath
     filepaths = walk_dir_test(pathcase)
-    func = lambda x: csvReadToDict(x)
+    #func = lambda x: csvReadToDict(x)
+    func = lambda x: excelReadToDict(x)
     funcm = lambda x: dictToInfaceDict(x)
     casedict = func(filepath)
     infaceDict = funcm(casedict)
     return infaceDict
 if __name__ == '__main__':
     casedict = creatTestCaseDataByPath()
-    print casedict
+    #print casedict

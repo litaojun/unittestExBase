@@ -6,10 +6,11 @@ Created on 2017年7月9日
 @author: ｌｉｔａｏｊｕｎ
 '''
 import os
-from dynload import Dynload
-from fileOper import walk_absdir_modul_file
-from isSystemType import splict,getPlatfromType
 
+from .dynload import Dynload
+from .fileOper import walk_absdir_modul_file
+from .isSystemType import splict,getPlatfromType
+#from isSystemType import splict,getPlatfromType
 #===============================================================================
 # getModul
 # path  相对当前目录
@@ -19,14 +20,14 @@ from isSystemType import splict,getPlatfromType
 # <module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\a\unittestExtend\com\tao\opg\util\dynload.pyc'>]
 #===============================================================================
 s = splict
-print "s=",s
+#print "s=",s
 def getModul(path='../../../',sign="load"):
     #定义lambda函数，将com\\bestv\\kafka\\kafkacon转换为(.com.bestv.kafka,.kafkacon)
     lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(s,"."))) 
     mfunc = lambda  x : x.replace(s,".")
     #定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
     nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject()
-    print os.getcwd()
+    #print os.getcwd()
     #通过相对路径获取绝对路径
     curpath =  os.path.abspath(path)
     #加载绝对路径下的所有模块文件，格式["com\\bestv\\kafka\\kafkacon",]
@@ -51,15 +52,15 @@ def getModulByabspath(path='',sign="load"):
     mfunc = lambda  x : x.replace(s,".")
     #定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
     nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject()
-    print os.getcwd()
+    #print os.getcwd()
     #通过相对路径获取绝对路径
     #curpath =  os.path.abspath(path)
     curpath = path
     #加载绝对路径下的所有模块文件，格式["com\\bestv\\kafka\\kafkacon",]
     lsn = walk_absdir_modul_file(curpath,sign=sign,endstr=".py")
     a = map(lfunc,lsn)
-    print "lsn=",lsn
-    print "a=",a
+    #print "lsn=",lsn
+    #print "a=",a
     #将(.com.bestv.kafka,.kafkacon)转换为(com.bestv.kafka.kafkacon,com.bestv.kafka)
     d = tuple([(x[1:]+y,[x[1:]]) for x,y in a ])
 #     if getPlatfromType() == 1:
@@ -69,10 +70,10 @@ def getModulByabspath(path='',sign="load"):
 #     print "d=",d
     #将(com.bestv.kafka.kafkacon,com.bestv.kafka)转换为模块
     mdlist = map(nfunc,[a[0] for a in d],[a[1] for a in d])
-    print "mdlist=",mdlist
+    #print "mdlist=",mdlist
     return mdlist 
     
     
 if __name__ == '__main__':
     moduls = getModul(path='../../../../',sign="ara")
-    print moduls
+    print(moduls)

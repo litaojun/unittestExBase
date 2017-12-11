@@ -7,9 +7,9 @@ Created on 2017年7月8日
 '''
 import os
 
-from isSystemType import splict
+from .isSystemType import splict
 s = splict
-print "s=",s
+# print("s=",s)
 #===============================================================================
 #dir  搜索目录
 #sign 文件标识，文件名包含sign
@@ -52,6 +52,6 @@ def walk_absdir_modul_file(dir,topdown=True,sign='con',endstr='.py'):
 
 if __name__ == '__main__':
     cspath = walk_dir_test("D:\\litaojun\\workspace\\a\\unittestExtend\\testcase")
-    print cspath
+    print(cspath)
     mouduls = walk_absdir_modul_file(dir='D:\\litaojun\\workspace\\jenkinsPython\\')
-    print mouduls
+    print(mouduls)

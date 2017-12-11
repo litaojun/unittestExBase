@@ -6,19 +6,19 @@ Created on 2017
 @author: li.taojun
 '''
 import unittest
-from parametrized import ParametrizedTestCase
+from .parametrized import ParametrizedTestCase
 from unittest.loader import TestLoader
 from unittest import case
 from opg.util.loadModul import getModul,getModulByabspath
 from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile
-from testLoadFromModul import loadTestClassFromModules,tranListClassToDict
+from .testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
 import os,sys
 from opg.util.isSystemType import splict,getPlatfromType
 def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     #moduls = getModul(path='../../../../',sign="Test")
     sys.path.append(moduleabspath)
-    print sys.path
+    print(sys.path)
     #获取所有测试类模块
     moduls = getModulByabspath(path=moduleabspath,sign="Test")
     #print moduls
@@ -27,10 +27,10 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     #print cls
     #将测试类（继承了ParametrizedTestCase）转换为DICT，其中键值为对应的接口名称
     dictCls = tranListClassToDict(cls)
-    print dictCls
+    #print dictCls
     #通过文件路径获取用例数据
     casedict = creatTestCaseDataByPath(path=moduleabspath)
-    print casedict
+    #print casedict
     #new一个测试套件，通过测试数据和测试类组合成测试用例TestCase，加入到测试套件中
     suites = unittest.TestSuite()
     for casets in casedict:
@@ -40,12 +40,12 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
                testclass = dictCls[infacename]
                suites.addTest(ParametrizedTestCase.parametrize(testclass, casets[infacename]))
             else:
-                print "%s接口对于的类不存在" % infacename
-    print "suites.tests=",suites._tests
+               print("%s接口对于的类不存在" % infacename)
+    #print "suites.tests=",suites._tests
     HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
-    print "HtmlFile = %s" % HtmlFile
-    print HtmlFile
-    fp = file(HtmlFile, "wb")
+    #print "HtmlFile = %s" % HtmlFile
+    #print HtmlFile
+    fp = open(HtmlFile, "wb")
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"百度测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
@@ -54,13 +54,13 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
     casedictcls = creatTestCaseDataByFile(casefilepath)
-    print casedictcls
+    #print casedictcls
     suites = unittest.TestSuite()
     suites.addTest(ParametrizedTestCase.parametrize(testclse, casedictcls[testclse.__interfaceName__]))
     HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
-    print "HtmlFile = %s" % HtmlFile
-    print HtmlFile
-    fp = file(HtmlFile, "wb")
+    #print "HtmlFile = %s" % HtmlFile
+    #print HtmlFile
+    fp = open(HtmlFile, "wb")
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"百度测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
@@ -70,9 +70,9 @@ if __name__ == '__main__':
     curpath = None
     if leng > 1:
        curpath = sys.argv[1]
-    print "curpath=",curpath
+    #print "curpath=",curpath
     if curpath is not None:
        testresult = runTest(moduleabspath = curpath)
     else:
         testresult = runTest()
-    print "testresult=",testresult
+    #print "testresult=",testresult
