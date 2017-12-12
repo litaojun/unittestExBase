@@ -8,7 +8,8 @@ http://blog.csdn.net/jasonwoolf/article/details/47979655
 
 import unittest
 class ParametrizedTestCase(unittest.case.TestCase):
-    """ TestCase classes that want to be parametrized should
+    """ 
+        TestCase classes that want to be parametrized should
         inherit from this class.
     """
     def __init__(self, methodName='runTest', param=None):
