@@ -35,6 +35,7 @@ class DbManager():
                 return results
     
     def insertData(self,sql_insert):
+        num = 0
         cur = self.conn.cursor()  
         #sql_insert ="""insert into user(id,username,password) values(4,'liu','1234')"""  
 
@@ -42,26 +43,31 @@ class DbManager():
             cur.execute(sql_insert)  
             #提交  
             self.conn.commit()  
+            num = cur.rowcount;
         except Exception as e:  
+            print(e)
             #错误回滚  
             self.conn.rollback()
             raise e
         finally:  
             #self.conn.close()
             pass
-    
+        return num
     def deleteData(self,sql_del):
+        num = 0
         try:  
             cur = self.conn.cursor() 
             cur.execute(sql_del)  #像sql语句传递参数  
             #提交  
             self.conn.commit()  
+            num = cur.rowcount
         except Exception as e:  
                 #错误回滚  
                 self.conn.rollback()   
         finally:  
                 #self.conn.close()
                 pass 
+        return num
                 
     def updateData(self,sql_update):
         try:  
@@ -75,8 +81,50 @@ class DbManager():
         finally:  
                 #self.conn.close()
                 pass 
+    
+    def initdata(self):
+        stuls = [
+                 "insert student(sname,sage,ssex) values('litaojun',31,1);",
+                 "insert student(sname,sage,ssex) values('chenming',32,1);",
+                 "insert student(sname,sage,ssex) values('youyou',30,1);",
+                 "insert student(sname,sage,ssex) values('guohui',28,0);"
+                ]      
+        tidls = ["insert teacher(tname) values('zhongming');",
+                 "insert teacher(tname) values('chennan');"]
+        coursels = ["insert course(cname,tid) VALUES('yuwen',1);",
+                    "insert course(cname,tid) VALUES('shuxue',2);",
+                   ]
+        scls = ["insert sc(sid,cid,score) values(1,1,80);",
+                "insert sc(sid,cid,score) values(2,1,40);",
+                "insert sc(sid,cid,score) values(3,1,69);",
+                "insert sc(sid,cid,score) values(4,1,99);",
+                "insert sc(sid,cid,score) values(1,2,79);",
+                "insert sc(sid,cid,score) values(2,2,88);",
+                "insert sc(sid,cid,score) values(3,2,67);",
+                "insert sc(sid,cid,score) values(4,2,55);"]
+        #dbtest = DbManager()
+        f = lambda x : self.insertData(x)
+        a = map(f,stuls)
+        print(list(a))
+        b = map(f,tidls)
+        print(list(b))
+        c = map(f,coursels)
+        print(list(c))
+        d = map(f,scls)
+        print(list(d))
+        
+    @staticmethod
+    def a(self):
+        sqlinsert = 'insert into test ( channel, subject, content, message_type) VALUES (3,4,5,6)'
+        sqldel = 'delete t.* from test t where t.mid=%d'
+        sqlquery = 'select * from test;'
+        dbtest = DbManager()
+        dbtest.insertData(sql_insert = sqlinsert)
+        dbtest.deleteData(sql_del= sqldel % 1)
+        res = dbtest.queryAll(sql = sqlquery)
+        print(res)
 if __name__ == '__main__':
-    dbtest = DbManager()
-    dbtest.insertData(sql_insert = 'insert into test (mid, channel, subject, content, message_type) VALUES (2,3,4,5,6)')
-    res = dbtest.queryAll(sql = 'select * from test;')
-    print(res)
+    sqlstr = "delete c.* from course c where EXISTS(select 1 from teacher t where t.tid = c.tid and t.tname = 'chennan');"
+    db = DbManager()
+    num = db.deleteData(sql_del = sqlstr)
+    print(str(num))
