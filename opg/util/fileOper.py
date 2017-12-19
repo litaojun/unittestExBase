@@ -20,7 +20,7 @@ s = splict
 # 'D:\\litaojun\\workspace\\a\\unittestExtend\\testcase\\admin\\shangpin\\testcase-shangpin.csv' ]
 # 
 #===============================================================================
-def walk_dir_test(dir,topdown=True,sign='case',endstr='.csv'):
+def walk_dir_test(dir,topdown=True,sign='case',endstr='.xlsx'):
     modelnm = []
     ts = os.walk(dir, topdown)
     for root, dirs, files in ts:

@@ -16,12 +16,13 @@ s = splict
 def creatTestCaseDataByPath(path="../../../../"):
     #获取相对path所在的绝对路径
     #pathcase = os.path.abspath(path+"\\"+"testcase")
-    pathcase = path+s+"testcase"
+    pathcase = path+s+"uoptestcase"
     filepaths = walk_dir_test(pathcase)
-    func = lambda x: csvReadToDict(x)
+    #func = lambda x: csvReadToDict(x)
+    func = lambda x: excelReadToDict(x)
     funcm = lambda x: dictToInfaceDict(x)
-    casedictlist = map(func,filepaths)
-    infaceDict = map(funcm,casedictlist)
+    casedictlist = list(map(func,filepaths))
+    infaceDict = list(map(funcm,casedictlist))
     return infaceDict
 
 def creatTestCaseDataByFile(filepath="../../../../"):

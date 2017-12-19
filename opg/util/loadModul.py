@@ -69,7 +69,7 @@ def getModulByabspath(path='',sign="load"):
 #        d = tuple([(x[0:]+y,[x[0:]]) for x,y in a ])
 #     print "d=",d
     #将(com.bestv.kafka.kafkacon,com.bestv.kafka)转换为模块
-    mdlist = map(nfunc,[a[0] for a in d],[a[1] for a in d])
+    mdlist = list(map(nfunc,[a[0] for a in d],[a[1] for a in d]))
     #print "mdlist=",mdlist
     return mdlist 
     

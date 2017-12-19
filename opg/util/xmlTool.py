@@ -20,7 +20,7 @@ class Xml_Parser(object):
               opertype = sqlnode.find('opertype').text   #子节点下节点rank的值 
               sql = sqlnode.find('sql').text   #子节点下节点rank的值 
               #name = country.get('name')      #子节点下属性name的值 
-              yield (name,opertype,sql) 
+              yield (name,opertype,sql)
         
     def parser_method(self, xmlCont, fileName):
         tree = ET.fromstring(str(xmlCont))

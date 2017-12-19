@@ -8,6 +8,7 @@ Created on 2017
 from unittest.loader import TestLoader
 from unittest import case
 from opg.util.loadModul import getModul
+from opg.unit.parametrized import ParametrizedTestCase
 
 from opg.util.testcaseTool import  creatTestCaseDataByPath
 #===============================================================================
@@ -22,7 +23,9 @@ def loadTestClassFromModule(module, use_load_tests=True):
     #print dir(module)
     for name in dir(module):
         obj = getattr(module, name)
-        if isinstance(obj, type) and issubclass(obj, case.TestCase):
+#         print(str(ParametrizedTestCase))
+#         print(str(obj))
+        if isinstance(obj, type) and issubclass(obj, ParametrizedTestCase) and str(obj) != str(ParametrizedTestCase):
         #if issubclass(obj, case.TestCase):c
                 tests = obj
     return tests
@@ -51,11 +54,15 @@ def tranListClassToDict(testClass=[]):
     return di
 
 if __name__ == '__main__':
-    moduls = getModul(path='../../../../',sign="t")
-    #print moduls
-    cls = loadTestClassFromModules(moduls)
-    #print cls
-    di = tranListClassToDict(cls)
-    #print di
-    casedict = creatTestCaseDataByPath()
-    #print casedict
+#     moduls = getModul(path='../../../../',sign="t")
+#     #print moduls
+#     cls = loadTestClassFromModules(moduls)
+#     #print cls
+#     di = tranListClassToDict(cls)
+#     #print di
+#     casedict = creatTestCaseDataByPath()
+#     #print casedict
+      a = ParametrizedTestCase()
+      print(type(a))
+      print(type(ParametrizedTestCase))
+      print(str(ParametrizedTestCase))

@@ -48,9 +48,10 @@ def excelReadToDict(filepath):
          rtdict = {}
          for row in reader:
              f = lambda x : row[x]
-             xcurl = map(f,casehear)
+             xcurl = list(map(f,casehear))
              methodname = xcurl[4]
-             if not rtdict.has_key(methodname) :
+             #if not rtdict.has_key(methodname) :
+             if not methodname in rtdict:
                  rtdict[methodname] = []
              rtdict[methodname].append(xcurl)
          return rtdict
@@ -75,7 +76,8 @@ def excelReadToDict(filepath):
 #===============================================================================
 def dictToInfaceDict(casedict = {}):
     infaceDict = {}
-    valuex = casedict.values()[0][0][1]
+    valueslist = list(casedict.values())
+    valuex = valueslist[0][0][1]
     infaceDict[valuex] = casedict
     return infaceDict
 
