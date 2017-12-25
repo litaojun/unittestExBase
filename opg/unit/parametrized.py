@@ -17,12 +17,18 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.param = param
     def getInputData(self):
         return self.param[5]
+    
     def getCaseid(self):
         return self.param[0]
+    
     def getTestPoint(self):
         return self.param[1]
+    
     def getExpectData(self):
         return self.param[6]
+    
+    def getPreConditions(self):
+        return self.param[3]
 
     @staticmethod
     #===========================================================================

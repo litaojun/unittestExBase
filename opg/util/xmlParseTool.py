@@ -6,11 +6,16 @@ Created on 2017年12月17日
 @author: ｌｉｔａｏｊｕｎ
 '''
 import xml.etree.ElementTree as ET
-class Xml_Parser(object):
-
+class Xml_Parserfile(object):
+    '''
+       xml 文件解析
+    '''
     def __init__(self,filename):
+        '''
+               filename ： 要解析xml文件路径
+        '''
         self.filename = filename
-
+  
     def parserSql(self):
         tree = ET.parse(self.filename) #打开xml文档 
         root = tree.getroot()
@@ -31,14 +36,13 @@ class Xml_Parser(object):
                 entryNum = child.find('AbbrNo').text
                 entryName = child.find('Name').text
                 faxNumber = child.find('./SendConfiguration/AddressInfo/FaxMode/PhoneNumber')
-
                 outputFile = open('result - %s' % fileName, 'a')
                 outputFile.write("%s: %s , Type: %s , Number: %s  \n\n" % (entryNum, entryName, sendMode.text, faxNumber.text))
                 outputFile.close()
 
         print("Parsed " + fileName)  
 if __name__ == '__main__':
-    xmll = Xml_Parser(filename = "D:\\litaojun\\workspace\\uopinterfacetest\\bigwheel.xml")
+    xmll = Xml_Parserfile(filename = "D:\\litaojun\\workspace\\uopweixinInterface\\bigwheel.xml")
     for x in xmll.parserSql():
         print(x)
     
