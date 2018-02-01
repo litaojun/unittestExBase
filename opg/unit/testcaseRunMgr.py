@@ -15,6 +15,7 @@ from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToD
 from opg.unit import HTMLTestRunner
 import os,sys
 from opg.util.isSystemType import splict,getPlatfromType
+
 def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     #moduls = getModul(path='../../../../',sign="Test")
     sys.path.append(moduleabspath)
@@ -57,24 +58,16 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse
     casedictcls = creatTestCaseDataByFile(casefilepath)
     #print casedictcls
     suites = unittest.TestSuite()
+    print(casedictcls)
+    casedict = casedictcls[testclse.__interfaceName__]
     suites.addTest(ParametrizedTestCase.parametrize(testclse, casedictcls[testclse.__interfaceName__]))
     HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
     #print "HtmlFile = %s" % HtmlFile
     #print HtmlFile
     fp = open(HtmlFile, "wb")
     #new一个Runner
-    runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"百度测试报告", description=u"用例测试情况")
+    runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
 
 if __name__ == '__main__':
-#     leng = len(sys.argv)
-#     curpath = None
-#     if leng > 1:
-#        curpath = sys.argv[1]
-#     #print "curpath=",curpath
-#     if curpath is not None:
-#        testresult = runTest(moduleabspath = curpath)
-#     else:
-#         testresult = runTest()
-#     #print "testresult=",testresult
     runTest("D:\\litaojun\\workspace\\uopweixinInterface")

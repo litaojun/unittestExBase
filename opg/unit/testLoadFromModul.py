@@ -9,7 +9,7 @@ from unittest.loader import TestLoader
 from unittest import case
 from opg.util.loadModul import getModul
 from opg.unit.parametrized import ParametrizedTestCase
-
+from inspect import isfunction
 from opg.util.testcaseTool import  creatTestCaseDataByPath
 #===============================================================================
 # loadTestClassFromModule
@@ -25,7 +25,7 @@ def loadTestClassFromModule(module, use_load_tests=True):
         obj = getattr(module, name)
 #         print(str(ParametrizedTestCase))
 #         print(str(obj))
-        if isinstance(obj, type) and issubclass(obj, ParametrizedTestCase) and str(obj) != str(ParametrizedTestCase):
+        if isinstance(obj, type) and issubclass(obj, ParametrizedTestCase) and str(obj) != str(ParametrizedTestCase) and str(obj) != "<class 'uopweixin.util.parametrizedCase.ParametrizedCase'>":
         #if issubclass(obj, case.TestCase):c
                 tests = obj
     return tests
@@ -53,6 +53,21 @@ def tranListClassToDict(testClass=[]):
           di[t[0]] = t[1]
     return di
 
+def loadFunFromObject(obj = None):
+     funls = []
+     for name in dir(obj):
+       objname = getattr(obj, name)
+       if isfunction(objname) : 
+         funls.append(objname)
+     return funls
+   
+def filterFunByDecoratorName(funls = [],decoratorName = "__unittest_skip__"):
+    decoratorls = []
+    for fun in funls :
+      if getattr(fun, decoratorName, False) is not None:
+        decoratorls.append(fun)
+        
+         
 if __name__ == '__main__':
 #     moduls = getModul(path='../../../../',sign="t")
 #     #print moduls

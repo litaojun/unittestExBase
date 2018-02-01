@@ -8,26 +8,35 @@ http://blog.csdn.net/MemoryD/article/details/74995651
 import pymysql 
 
 class DbManager():
+    sign = True
+    conn = None
     def __init__(self,
-                   host="192.168.0.103",
-                   user="root",
-                   password="123456",
-                   dbname="test",
-                   port=3306):
-          self.conn= pymysql.connect(host,user,  password,dbname,port,connect_timeout=100,write_timeout=100)
+                 host="192.168.0.103",
+                 user="root",
+                 password="123456",
+                 dbname="test",
+                 port=3306):
+          DbManager.initConn(host,
+                             user,
+                             password,
+                             dbname,
+                             port)
+          #self.conn= pymysql.connect(host,user,  password,dbname,port,connect_timeout=100,write_timeout=100)
+          self.conn  = DbManager.getDbManager()
+          
+    @staticmethod
+    def initConn(host,user,password,dbname,port):
+        if DbManager.sign:
+           DbManager.conn= pymysql.connect(host,user,  password,dbname,port,connect_timeout=100,write_timeout=100)
+           DbManager.sign = False
+           
     def queryAll(self,sql,param=None): 
           results = None 
           try:  
             cur =self.conn.cursor() 
             cur.execute(sql)    #执行sql语句  
             results = cur.fetchall()    #获取查询的所有记录  
-#             print("id","name","password")  
-#             #遍历结果   
-#             for row in results :  
-#                 id = row[0]  
-#                 name = row[1]  
-#                 password = row[2]  
-#                 print(id,name,password)  
+            self.conn.commit()
           except Exception as e:  
                 raise e  
           finally:  
@@ -80,7 +89,7 @@ class DbManager():
                 self.conn.rollback()   
         finally:  
                 #self.conn.close()
-                pass 
+                pass
     
     def initdata(self):
         stuls = [
@@ -113,6 +122,10 @@ class DbManager():
         d = map(f,scls)
         print(list(d))
         
+    @staticmethod
+    def getDbManager():
+        return DbManager.conn
+    
     @staticmethod
     def a(self):
         sqlinsert = 'insert into test ( channel, subject, content, message_type) VALUES (3,4,5,6)'

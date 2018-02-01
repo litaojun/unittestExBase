@@ -7,6 +7,7 @@ http://blog.csdn.net/jasonwoolf/article/details/47979655
 '''
 
 import unittest
+# from uopweixin.register.userRegService import UserRegisterService
 class ParametrizedTestCase(unittest.case.TestCase):
     """ 
         TestCase classes that want to be parametrized should
@@ -15,20 +16,64 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def __init__(self, methodName='runTest', param=None):
         super(ParametrizedTestCase, self).__init__(methodName)
         self.param = param
+        self.myservice = None
+        
+    def setService(self,myservice):
+        self.myservice = myservice
+        
+    def setUp(self):
+#           #后期抽奖前的个人总积分
+#           self.preuserTotalPoint = self.personalCenterService.getPersonalSign()
+          predata = self.getPreConditions()
+          if predata is not None:
+              dbsqlls = [sql for sql in predata if not sql.startswith("interface")]
+              interfacels = [infacename for infacename in predata if infacename.startswith("interface")]
+              self.myservice.handlingDb(dbsqlls)
+              self.myservice.handlingInterface(interfacels)
+              
+    def tearDown(self):
+          predata = self.getPreConditions()
+          f = lambda x :  self.cleandata[x] if x in self.cleandata  else None
+          if predata is not None :
+                prels = list(map(f,predata))
+                self.myservice.handlingDb(prels)
+    
+    def setCleanData(self,cleandata):
+        self.cleandata = cleandata
+    
     def getInputData(self):
-        return self.param[5]
+        data = self.param[5]
+        itemdata = data.split("\n")
+        jsonstr = "{"+",".join(itemdata) + "}"
+        dicdata =  eval(jsonstr)
+#         if "memberId" in dicdata:
+#             if len(dicdata['memberId']) == 11:
+#                    dicdata['memberId'] = UserRegisterService(dicdata['memberId'],dicdata['openid']).getMemberidByPhone()
+#                    if dicdata['memberId']  is None:
+#                       self.assertFalse(1==1, "memberid为空")
+        return dicdata
     
     def getCaseid(self):
         return self.param[0]
     
     def getTestPoint(self):
-        return self.param[1]
+        return self.param[2]
     
     def getExpectData(self):
-        return self.param[6]
+        itemdata = []
+        data = self.param[6]
+        if data is not None and data != "":
+               itemdata = data.split("\n")
+        f = lambda x : x.split("=")[1]
+        lsret = list(map(f,itemdata))
+        return lsret
     
     def getPreConditions(self):
-        return self.param[3]
+        itemdata = None
+        data = self.param[3]
+        if data is not None and data != "":
+           itemdata = data.split("\n")
+        return itemdata
 
     @staticmethod
     #===========================================================================
