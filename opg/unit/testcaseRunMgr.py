@@ -7,13 +7,11 @@ Created on 2017
 '''
 import unittest
 from opg.unit.parametrized import ParametrizedTestCase
-from unittest.loader import TestLoader
-from unittest import case
 from opg.util.loadModul import getModul,getModulByabspath
 from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile
 from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
-import os,sys
+import sys
 from opg.util.isSystemType import splict,getPlatfromType
 
 def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
@@ -61,7 +59,7 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse
     print(casedictcls)
     casedict = casedictcls[testclse.__interfaceName__]
     suites.addTest(ParametrizedTestCase.parametrize(testclse, casedictcls[testclse.__interfaceName__]))
-    HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
+    HtmlFile = moduleabspath + splict + "testresult" + splict + "HTMLtemplate.html"
     #print "HtmlFile = %s" % HtmlFile
     #print HtmlFile
     fp = open(HtmlFile, "wb")
