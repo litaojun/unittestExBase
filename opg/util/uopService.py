@@ -42,9 +42,9 @@ class UopService(object):
                     print("curdoc"+str(curdoc))
                     sign = curdoc.split("\n")[1].strip()
                     if sign.startswith("Sign"):
-                            funSign = sign.split(":")[1]
-                            print("funSign = %s" % funSign)
-                            self.ifacedict[funSign] = funObj
+                       funSign = sign.split(":")[1]
+                       print("funSign = %s" % funSign)
+                       self.ifacedict[funSign] = funObj
 
     def initDbOperator(self):
         if self.filename is not None and self.filename != "" :
