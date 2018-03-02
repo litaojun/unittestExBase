@@ -5,7 +5,6 @@ Created on
 http://blog.csdn.net/jasonwoolf/article/details/47979655
 @author: li.taojun
 '''
-
 import unittest
 # from uopweixin.register.userRegService import UserRegisterService
 class ParametrizedTestCase(unittest.case.TestCase):
@@ -20,6 +19,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
         
     def setService(self,myservice):
         self.myservice = myservice
+        self.myservice.initInterfaceData()
         
     def setUp(self):
 #           #后期抽奖前的个人总积分
@@ -94,6 +94,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
                  else:
                      print("%s类不存在%s方法" % (testcase_klass.__name__,name))
         return suite
+
     def id(self):
         return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[2])
 #     return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[4]+"--"+self.param[2])

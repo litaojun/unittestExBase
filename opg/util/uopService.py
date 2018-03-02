@@ -8,6 +8,20 @@ import os
 from opg.util.xmlParseTool  import Xml_Parserfile
 from opg.util.dbtools import DbManager
 from inspect import isfunction,ismethod
+import time,functools
+def decorator(param):
+    def _decorator(fun):
+        if not isinstance(fun, type):
+            @functools.wraps(fun)
+            def wrapper(*args, **kwargs):
+                start = time.time()
+                fun(*args, **kwargs)
+                runtime = time.time() - start
+            wrapper.__decorator__ = True
+            wrapper.__param__ = param
+        return wrapper
+    return _decorator
+
 class UopService(object):
     """
 
@@ -45,6 +59,17 @@ class UopService(object):
                        funSign = sign.split(":")[1]
                        print("funSign = %s" % funSign)
                        self.ifacedict[funSign] = funObj
+
+    def initInterfaceData(self):
+        a = dir(self)
+        print("a=" + str(a))
+        for name in dir(self):
+            funObj = getattr(self, name)
+            if ismethod(funObj):
+                signDec = getattr(funObj, "__decorator__",False)
+                signName = getattr(funObj, "__param__", False)
+                if signDec :
+                    self.ifacedict[signName] = funObj
 
     def initDbOperator(self):
         if self.filename is not None and self.filename != "" :
