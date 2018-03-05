@@ -20,11 +20,15 @@ class Xml_Parserfile(object):
         tree = ET.parse(self.filename) #打开xml文档 
         root = tree.getroot()
         #root = ET.fromstring(str(self.filename)) #从字符串传递xml
-        for sqlnode in root.findall('mysql'): #找到root节点下的所有country节点 
-              name = sqlnode.find('name').text   #子节点下节点rank的值 
-              opertype = sqlnode.find('opertype').text   #子节点下节点rank的值 
-              sql = sqlnode.find('sql').text   #子节点下节点rank的值 
-              yield (name,opertype,sql)
+        for sqlnode in root.findall('mysql'): #找到root节点下的所有country节点
+              name = sqlnode.find('name').text   #子节点下节点rank的值
+              opertype = sqlnode.find('opertype').text   #子节点下节点rank的值
+              sql = sqlnode.find('sql').text   #子节点下节点rank的值
+              townname  = None
+              townnameObj =  sqlnode.find('townname')
+              if townnameObj is not None:
+                  townname = townnameObj.text
+              yield (name,opertype,sql,townname)
         
     def parser_method(self, xmlCont, fileName):
         tree = ET.fromstring(str(xmlCont))
