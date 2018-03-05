@@ -23,7 +23,6 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     print("moduls="+str(list(moduls)))
     #重模块中提取所有测试类（（继承了ParametrizedTestCase））
     cls = loadTestClassFromModules(moduls)
-    print("cls="+str(cls))
     #将测试类（继承了ParametrizedTestCase）转换为DICT，其中键值为对应的接口名称
     dictCls = tranListClassToDict(cls)
     print(str(dictCls))

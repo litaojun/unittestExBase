@@ -46,8 +46,6 @@ class UopService(object):
         # self.initInterfaceDict()
 
     def initInterfaceDict(self):
-        a = dir(self)
-        print("a="+str(a))
         for name in dir(self):
             funObj = getattr(self, name)
             if ismethod(funObj)  :
@@ -61,8 +59,6 @@ class UopService(object):
                        self.ifacedict[funSign] = funObj
 
     def initInterfaceData(self):
-        a = dir(self)
-        print("a=" + str(a))
         for name in dir(self):
             funObj = getattr(self, name)
             if ismethod(funObj):
@@ -77,7 +73,7 @@ class UopService(object):
             # cwdps = os.path.join(os.getcwd())
             # xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd())), "uopdb", "weixin",
             #                           self.module, self.filename)
-            xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "../../..")), "uopdb", "weixin",
+            xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "../..")), "uopdb", "weixin",
                                       self.module, self.filename)
             xmlsqlfile = Xml_Parserfile(filename = xmlsqlpath)
             itsql = xmlsqlfile.parserSql()

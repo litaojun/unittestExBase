@@ -13,7 +13,7 @@ from inspect import isfunction
 from opg.util.testcaseTool import  creatTestCaseDataByPath
 #===============================================================================
 # loadTestClassFromModule
-# module ģ��<module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\unittestExtend\com\tao\opg\util\dynload.pyc'>
+# module <module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\unittestExtend\com\tao\opg\util\dynload.pyc'>
 # desc case.TestCase
 # return 
 #===============================================================================

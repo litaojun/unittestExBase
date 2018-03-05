@@ -5,8 +5,7 @@ Created on 2017年12月16日
 http://blog.csdn.net/MemoryD/article/details/74995651
 @author: ｌｉｔａｏｊｕｎ
 '''
-import pymysql 
-
+import pymysql
 class DbManager():
     sign = True
     conn = None
@@ -136,6 +135,7 @@ class DbManager():
         dbtest.deleteData(sql_del= sqldel % 1)
         res = dbtest.queryAll(sql = sqlquery)
         print(res)
+
 if __name__ == '__main__':
     sqlstr = "delete t.* from t_raffle_result_address t where EXISTS(select 1 from     t_raffle_result f where    t.RESULT_ID = f.id and f.MEMBER_ID = 'ab4d6667-e04c-447d-85a1-c78e9b3e42fe' and f.ACTIVITIES_ID ='1a1c0272-769a-44b1-9cc3-1b4163f537a5');"
     db = DbManager(host="uop-uat-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",user="root",password="Bestv001!",dbname="ltjtest",port=3306)
