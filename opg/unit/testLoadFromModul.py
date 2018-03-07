@@ -23,10 +23,7 @@ def loadTestClassFromModule(module, use_load_tests=True):
     #print dir(module)
     for name in dir(module):
         obj = getattr(module, name)
-#         print(str(ParametrizedTestCase))
-#         print(str(obj))
         if isinstance(obj, type) and issubclass(obj, ParametrizedTestCase) and str(obj) != str(ParametrizedTestCase) and str(obj) != "<class 'uopweixin.util.parametrizedCase.ParametrizedCase'>":
-        #if issubclass(obj, case.TestCase):c
                 tests = obj
     return tests
 #===============================================================================
