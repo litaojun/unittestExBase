@@ -66,5 +66,29 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
 
+def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,caseids = [],moduleabspath=""):
+    """
+    :param casefilepath: 用例路径
+    :param testclse:测试类
+    :param caseid:用例ID
+    :param moduleabspath:模块路径
+    :return:
+    """
+    casedictcls = creatTestCaseDataByFile(casefilepath)
+    #print casedictcls
+    suites = unittest.TestSuite()
+    #print(casedictcls)
+    casedict = casedictcls[testclse.__interfaceName__]
+    clsSuites = ParametrizedTestCase.parametrize(testclse, casedictcls[testclse.__interfaceName__])
+    for curcase in clsSuites:
+        curcaseid = curcase.getCaseid()
+        if curcaseid in caseids:
+            suites.addTest(curcase)
+    HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
+    fp = open(HtmlFile, "wb")
+    #new一个Runner
+    runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
+    unitresult = runner.run(suites)
+
 if __name__ == '__main__':
     runTest("D:\\litaojun\\workspace\\uopweixinInterface")

@@ -73,7 +73,7 @@ class UopService(object):
             # cwdps = os.path.join(os.getcwd())
             # xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd())), "uopdb", "weixin",
             #                           self.module, self.filename)
-            xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "../..")), "uopdb", "weixin",
+            xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "../../..")), "uopdb", "weixin",
                                       self.module, self.filename)
             xmlsqlfile = Xml_Parserfile(filename = xmlsqlpath)
             itsql = xmlsqlfile.parserSql()
