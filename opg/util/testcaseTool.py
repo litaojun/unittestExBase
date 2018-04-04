@@ -8,8 +8,7 @@ Created on 2017年7月9日
 import os
 from .fileOper import walk_dir_test
 from opg.util.csvtools import  csvReadToDict, dictToInfaceDict,excelReadToDict
-from .isSystemType import splict,getPlatfromType
-from .excelOper import excel_table_byindex
+from .isSystemType import splict
 s = splict
 #path  测试用例文件所在根目录
 #desc  读取相对路径path目录下的所有测试用例，并将测试用例转换为{"interfacename":{"method":[["caseid","interfaceName","testPoint","preConditions","operationSteps","testData","expectedResult","actualResult"][]...[]]}}格式

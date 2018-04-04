@@ -9,8 +9,7 @@ import os
 
 from .dynload import Dynload
 from .fileOper import walk_absdir_modul_file
-from .isSystemType import splict,getPlatfromType
-#from isSystemType import splict,getPlatfromType
+from .isSystemType import splict
 #===============================================================================
 # getModul
 # path  相对当前目录

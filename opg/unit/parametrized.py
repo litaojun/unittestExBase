@@ -9,7 +9,7 @@ import logging
 import unittest
 # from uopweixin.register.userRegService import UserRegisterService
 class ParametrizedTestCase(unittest.case.TestCase):
-    """ 
+    """
         TestCase classes that want to be parametrized should
         inherit from this class.
     """
@@ -21,7 +21,6 @@ class ParametrizedTestCase(unittest.case.TestCase):
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-
         super(ParametrizedTestCase, self).__init__(methodName)
         self.param = param
         self.myservice = None

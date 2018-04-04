@@ -5,12 +5,8 @@ Created on 2017
 
 @author: li.taojun
 '''
-from unittest.loader import TestLoader
-from unittest import case
-from opg.util.loadModul import getModul
 from opg.unit.parametrized import ParametrizedTestCase
 from inspect import isfunction
-from opg.util.testcaseTool import  creatTestCaseDataByPath
 #===============================================================================
 # loadTestClassFromModule
 # module <module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\unittestExtend\com\tao\opg\util\dynload.pyc'>
@@ -64,16 +60,7 @@ def filterFunByDecoratorName(funls = [],decoratorName = "__unittest_skip__"):
       if getattr(fun, decoratorName, False) is not None:
         decoratorls.append(fun)
         
-         
 if __name__ == '__main__':
-#     moduls = getModul(path='../../../../',sign="t")
-#     #print moduls
-#     cls = loadTestClassFromModules(moduls)
-#     #print cls
-#     di = tranListClassToDict(cls)
-#     #print di
-#     casedict = creatTestCaseDataByPath()
-#     #print casedict
       a = ParametrizedTestCase()
       print(type(a))
       print(type(ParametrizedTestCase))

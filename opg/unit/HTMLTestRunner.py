@@ -736,6 +736,7 @@ class HTMLTestRunner(Template_mixin):
                 #该NAME为测试报告对于的类，先修改为接口名称2017-07-12
                 name = cls.__interfaceName__
                 #name = "%s.%s" % (cls.__module__, cls.__name__)
+            name = cls.__interfaceName__
             doc = cls.__doc__ and cls.__doc__.split("\n")[0] or ""
             desc = doc and '%s: %s' % (name, doc) or name
 

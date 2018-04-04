@@ -37,7 +37,7 @@ class UopService(object):
         self.sqlvaluedict = sqlvaluedict
         self.sqldict = {}
         self.ifacedict = {}
-        self.dbManager = DbManager(host="uop-uat-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+        self.dbManager = DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
                                    user="root",
                                    password="Bestv001!",
                                    dbname="uop",

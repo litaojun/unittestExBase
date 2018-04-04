@@ -7,12 +7,15 @@ Created on 2017
 '''
 import unittest
 from opg.unit.parametrized import ParametrizedTestCase
-from opg.util.loadModul import getModul,getModulByabspath
+from opg.util.loadModul import getModulByabspath
 from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile
 from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
 import sys
 from opg.util.isSystemType import splict,getPlatfromType
+from opg.util.dbtools import DbManager
+from xml.sax import saxutils
+from opg.util.timeTool import getNowTime
 
 def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     #moduls = getModul(path='../../../../',sign="Test")
@@ -49,6 +52,7 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"UOP-小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
     #unitresult = unittest.TextTestRunner(verbosity=2).run(suites)
+    writeTestResultToDb(testResult = unitresult)
     return unitresult
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
@@ -57,7 +61,7 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse
     suites = unittest.TestSuite()
     print(casedictcls)
     casedict = casedictcls[testclse.__interfaceName__]
-    suites.addTest(ParametrizedTestCase.parametrize(testclse, casedictcls[testclse.__interfaceName__]))
+    suites.addTest(ParametrizedTestCase.parametrize(testclse , casedictcls[testclse.__interfaceName__]))
     HtmlFile = moduleabspath + splict + "testresult" + splict + "HTMLtemplate.html"
     #print "HtmlFile = %s" % HtmlFile
     #print HtmlFile
@@ -65,6 +69,7 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
+    return unitresult
 
 def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,caseids = [],moduleabspath=""):
     """
@@ -89,6 +94,64 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
+    return unitresult
+
+def writeTestResultToDb(testResult = None,title=u"小红巢测试报告", description=u"用例测试情况"):
+    DbManager.cleanDB()
+    dbManager   =      DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+                               user="root",
+                               password="Bestv001!",
+                               dbname="ltjtest",
+                               port=3306)
+    result_list = testResult.result
+    nowdatestr = getNowTime()
+    plandict = {
+                 "plantime":nowdatestr,
+                 "projectname":title,
+                 "description":description
+                }
+    plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s'); "
+    dbManager.insertData(plansqlStr % plandict)
+    planidStr = "select max(id) id from test_plan;"
+    idrst = dbManager.queryAll(sql = planidStr)
+    id = idrst[0][0]
+    #n=异常，错误，成功,
+    #t = 测试用例对象 TestCase
+    #o = ,
+    #e = 异常信息
+    for n, t, o, e in result_list:
+        caseResultDic = {}
+        caseResultDic['result_sign'] = n
+        caseResultDic['plan_id'] = id
+        caseResultDic['classname'] = t.__class__
+        caseResultDic['interfacename'] = t.__interfaceName__
+        caseResultDic['testcaseid'] = t.getCaseid()
+        caseResultDic['testpoint'] = t.getTestPoint()
+        if isinstance(o, str):
+            # TODO: some problem with 'string_escape': it escape \n and mess up formating
+            # uo = unicode(o.encode('string_escape'))
+            # uo    = o.decode('latin-1')
+            uo = e
+        else:
+            uo = o
+        if isinstance(e, str):
+            # TODO: some problem with 'string_escape': it escape \n and mess up formating
+            # ue = unicode(e.encode('string_escape'))
+            # ue = e.decode('latin-1')
+            ue = e
+        else:
+            ue = e
+
+        script = "%(output)s" % dict(
+                                        output=saxutils.escape(uo + ue),
+                                    )
+        caseResultDic['errordes'] = dbManager.conn.escape(script)
+        sqlstr = "insert into test_case_record(classname,interfacename,testcaseid,testpoint,plan_id,result_sign,errordes) values(\"%(classname)s\" , '%(interfacename)s','%(testcaseid)s','%(testpoint)s','%(plan_id)s','%(result_sign)s',\"%(errordes)s\")"
+        insertSql = sqlstr % caseResultDic
+        dbManager.insertData(insertSql )
+
+
+
 
 if __name__ == '__main__':
     runTest("D:\\litaojun\\workspace\\uopweixinInterface")

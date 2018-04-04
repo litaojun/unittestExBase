@@ -28,7 +28,11 @@ class DbManager():
         if DbManager.sign:
            DbManager.conn= pymysql.connect(host,user,  password,dbname,port,connect_timeout=100,write_timeout=100)
            DbManager.sign = False
-           
+    @staticmethod
+    def cleanDB():
+        DbManager.sign = True
+        DbManager.conn = None
+
     def queryAll(self,sql,param=None): 
           results = None 
           try:  
