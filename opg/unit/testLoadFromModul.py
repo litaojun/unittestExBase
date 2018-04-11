@@ -59,7 +59,7 @@ def filterFunByDecoratorName(funls = [],decoratorName = "__unittest_skip__"):
     for fun in funls :
       if getattr(fun, decoratorName, False) is not None:
         decoratorls.append(fun)
-        
+
 if __name__ == '__main__':
       a = ParametrizedTestCase()
       print(type(a))
