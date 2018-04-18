@@ -11,7 +11,7 @@ from opg.util.loadModul import getModulByabspath
 from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile
 from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
-import sys
+import sys,os
 from opg.util.isSystemType import splict,getPlatfromType
 from opg.util.dbtools import DbManager
 from xml.sax import saxutils
@@ -56,13 +56,14 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     return unitresult
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
-    casedictcls = creatTestCaseDataByFile(casefilepath)
+    basepath = os.getcwd()
+    casedictcls = creatTestCaseDataByFile(basepath + casefilepath)
     #print casedictcls
     suites = unittest.TestSuite()
     print(casedictcls)
     casedict = casedictcls[testclse.__interfaceName__]
     suites.addTest(ParametrizedTestCase.parametrize(testclse , casedictcls[testclse.__interfaceName__]))
-    HtmlFile = moduleabspath + splict + "testresult" + splict + "HTMLtemplate.html"
+    HtmlFile = basepath + splict + "testresult" + splict + "HTMLtemplate.html"
     #print "HtmlFile = %s" % HtmlFile
     #print HtmlFile
     fp = open(HtmlFile, "wb")

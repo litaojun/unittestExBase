@@ -68,13 +68,18 @@ class ParametrizedTestCase(unittest.case.TestCase):
         return self.param[2]
     
     def getExpectData(self):
-        itemdata = []
         data = self.param[6]
-        if data is not None and data != "":
-               itemdata = data.split("\n")
-        f = lambda x : x.split("=")[1]
-        lsret = list(map(f,itemdata))
-        return lsret
+        itemdata = data.split("\n")
+        jsonstr = "{" + ",".join(itemdata) + "}"
+        dicdata = eval(jsonstr)
+        return dicdata
+        # itemdata = []
+        # data = self.param[6]
+        # if data is not None and data != "":
+        #        itemdata = data.split("\n")
+        # f = lambda x : x.split("=")[1]
+        # lsret = list(map(f,itemdata))
+        # return lsret
     
     def getPreConditions(self):
         itemdata = None
