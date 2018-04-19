@@ -34,17 +34,23 @@ class ParametrizedTestCase(unittest.case.TestCase):
 #           self.preuserTotalPoint = self.personalCenterService.getPersonalSign()
           predata = self.getPreConditions()
           if predata is not None:
-              dbsqlls = [sql for sql in predata if not sql.startswith("interface")]
-              interfacels = [infacename for infacename in predata if infacename.startswith("interface")]
+              dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
+              interfacels = [infacename for infacename in predata if infacename.startswith("preInterface")]
               self.myservice.handlingDb(dbsqlls)
               self.myservice.handlingInterface(interfacels)
               
     def tearDown(self):
-          predata = self.getPreConditions()
-          f = lambda x :  self.cleandata[x] if x in self.cleandata  else None
-          if predata is not None :
-                prels = list(map(f,predata))
-                self.myservice.handlingDb(prels)
+        predata = self.getPreConditions()
+        if predata is not None:
+              dbsqlls = [sql for sql in predata if  sql.startswith("tearDB")]
+              interfacels = [infacename for infacename in predata if infacename.startswith("tearInterface")]
+              self.myservice.handlingDb(dbsqlls)
+              self.myservice.handlingInterface(interfacels)
+          # predata = self.getPreConditions()
+          # f = lambda x :  self.cleandata[x] if x in self.cleandata  else None
+          # if predata is not None :
+          #       prels = list(map(f,predata))
+          #       self.myservice.handlingDb(prels)
     
     def setCleanData(self,cleandata):
         self.cleandata = cleandata

@@ -122,12 +122,6 @@ class UopService(object):
     #     pass
 
     def handlingInterface(self,interacels = ()):
-        # self.ifacedict = {
-        #               "interfaceUserSignupActivities":self.userSignupActivities,
-        #               "interfaceluckDraw":self.userSignupActivities,
-        #               "interfaceUserCollection":self.userCollectionGoods,
-        #               "interfaceUserRemoveCollection":self.userRemoveCollectionGoods
-        #             }
         f = lambda x:self.ifacedict[x]()
         rst = list(map(f,interacels))
         print(rst)
