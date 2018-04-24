@@ -17,7 +17,7 @@ from opg.util.dbtools import DbManager
 from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
 
-def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
+def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',title=u"Steam测试报告", description=u"用例测试情况"):
     #moduls = getModul(path='../../../../',sign="Test")
     moduleabspath = os.getcwd()
     sys.path.append(moduleabspath)
@@ -50,10 +50,10 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     #print HtmlFile
     fp = open(HtmlFile, "wb")
     #new一个Runner
-    runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"UOP-小红巢测试报告", description=u"用例测试情况")
+    runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=title, description=description)
     unitresult = runner.run(suites)
     #unitresult = unittest.TextTestRunner(verbosity=2).run(suites)
-    writeTestResultToDb(testResult = unitresult)
+    writeTestResultToDb(testResult = unitresult,title=title,description=description)
     return unitresult
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
