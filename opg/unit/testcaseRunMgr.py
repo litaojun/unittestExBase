@@ -115,6 +115,8 @@ def writeTestResultToDb(testResult = None,title=u"Steam测试报告", descriptio
                  "description":description
                 }
     plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s'); "
+    t = plansqlStr % plandict
+    print("t = " % t)
     dbManager.insertData(plansqlStr % plandict)
     planidStr = "select max(id) id from test_plan;"
     idrst = dbManager.queryAll(sql = planidStr)
