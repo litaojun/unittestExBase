@@ -15,7 +15,7 @@ s = splict
 def creatTestCaseDataByPath(path="../../../../"):
     #获取相对path所在的绝对路径
     #pathcase = os.path.abspath(path+"\\"+"testcase")
-    pathcase = path+s+"uoptestcase"
+    pathcase = path+s+"steamcase"
     filepaths = walk_dir_test(pathcase)
     #func = lambda x: csvReadToDict(x)
     func = lambda x: excelReadToDict(x)

@@ -19,6 +19,7 @@ from opg.util.timeTool import getNowTime
 
 def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython'):
     #moduls = getModul(path='../../../../',sign="Test")
+    moduleabspath = os.getcwd()
     sys.path.append(moduleabspath)
     print(sys.path)
     #获取所有测试类模块
@@ -70,6 +71,7 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
+    writeTestResultToDb(testResult=unitresult)
     return unitresult
 
 def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,caseids = [],moduleabspath=""):
@@ -95,9 +97,10 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
+    writeTestResultToDb(testResult=unitresult)
     return unitresult
 
-def writeTestResultToDb(testResult = None,title=u"小红巢测试报告", description=u"用例测试情况"):
+def writeTestResultToDb(testResult = None,title=u"Steam测试报告", description=u"用例测试情况"):
     DbManager.cleanDB()
     dbManager   =      DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
                                user="root",
