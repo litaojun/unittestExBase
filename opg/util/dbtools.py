@@ -26,7 +26,7 @@ class DbManager():
     @staticmethod
     def initConn(host,user,password,dbname,port):
         if DbManager.sign:
-           DbManager.conn= pymysql.connect(host,user,  password,dbname,port,connect_timeout=100,write_timeout=100)
+           DbManager.conn= pymysql.connect(host,user,  password,dbname,port,use_unicode=True, charset="utf8",connect_timeout=100,write_timeout=100)
            DbManager.sign = False
     @staticmethod
     def cleanDB():
