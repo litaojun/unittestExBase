@@ -5,15 +5,11 @@ Created on 2017
 
 @author: li.taojun
 '''
-from unittest.loader import TestLoader
-from unittest import case
-from opg.util.loadModul import getModul
 from opg.unit.parametrized import ParametrizedTestCase
 from inspect import isfunction
-from opg.util.testcaseTool import  creatTestCaseDataByPath
 #===============================================================================
 # loadTestClassFromModule
-# module ģ��<module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\unittestExtend\com\tao\opg\util\dynload.pyc'>
+# module <module 'com.tao.opg.util.dynload' from 'D:\litaojun\workspace\unittestExtend\com\tao\opg\util\dynload.pyc'>
 # desc case.TestCase
 # return 
 #===============================================================================
@@ -23,10 +19,7 @@ def loadTestClassFromModule(module, use_load_tests=True):
     #print dir(module)
     for name in dir(module):
         obj = getattr(module, name)
-#         print(str(ParametrizedTestCase))
-#         print(str(obj))
         if isinstance(obj, type) and issubclass(obj, ParametrizedTestCase) and str(obj) != str(ParametrizedTestCase) and str(obj) != "<class 'uopweixin.util.parametrizedCase.ParametrizedCase'>":
-        #if issubclass(obj, case.TestCase):c
                 tests = obj
     return tests
 #===============================================================================
@@ -66,17 +59,8 @@ def filterFunByDecoratorName(funls = [],decoratorName = "__unittest_skip__"):
     for fun in funls :
       if getattr(fun, decoratorName, False) is not None:
         decoratorls.append(fun)
-        
-         
+
 if __name__ == '__main__':
-#     moduls = getModul(path='../../../../',sign="t")
-#     #print moduls
-#     cls = loadTestClassFromModules(moduls)
-#     #print cls
-#     di = tranListClassToDict(cls)
-#     #print di
-#     casedict = creatTestCaseDataByPath()
-#     #print casedict
       a = ParametrizedTestCase()
       print(type(a))
       print(type(ParametrizedTestCase))

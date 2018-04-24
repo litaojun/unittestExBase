@@ -5,38 +5,52 @@ Created on
 http://blog.csdn.net/jasonwoolf/article/details/47979655
 @author: li.taojun
 '''
-
+import logging
 import unittest
 # from uopweixin.register.userRegService import UserRegisterService
 class ParametrizedTestCase(unittest.case.TestCase):
-    """ 
+    """
         TestCase classes that want to be parametrized should
         inherit from this class.
     """
     def __init__(self, methodName='runTest', param=None):
+        logger = logging.getLogger("%s.%s" % (self.__class__.__name__, "__init__"))
+        logger.setLevel(level=logging.INFO)
+        handler = logging.FileHandler("log.txt")
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
         super(ParametrizedTestCase, self).__init__(methodName)
         self.param = param
         self.myservice = None
         
     def setService(self,myservice):
         self.myservice = myservice
+        self.myservice.initInterfaceData()
         
     def setUp(self):
 #           #后期抽奖前的个人总积分
 #           self.preuserTotalPoint = self.personalCenterService.getPersonalSign()
           predata = self.getPreConditions()
           if predata is not None:
-              dbsqlls = [sql for sql in predata if not sql.startswith("interface")]
-              interfacels = [infacename for infacename in predata if infacename.startswith("interface")]
+              dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
+              interfacels = [infacename for infacename in predata if infacename.startswith("preInterface")]
               self.myservice.handlingDb(dbsqlls)
               self.myservice.handlingInterface(interfacels)
               
     def tearDown(self):
-          predata = self.getPreConditions()
-          f = lambda x :  self.cleandata[x] if x in self.cleandata  else None
-          if predata is not None :
-                prels = list(map(f,predata))
-                self.myservice.handlingDb(prels)
+        predata = self.getPreConditions()
+        if predata is not None:
+              dbsqlls = [sql for sql in predata if  sql.startswith("tearDB")]
+              interfacels = [infacename for infacename in predata if infacename.startswith("tearInterface")]
+              self.myservice.handlingDb(dbsqlls)
+              self.myservice.handlingInterface(interfacels)
+          # predata = self.getPreConditions()
+          # f = lambda x :  self.cleandata[x] if x in self.cleandata  else None
+          # if predata is not None :
+          #       prels = list(map(f,predata))
+          #       self.myservice.handlingDb(prels)
     
     def setCleanData(self,cleandata):
         self.cleandata = cleandata
@@ -60,13 +74,18 @@ class ParametrizedTestCase(unittest.case.TestCase):
         return self.param[2]
     
     def getExpectData(self):
-        itemdata = []
         data = self.param[6]
-        if data is not None and data != "":
-               itemdata = data.split("\n")
-        f = lambda x : x.split("=")[1]
-        lsret = list(map(f,itemdata))
-        return lsret
+        itemdata = data.split("\n")
+        jsonstr = "{" + ",".join(itemdata) + "}"
+        dicdata = eval(jsonstr)
+        return dicdata
+        # itemdata = []
+        # data = self.param[6]
+        # if data is not None and data != "":
+        #        itemdata = data.split("\n")
+        # f = lambda x : x.split("=")[1]
+        # lsret = list(map(f,itemdata))
+        # return lsret
     
     def getPreConditions(self):
         itemdata = None
@@ -94,6 +113,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
                  else:
                      print("%s类不存在%s方法" % (testcase_klass.__name__,name))
         return suite
+
     def id(self):
         return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[2])
 #     return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[4]+"--"+self.param[2])
