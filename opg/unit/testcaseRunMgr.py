@@ -109,7 +109,7 @@ def writeStartTestToDb(projectname = ""):
 	                      dbname="ltjtest",
 	                      port=3306)
     starttime = sys.argv[1]
-    sqlstr = "insert into test_run_process(starttime,status,projectname) value(%s,1,%s)" % (starttime,projectname)
+    sqlstr = "insert into test_run_process(starttime,status,projectname) value('%s',1,'%s')" % (starttime,projectname)
     dbManager.insertData(sqlstr)
 
 def writeTestResultToDb(testResult = None,title=u"Steam测试报告", description=u"用例测试情况"):
@@ -127,7 +127,7 @@ def writeTestResultToDb(testResult = None,title=u"Steam测试报告", descriptio
                  "description":description
                 }
     starttime = sys.argv[1]
-    processSql = "update test_run_process set status=2,endtime = %s where projectname = %s and starttime = %s;" %(nowdatestr,title,starttime)
+    processSql = "update test_run_process set status=2,endtime = '%s' where projectname = '%s' and starttime = '%s';" %(nowdatestr,title,starttime)
     dbManager.updateData(processSql)
     plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s'); "
     t = plansqlStr % plandict
