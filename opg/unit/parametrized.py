@@ -5,7 +5,7 @@ Created on
 http://blog.csdn.net/jasonwoolf/article/details/47979655
 @author: li.taojun
 '''
-import logging
+import logging,os
 import unittest
 # from uopweixin.register.userRegService import UserRegisterService
 class ParametrizedTestCase(unittest.case.TestCase):
@@ -16,7 +16,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def __init__(self, methodName='runTest', param=None):
         logger = logging.getLogger("%s.%s" % (self.__class__.__name__, "__init__"))
         logger.setLevel(level=logging.INFO)
-        handler = logging.FileHandler("log.txt")
+        handler = logging.FileHandler("../log.txt")
         handler.setLevel(logging.INFO)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)

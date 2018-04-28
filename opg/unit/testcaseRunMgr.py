@@ -169,10 +169,7 @@ def writeTestResultToDb(testResult = None,title=u"Steam测试报告", descriptio
         caseResultDic['errordes'] = dbManager.conn.escape(script)
         sqlstr = "insert into test_case_record(classname,interfacename,testcaseid,testpoint,plan_id,result_sign,errordes) values(\"%(classname)s\" , '%(interfacename)s','%(testcaseid)s','%(testpoint)s','%(plan_id)s','%(result_sign)s',\"%(errordes)s\")"
         insertSql = sqlstr % caseResultDic
-        dbManager.insertData(insertSql )
-
-
-
+        dbManager.insertData(insertSql)
 
 if __name__ == '__main__':
     runTest("D:\\litaojun\\workspace\\uopweixinInterface")
