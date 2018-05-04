@@ -7,7 +7,8 @@ Created on 2017年12月29日 上午11:34:48
 import os
 from opg.util.xmlParseTool  import Xml_Parserfile
 from opg.util.dbtools import DbManager
-from inspect import isfunction,ismethod
+from inspect import ismethod
+from opg.util.schemajson import loadStrFromFile
 import time,functools
 def decorator(param):
     def _decorator(fun):
@@ -26,7 +27,7 @@ class UopService(object):
     """
 
     """
-    def __init__(self,module,filename,sqlvaluedict):
+    def __init__(self,module,filename,sqlvaluedict,reqjsonfile=None):
         """
             :param module :
             :param filename :
@@ -37,13 +38,33 @@ class UopService(object):
         self.sqlvaluedict = sqlvaluedict
         self.sqldict = {}
         self.ifacedict = {}
+        self.reqjsondata = None
         self.dbManager = DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
                                    user="root",
                                    password="Bestv001!",
                                    dbname="ltjtest",
                                    port=3306)
         self.initDbOperator()
+        self.initReqJsonData(reqjsonfile = reqjsonfile,reqjsondata = sqlvaluedict)
         # self.initInterfaceDict()
+
+    def initReqJsonData(self,reqjsonfile = "",reqjsondata = None):
+        if reqjsonfile is not None and reqjsondata != "":
+           jsonpath = os.getcwd() + reqjsonfile
+           reqDataFmt = loadStrFromFile(filepath = jsonpath)
+           reqdata = reqDataFmt % reqjsondata
+           print(reqdata)
+           try:
+              self.reqjsondata = eval(reqdata)
+           except SyntaxError as err:
+              self.reqjsondata = reqdata
+              print("SyntaxError:",err)
+           except Exception as e:
+              print("Exception:", e)
+              raise e
+
+
+
 
     def initInterfaceDict(self):
         for name in dir(self):

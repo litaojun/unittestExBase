@@ -72,7 +72,7 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
-    writeTestResultToDb(testResult=unitresult)
+    #writeTestResultToDb(testResult=unitresult)
     return unitresult
 
 def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,caseids = [],moduleabspath=""):
