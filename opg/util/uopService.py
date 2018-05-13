@@ -39,10 +39,10 @@ class UopService(object):
         self.sqldict = {}
         self.ifacedict = {}
         self.reqjsondata = None
-        self.dbManager = DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+        self.dbManager = DbManager(host="steam-uat-resource.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
                                    user="root",
                                    password="Bestv001!",
-                                   dbname="ltjtest",
+                                   dbname="resource",
                                    port=3306)
         self.initDbOperator()
         self.initReqJsonData(reqjsonfile = reqjsonfile,reqjsondata = sqlvaluedict)
@@ -94,7 +94,11 @@ class UopService(object):
             # cwdps = os.path.join(os.getcwd())
             # xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd())), "uopdb", "weixin",
             #                           self.module, self.filename)
-            xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "../../..")), "uopdb", "weixin",
+            # xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "../../..")),
+            #                           'uopdb',
+            #                           self.module, self.filename)
+            xmlsqlpath = os.path.join(os.getcwd(),
+                                      'steamdb',
                                       self.module, self.filename)
             xmlsqlfile = Xml_Parserfile(filename = xmlsqlpath)
             itsql = xmlsqlfile.parserSql()
