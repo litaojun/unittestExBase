@@ -59,7 +59,11 @@ class ParametrizedTestCase(unittest.case.TestCase):
         data = self.param[5]
         itemdata = data.split("\n")
         jsonstr = "{"+",".join(itemdata) + "}"
-        dicdata =  eval(jsonstr)
+        try:
+           dicdata =  eval(jsonstr)
+        except Exception as ex:
+            print(ex)
+            print(jsonstr)
 #         if "memberId" in dicdata:
 #             if len(dicdata['memberId']) == 11:
 #                    dicdata['memberId'] = UserRegisterService(dicdata['memberId'],dicdata['openid']).getMemberidByPhone()
