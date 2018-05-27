@@ -103,9 +103,9 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
 
 def writeStartTestToDb(projectname = ""):
     DbManager.cleanDB()
-    dbManager = DbManager(host="192.168.0.103",
+    dbManager = DbManager(host="steam-uat-resource.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
 	                      user="root",
-	                      password="123456",
+	                      password="Bestv001!",
 	                      dbname="ltjtest",
 	                      port=3306)
     starttime = sys.argv[1]
