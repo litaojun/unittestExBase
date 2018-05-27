@@ -103,9 +103,9 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
 
 def writeStartTestToDb(projectname = ""):
     DbManager.cleanDB()
-    dbManager = DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+    dbManager = DbManager(host="192.168.0.103",
 	                      user="root",
-	                      password="Bestv001!",
+	                      password="123456",
 	                      dbname="ltjtest",
 	                      port=3306)
     starttime = sys.argv[1]
@@ -114,7 +114,7 @@ def writeStartTestToDb(projectname = ""):
 
 def writeTestResultToDb(testResult = None,title=u"Steam测试报告", description=u"用例测试情况"):
     DbManager.cleanDB()
-    dbManager   =      DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+    dbManager   =      DbManager(host="steam-uat-resource.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
                                user="root",
                                password="Bestv001!",
                                dbname="ltjtest",
