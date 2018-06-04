@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-Created on 2017��6��29��
+Created on 2017
 
 @author: li.taojun
 判断当前操作系统，目前主要判断windows,linux两种
