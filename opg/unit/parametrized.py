@@ -28,6 +28,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def setService(self,myservice):
         self.myservice = myservice
         self.myservice.initInterfaceData()
+        print("litaojun")
         
     def setUp(self):
 #           #后期抽奖前的个人总积分

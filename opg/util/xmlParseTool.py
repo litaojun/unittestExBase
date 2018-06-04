@@ -43,9 +43,26 @@ class Xml_Parserfile(object):
                 outputFile.write("%s: %s , Type: %s , Number: %s  \n\n" % (entryNum, entryName, sendMode.text, faxNumber.text))
                 outputFile.close()
 
-        print("Parsed " + fileName)  
+        print("Parsed " + fileName)
+
+    def parseJmxFileTheardNum(self, name: object, newValue: object) -> object:
+        tree = ET.parse(self.filename)  # 打开xml文档
+        root = tree.getroot()
+        threadNodeList = root.findall("./hashTree/hashTree/ThreadGroup/stringProp")
+        for theadNode in threadNodeList:
+            tagname = theadNode.attrib['name']
+            if tagname == name:
+                theadNode.text = newValue
+                ET.dump(theadNode)
+                break
+        ET.dump(root)
+        tree.write(self.filename)
+
+    def setThradNum(self,newValue):
+        name = "ThreadGroup.num_threads"
+        self.parseJmxFileTheardNum(name=name,newValue=newValue)
+
 if __name__ == '__main__':
-    xmll = Xml_Parserfile(filename = "D:\\litaojun\\workspace\\uopweixinInterface\\bigwheel.xml")
-    for x in xmll.parserSql():
-        print(x)
+    xmll = Xml_Parserfile(filename = "D:\\litaojun\\workspace\\steamJmeterScript\\jmeter\\script\\findPage.jmx")
+    xmll.parseJmxFileTheardNum("ThreadGroup.num_threads","200")
     

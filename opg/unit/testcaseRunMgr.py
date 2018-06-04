@@ -103,7 +103,7 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
 
 def writeStartTestToDb(projectname = ""):
     DbManager.cleanDB()
-    dbManager = DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+    dbManager = DbManager(host="steam-uat-resource.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
 	                      user="root",
 	                      password="Bestv001!",
 	                      dbname="ltjtest",
@@ -114,7 +114,7 @@ def writeStartTestToDb(projectname = ""):
 
 def writeTestResultToDb(testResult = None,title=u"Steam测试报告", description=u"用例测试情况"):
     DbManager.cleanDB()
-    dbManager   =      DbManager(host="uop-dev-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+    dbManager   =      DbManager(host="steam-uat-resource.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
                                user="root",
                                password="Bestv001!",
                                dbname="ltjtest",
@@ -164,8 +164,8 @@ def writeTestResultToDb(testResult = None,title=u"Steam测试报告", descriptio
             ue = e
 
         script = "%(output)s" % dict(
-                                        output=saxutils.escape(uo + ue),
-                                    )
+                                          output=saxutils.escape(uo + ue),
+                                       )
         caseResultDic['errordes'] = dbManager.conn.escape(script)
         sqlstr = "insert into test_case_record(classname,interfacename,testcaseid,testpoint,plan_id,result_sign,errordes) values(\"%(classname)s\" , '%(interfacename)s','%(testcaseid)s','%(testpoint)s','%(plan_id)s','%(result_sign)s',\"%(errordes)s\")"
         insertSql = sqlstr % caseResultDic
