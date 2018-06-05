@@ -12,7 +12,7 @@ class RedisOper(object):
     '''
     sign = True
     curRedis = None
-    def __init__(self,host = "uop-uat-common.jl93bm.ng.0001.cnn1.cache.amazonaws.com.cn",port = 6379):
+    def __init__(self,host = "steam-uat-passport.jl93bm.ng.0001.cnn1.cache.amazonaws.com.cn",port = 6379):
         '''
                host ： 要解析xml文 件路径
                port: 端口
@@ -25,7 +25,7 @@ class RedisOper(object):
         if RedisOper.sign :
             RedisOper.curRedis  = redis.Redis(host,port)
             RedisOper.sign = False
-        
+
     @staticmethod
     def getRedis(host,port):
         RedisOper.iniRedis(host,port)
@@ -39,10 +39,20 @@ class RedisOper(object):
     def getValue(self,key = ""):
         cvalue = RedisOper.curRedis.get(key)
         return cvalue
+
+    def getSteamVerCodeByPhone(self,phone = '18916899938'):
+        keycodefmt = "PASSPORT_VERIFY_CODE:OTP:%s%s" % (phone,"*")
+        keyls = RedisOper.curRedis.keys(keycodefmt)
+        code = None
+        if len(keyls) > 0:
+            key = keyls[0]
+            code = key[-6:]
+            print(type(code))
+        return str(code,encoding = "utf-8")
+
         
 if __name__ == '__main__':
     redisOper = RedisOper()
-    cvalue = redisOper.getValue("uop-x-sms:sendNum:18516099506")
-    print(type(cvalue),cvalue)
-    keyls = redisOper.keys("uop-x-sms:verifyCode:18516099506*")
-    print(type(keyls),keyls)
+    code = redisOper.getSteamVerCodeByPhone(phone="18916899938")
+    print("code = %s" % code)
+    #PASSPORT_VERIFY_CODE:OTP:18916899938_816518
