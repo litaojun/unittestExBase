@@ -39,7 +39,7 @@ class Validator(object):
 def loadJsonFile(filepath = ""):
     load_dict = None
     if os.path.exists(filepath):
-        with open(filepath, 'r') as load_f:
+        with open(filepath, 'r',encoding='UTF-8') as load_f:
             load_dict = json.load(load_f)
     else:
         print("文件%s不存在" % filepath)
@@ -67,22 +67,9 @@ def check_rspdata(filepath):
             print ("kwargs="+str(kwargs))
             jsondata = kwargs["response"]
             #LOG.debug("validating input %s with %s", data, validator.name)
-            activitiesInfoScma = loadJsonFile(os.getcwd() + filepath)
-            # activitiesInfoScma = {
-            #                         "type": "object",
-            #                         "properties": {
-            #                             "code": {
-            #                                 "type": "string",
-            #                                 "maxLength": 5
-            #                             },
-            #                             "message": {
-            #                                 "type": "string"
-            #                             },
-            #                             "data": {
-            #                                 "type": "null"
-            #                             }
-            #                         }
-            #                     }
+            file = os.getcwd() + filepath
+            print("file=%s" % file)
+            activitiesInfoScma = loadJsonFile(file)
             validator = Validator(activitiesInfoScma)
             #jsondata = {"code":"000000","message":"成功","data":None}
             validator.validate(json.loads(jsondata))
