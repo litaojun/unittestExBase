@@ -16,6 +16,7 @@ from functools import wraps
 from jsonschema import FormatChecker
 from jsonschema import ValidationError
 import os,sys
+from opg.util.lginfo import logger
 class Validator(object):
     def __init__(self, schemaformat):
         #self.name = name
@@ -31,10 +32,17 @@ class Validator(object):
             #OG.exception(ex.message)
             # TODO(ramineni):raise valence specific exception
             print(ex.message)
-            print("type="+str(type(ex)))
-            print("dir="+str(dir(ex)))
-            print("ex.message="+str(type(ex.message)))
+            #logger.error(ex.message)
+            logger.error(ex)
+            # print("type="+str(type(ex)))
+            # print("dir="+str(dir(ex)))
+            # print("ex.message="+str(type(ex.message)))
             raise Exception(ex.message)
+        except Exception as ex:
+            logger.error(ex.message)
+            raise Exception(ex.message)
+        finally:
+            print("vaild end")
 
 def loadJsonFile(filepath = ""):
     load_dict = None
