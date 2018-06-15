@@ -160,6 +160,11 @@ class UopService(object):
         if qurResult is not None and len(qurResult)>0:
            return qurResult[0][0]
         return None
+
+    def selectAllDataBySqlName(self,sqlname):
+        sqlstr = self.sqldict[sqlname][1]
+        qurResult = self.dbManager.queryAll(sqlstr)
+        return qurResult
         
 if __name__ == '__main__':
   pt  = os.path.abspath(os.path.join(os.getcwd(), "../.."))
