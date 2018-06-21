@@ -20,6 +20,7 @@ def loadTestClassFromModule(module, use_load_tests=True):
     for name in dir(module):
         obj = getattr(module, name)
         if isinstance(obj, type) and issubclass(obj, ParametrizedTestCase) and str(obj) != str(ParametrizedTestCase) and str(obj) != "<class 'uopweixin.util.parametrizedCase.ParametrizedCase'>":
+            if obj.__name__.endswith("Test"):
                 tests = obj
     return tests
 #===============================================================================

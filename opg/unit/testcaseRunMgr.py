@@ -44,7 +44,7 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',title=u"Steam
                testclass = dictCls[infacename]
                suites.addTest(ParametrizedTestCase.parametrize(testclass, casets[infacename]))
             else:
-               print("%s接口对于的类不存在" % infacename)
+               print("%s接口对应的类不存在" % infacename)
     #print "suites.tests=",suites._tests
     HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
     #print "HtmlFile = %s" % HtmlFile
