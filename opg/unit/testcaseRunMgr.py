@@ -47,8 +47,6 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',title=u"Steam
                print("%s接口对应的类不存在" % infacename)
     #print "suites.tests=",suites._tests
     HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
-    #print "HtmlFile = %s" % HtmlFile
-    #print HtmlFile
     fp = open(HtmlFile, "wb")
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=title, description=description)

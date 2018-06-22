@@ -15,6 +15,7 @@ class DbManager():
                  password="123456",
                  dbname="test",
                  port=3306):
+          DbManager.cleanDB()
           DbManager.initConn(host,
                              user,
                              password,
