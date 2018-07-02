@@ -39,7 +39,7 @@ class UopService(object):
         self.sqldict = {}
         self.ifacedict = {}
         self.reqjsondata = None
-        self.dbManager = DbManager(host="steam-uat-resource.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+        self.dbManager = DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
                                    user="root",
                                    password="Bestv001!",
                                    dbname="resource",

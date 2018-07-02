@@ -12,7 +12,7 @@ class RedisOper(object):
     '''
     sign = True
     curRedis = None
-    def __init__(self,host = "steam-uat-passport.jl93bm.ng.0001.cnn1.cache.amazonaws.com.cn",port = 6379):
+    def __init__(self,host = "steam-uat-default.mqmpgn.0001.cnn1.cache.amazonaws.com.cn",port = 6379):
         '''
                host ： 要解析xml文 件路径
                port: 端口
