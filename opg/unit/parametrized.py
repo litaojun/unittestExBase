@@ -24,6 +24,8 @@ class ParametrizedTestCase(unittest.case.TestCase):
         super(ParametrizedTestCase, self).__init__(methodName)
         self.param = param
         self.myservice = None
+        self.inputdata = self.getInputData()
+        self.expectdata = self.getExpectData()
         
     def setService(self,myservice):
         self.myservice = myservice

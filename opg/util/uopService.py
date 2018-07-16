@@ -16,8 +16,9 @@ def decorator(param):
             @functools.wraps(fun)
             def wrapper(*args, **kwargs):
                 start = time.time()
-                fun(*args, **kwargs)
+                rsp = fun(*args, **kwargs)
                 runtime = time.time() - start
+                return rsp
             wrapper.__decorator__ = True
             wrapper.__param__ = param
         return wrapper
@@ -33,12 +34,17 @@ class UopService(object):
             :param filename :
             :param sqlvaluedict :
         """
+        self.jsonheart = {
+                                    "x-token": "admin",
+                                    "memberId": sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else ""
+                                }
         self.module = module
         self.filename = filename
         self.sqlvaluedict = sqlvaluedict
         self.sqldict = {}
         self.ifacedict = {}
-        self.reqjsondata = None
+        self.reqjsondata = ""
+        self.rsp = None
         self.dbManager = DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
                                    user="root",
                                    password="Bestv001!",
@@ -63,9 +69,6 @@ class UopService(object):
               print("Exception:", e)
               raise e
 
-
-
-
     def initInterfaceDict(self):
         for name in dir(self):
             funObj = getattr(self, name)
@@ -86,17 +89,15 @@ class UopService(object):
                 signDec = getattr(funObj, "__decorator__",False)
                 signName = getattr(funObj, "__param__", False)
                 if signDec :
-                    self.ifacedict[signName] = funObj
+                    if isinstance(signName,str):
+                        self.ifacedict[signName] = funObj
+                    else:
+                        if isinstance(signName,list):
+                           for name in signName:
+                               self.ifacedict[name] = funObj
 
     def initDbOperator(self):
         if self.filename is not None and self.filename != "" :
-            # cwdt = os.getcwd()
-            # cwdps = os.path.join(os.getcwd())
-            # xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd())), "uopdb", "weixin",
-            #                           self.module, self.filename)
-            # xmlsqlpath = os.path.join(os.path.abspath(os.path.join(os.getcwd(), "../../..")),
-            #                           'uopdb',
-            #                           self.module, self.filename)
             xmlsqlpath = os.path.join(os.getcwd(),
                                       'steamdb',
                                       self.module, self.filename)
@@ -106,17 +107,11 @@ class UopService(object):
             for cursql in itsql :
                 self.sqldict[cursql[0]] = (cursql[1],cursql[2] % self.sqlvaluedict,cursql[3])
 
-    # def getTownList(self,prels):
-    #     townls = []
-    #     for cursql in self.sqldict:
-    #         if self.sqldict[cursql][3] is not None:
-    #             townls.append(self.sqldict[cursql][3])
-    #     return townls
 
     def getTownList(self,predata = []):
         """
-        :param predata:
-        :return:
+            :param predata:
+            :return:
         """
         prels = []
         if predata is not None:
@@ -126,8 +121,8 @@ class UopService(object):
 
     def handlingDb(self,sqlls = ()):
         """
-        :param sqlls:
-        :return:
+            :param sqlls:
+            :return:
         """
         operDict = {
                       "delete":self.dbManager.deleteData,
@@ -136,7 +131,7 @@ class UopService(object):
                    }
         f = lambda x:operDict[self.sqldict[x][0]](self.sqldict[x][1]) if x is not None else None
         als = list(map(f,sqlls))
-        
+
     # def userSignupActivities(self):
     #     pass
     #
@@ -153,7 +148,7 @@ class UopService(object):
 
     def getDbManager(self):
         return self.dbManager
-      
+
     def selectBySqlName(self,sqlname):
         sqlstr = self.sqldict[sqlname][1]
         qurResult = self.dbManager.queryAll(sqlstr)
@@ -165,7 +160,7 @@ class UopService(object):
         sqlstr = self.sqldict[sqlname][1]
         qurResult = self.dbManager.queryAll(sqlstr)
         return qurResult
-        
+
 if __name__ == '__main__':
   pt  = os.path.abspath(os.path.join(os.getcwd(), "../.."))
   print(pt)

@@ -40,8 +40,13 @@ class RedisOper(object):
         cvalue = RedisOper.curRedis.get(key)
         return cvalue
 
-    def getSteamVerCodeByPhone(self,phone = '18916899938'):
-        keycodefmt = "PASSPORT_VERIFY_CODE:OTP:%s%s" % (phone,"*")
+    def getSteamVerCodeByPhone(self,phone = '18916899938',scenes = "QTP"):
+        #PASSPORT_VERIFY_CODE:MLN:18516099509_235934
+        vercodeDict = {
+                          "OTP":"PASSPORT_VERIFY_CODE:OTP:%s%s",
+                          "MP": "PASSPORT_VERIFY_CODE:MLN:%s%s"
+                      }
+        keycodefmt = vercodeDict[scenes] % (phone,"*")
         keyls = RedisOper.curRedis.keys(keycodefmt)
         code = None
         if len(keyls) > 0:

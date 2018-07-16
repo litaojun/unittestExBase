@@ -107,6 +107,7 @@ def writeStartTestToDb(projectname = ""):
 	                      dbname="ltjtest",
 	                      port=3306)
     starttime = sys.argv[1]
+    #starttime = "sss"
     sqlstr = "insert into test_run_process(starttime,status,projectname) value('%s',1,'%s')" % (starttime,projectname)
     dbManager.insertData(sqlstr)
 
