@@ -22,18 +22,15 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',title=u"Steam
     writeStartTestToDb(projectname = title)
     moduleabspath = os.getcwd()
     sys.path.append(moduleabspath)
-    print(sys.path)
     #获取所有测试类模块
     moduls = getModulByabspath(path=moduleabspath,sign="Test")
-    print("moduls="+str(list(moduls)))
+    # print("moduls="+str(list(moduls)))
     #重模块中提取所有测试类（（继承了ParametrizedTestCase））
     cls = loadTestClassFromModules(moduls)
     #将测试类（继承了ParametrizedTestCase）转换为DICT，其中键值为对应的接口名称
     dictCls = tranListClassToDict(cls)
-    print(str(dictCls))
     #通过文件路径获取用例数据
     casedict = creatTestCaseDataByPath(path=moduleabspath)
-    print("casedict="+str(casedict))
     #new一个测试套件，通过测试数据和测试类组合成测试用例TestCase，加入到测试套件中
     suites = unittest.TestSuite()
     for casets in casedict:

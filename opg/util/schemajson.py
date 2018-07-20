@@ -9,6 +9,7 @@ https://jsonschema.net/#/home
 @author: li.taojun
 '''
 import json
+from opg.util.uopService import UopService
 #from jsonschema import validators 
 #from jsonschema import validate
 from jsonschema import Draft4Validator
@@ -29,14 +30,9 @@ class Validator(object):
         try:
             self.validator.validate(data)
         except ValidationError as ex:
-            #OG.exception(ex.message)
             # TODO(ramineni):raise valence specific exception
             print(ex.message)
-            #logger.error(ex.message)
             logger.error(ex)
-            # print("type="+str(type(ex)))
-            # print("dir="+str(dir(ex)))
-            # print("ex.message="+str(type(ex.message)))
             raise Exception(ex.message)
         except Exception as ex:
             logger.error(ex.message)
@@ -60,26 +56,24 @@ def loadStrFromFile(filepath = ""):
             lines = load_f.readlines()
             load_str = "".join(lines)
             load_str = load_str.replace("\n\t", "")
-            # while line:
-            #     line = line.strip('\n')
-            #     load_str = load_str + line
-            #     line = load_f.readline()
     return load_str
 
 
 ##validator.py
+#https://cloud.tencent.com/developer/article/1005810
+#https://spacetelescope.github.io/understanding-json-schema/index.html
 def check_rspdata(filepath):
     def decorated(f):
 #         @wraps(f)
         def wrapper(*args, **kwargs):
-            print ("kwargs="+str(kwargs))
             jsondata = kwargs["response"]
             #LOG.debug("validating input %s with %s", data, validator.name)
-            file = os.getcwd() + filepath
-            print("file=%s" % file)
+            if filepath.endswith(".json"):
+                 file = os.getcwd() + filepath
+            else:
+                file = UopService.fmtdict[filepath]
             activitiesInfoScma = loadJsonFile(file)
             validator = Validator(activitiesInfoScma)
-            #jsondata = {"code":"000000","message":"成功","data":None}
             validator.validate(json.loads(jsondata))
             return f(*args,jsondata)
         return wrapper

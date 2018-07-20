@@ -15,7 +15,7 @@ import logging  # 引入logging模块
 import os.path,os
 import time
 #from steam.util.reqFormatPath  import  fxt
-from opg.unit.parametrized import ParametrizedTestCase
+#from opg.unit.parametrized import ParametrizedTestCase
 # from steam.user.login.userLoginService import WeixinUserLoginService
 # from steam.user.verfiycode.userVerfiyCodeService import WeixinUserVerfiyCodeService
 # 第一步，创建一个logger

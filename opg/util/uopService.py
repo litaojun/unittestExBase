@@ -8,13 +8,16 @@ import os
 from opg.util.xmlParseTool  import Xml_Parserfile
 from opg.util.dbtools import DbManager
 from inspect import ismethod
-from opg.util.schemajson import loadStrFromFile
+# from opg.util.schemajson import loadStrFromFile
 import time,functools
+from opg.util.fileOper import walk_dir_test
+from opg.util.lginfo import logger
 def decorator(param):
     def _decorator(fun):
         if not isinstance(fun, type):
             @functools.wraps(fun)
             def wrapper(*args, **kwargs):
+                logger.info(msg="前置调用函数%s,类%s" % (fun.__name__, str(args[0])))
                 start = time.time()
                 rsp = fun(*args, **kwargs)
                 runtime = time.time() - start
@@ -24,10 +27,20 @@ def decorator(param):
         return wrapper
     return _decorator
 
+def loadStrFromFile(filepath = ""):
+    load_str = ""
+    if os.path.exists(filepath):
+        with open(filepath, 'r') as load_f:
+            lines = load_f.readlines()
+            load_str = "".join(lines)
+            load_str = load_str.replace("\n\t", "")
+    return load_str
+
 class UopService(object):
     """
 
     """
+    fmtdict = None
     def __init__(self,module,filename,sqlvaluedict,reqjsonfile=None):
         """
             :param module :
@@ -35,28 +48,42 @@ class UopService(object):
             :param sqlvaluedict :
         """
         self.jsonheart = {
-                                    "x-token": "admin",
-                                    "memberId": sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else ""
-                                }
+                            "x-token": "admin",
+                            "memberId": sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else ""
+                         }
         self.module = module
         self.filename = filename
-        self.sqlvaluedict = sqlvaluedict
+        self.inputKV = sqlvaluedict
         self.sqldict = {}
         self.ifacedict = {}
         self.reqjsondata = ""
         self.rsp = None
+        self.lsser = [self,]
         self.dbManager = DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
                                    user="root",
                                    password="Bestv001!",
                                    dbname="resource",
                                    port=3306)
         self.initDbOperator()
-        self.initReqJsonData(reqjsonfile = reqjsonfile,reqjsondata = sqlvaluedict)
-        # self.initInterfaceDict()
+        UopService.initFmtDict()
+        self.initReqJsonData(reqjsonfile = reqjsonfile,reqjsondata = self.inputKV)
+
+    @classmethod
+    def initFmtDict(cls):
+        if cls.fmtdict is None:
+            cls.fmtdict = {}
+            a = walk_dir_test(dir=os.getcwd(), sign="Req", endstr=".txt")
+            b = walk_dir_test(dir=os.getcwd(), sign="Fmt", endstr=".json")
+            for cs in a + b:
+                cls.fmtdict[os.path.basename(cs).split(".")[0]] = cs
 
     def initReqJsonData(self,reqjsonfile = "",reqjsondata = None):
+        print(str(UopService.fmtdict))
         if reqjsonfile is not None and reqjsondata != "":
-           jsonpath = os.getcwd() + reqjsonfile
+           if reqjsonfile.endswith(".txt"):
+               jsonpath = os.getcwd() + reqjsonfile
+           else:
+               jsonpath = UopService.fmtdict[reqjsonfile]
            reqDataFmt = loadStrFromFile(filepath = jsonpath)
            reqdata = reqDataFmt % reqjsondata
            print(reqdata)
@@ -96,6 +123,21 @@ class UopService(object):
                            for name in signName:
                                self.ifacedict[name] = funObj
 
+    def initInterfaceDataT(self):
+        for serv in self.lsser:
+            for name in dir(serv):
+                funObj = getattr(serv, name)
+                if ismethod(funObj):
+                    signDec = getattr(funObj, "__decorator__",False)
+                    signName = getattr(funObj, "__param__", False)
+                    if signDec :
+                        if isinstance(signName,str):
+                            self.ifacedict[signName] = funObj
+                        else:
+                            if isinstance(signName,list):
+                               for name in signName:
+                                   self.ifacedict[name] = funObj
+
     def initDbOperator(self):
         if self.filename is not None and self.filename != "" :
             xmlsqlpath = os.path.join(os.getcwd(),
@@ -103,9 +145,9 @@ class UopService(object):
                                       self.module, self.filename)
             xmlsqlfile = Xml_Parserfile(filename = xmlsqlpath)
             itsql = xmlsqlfile.parserSql()
-            a = self.sqlvaluedict
+            a = self.inputKV
             for cursql in itsql :
-                self.sqldict[cursql[0]] = (cursql[1],cursql[2] % self.sqlvaluedict,cursql[3])
+                self.sqldict[cursql[0]] = (cursql[1],cursql[2] % self.inputKV,cursql[3])
 
 
     def getTownList(self,predata = []):
@@ -132,15 +174,6 @@ class UopService(object):
         f = lambda x:operDict[self.sqldict[x][0]](self.sqldict[x][1]) if x is not None else None
         als = list(map(f,sqlls))
 
-    # def userSignupActivities(self):
-    #     pass
-    #
-    # def userRemoveCollectionGoods(self):
-    #     pass
-    #
-    # def userCollectionGoods(self):
-    #     pass
-
     def handlingInterface(self,interacels = ()):
         f = lambda x:self.ifacedict[x]()
         rst = list(map(f,interacels))
@@ -160,6 +193,9 @@ class UopService(object):
         sqlstr = self.sqldict[sqlname][1]
         qurResult = self.dbManager.queryAll(sqlstr)
         return qurResult
+
+    def setInPutData(self):
+        pass
 
 if __name__ == '__main__':
   pt  = os.path.abspath(os.path.join(os.getcwd(), "../.."))

@@ -7,6 +7,7 @@ http://blog.csdn.net/jasonwoolf/article/details/47979655
 '''
 import logging,os
 import unittest
+from opg.util.lginfo import  logger
 # from uopweixin.register.userRegService import UserRegisterService
 class ParametrizedTestCase(unittest.case.TestCase):
     """
@@ -14,18 +15,12 @@ class ParametrizedTestCase(unittest.case.TestCase):
         inherit from this class.
     """
     def __init__(self, methodName='runTest', param=None):
-        logger = logging.getLogger("%s.%s" % (self.__class__.__name__, "__init__"))
-        logger.setLevel(level=logging.INFO)
-        handler = logging.FileHandler("../log.txt")
-        handler.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
         super(ParametrizedTestCase, self).__init__(methodName)
         self.param = param
         self.myservice = None
         self.inputdata = self.getInputData()
         self.expectdata = self.getExpectData()
+        logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始"%(self.__class__,self.__class__.__interfaceName__,self.getCaseid()))
         
     def setService(self,myservice):
         self.myservice = myservice
@@ -49,29 +44,22 @@ class ParametrizedTestCase(unittest.case.TestCase):
               interfacels = [infacename for infacename in predata if infacename.startswith("tearInterface")]
               self.myservice.handlingDb(dbsqlls)
               self.myservice.handlingInterface(interfacels)
-          # predata = self.getPreConditions()
-          # f = lambda x :  self.cleandata[x] if x in self.cleandata  else None
-          # if predata is not None :
-          #       prels = list(map(f,predata))
-          #       self.myservice.handlingDb(prels)
-    
+        logger.info(msg="类=%s,接口=%s,用例ID=%s执行结束" % (self.__class__, self.__class__.__interfaceName__, self.getCaseid()))
+
     def setCleanData(self,cleandata):
         self.cleandata = cleandata
-    
+
     def getInputData(self):
-        data = self.param[5]
-        itemdata = data.split("\n")
-        jsonstr = "{"+",".join(itemdata) + "}"
+        # data = self.param[5]
+        # itemdata = data.split("\n")
+        # jsonstr = "{"+",".join(itemdata) + "}"
+        jsonstr = "{"+ ",".join(self.param[5].split("\n")) + "}"
+        dicdata = None
         try:
            dicdata =  eval(jsonstr)
         except Exception as ex:
             print(ex)
             print(jsonstr)
-#         if "memberId" in dicdata:
-#             if len(dicdata['memberId']) == 11:
-#                    dicdata['memberId'] = UserRegisterService(dicdata['memberId'],dicdata['openid']).getMemberidByPhone()
-#                    if dicdata['memberId']  is None:
-#                       self.assertFalse(1==1, "memberid为空")
         return dicdata
     
     def getCaseid(self):

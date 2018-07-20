@@ -51,7 +51,9 @@ def walk_absdir_modul_file(dir,topdown=True,sign='con',endstr='.py'):
 
 
 if __name__ == '__main__':
-    cspath = walk_dir_test("D:\\litaojun\\workspace\\a\\unittestExtend\\testcase")
-    print(cspath)
-    mouduls = walk_absdir_modul_file(dir='D:\\litaojun\\workspace\\jenkinsPython\\')
-    print(mouduls)
+    # cspath = walk_dir_test("D:\\litaojun\\workspace\\a\\unittestExtend\\testcase")
+    # print(cspath)
+    # mouduls = walk_absdir_modul_file(dir='D:\\litaojun\\workspace\\jenkinsPython\\')
+    # print(mouduls)
+    a = walk_dir_test(dir=os.getcwd(),str="",endstr=".txt")
+    print(str(a))
