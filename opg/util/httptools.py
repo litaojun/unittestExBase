@@ -39,3 +39,17 @@ def httpPost(url="",headers = {},reqJsonData = {}):
     logger.info("http response data:%s" % httpRsp.text)
     return httpRsp.text
 
+def httpDelete(url ="" ,headers = {}):
+    logger.info("http request type:GET")
+    logger.info("http request url:%s" % url)
+    httpRsp = requests.delete(
+                                 url=url,
+                                 headers=headers,
+                                 verify=False
+                              )
+    logger.info("http response data:%s" % httpRsp.text)
+    return httpRsp.text
+
+
+
+

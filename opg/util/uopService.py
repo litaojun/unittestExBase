@@ -30,7 +30,7 @@ def decorator(param):
 def loadStrFromFile(filepath = ""):
     load_str = ""
     if os.path.exists(filepath):
-        with open(filepath, 'r') as load_f:
+        with open(filepath, 'r',encoding="utf-8") as load_f:
             lines = load_f.readlines()
             load_str = "".join(lines)
             load_str = load_str.replace("\n\t", "")
@@ -41,7 +41,7 @@ class UopService(object):
 
     """
     fmtdict = None
-    def __init__(self,module,filename,sqlvaluedict,reqjsonfile=None):
+    def __init__(self,module,filename,sqlvaluedict,reqjsonfile=None,dbName = "resource"):
         """
             :param module :
             :param filename :
@@ -62,7 +62,7 @@ class UopService(object):
         self.dbManager = DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
                                    user="root",
                                    password="Bestv001!",
-                                   dbname="resource",
+                                   dbname=dbName,
                                    port=3306)
         self.initDbOperator()
         UopService.initFmtDict()

@@ -50,9 +50,6 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.cleandata = cleandata
 
     def getInputData(self):
-        # data = self.param[5]
-        # itemdata = data.split("\n")
-        # jsonstr = "{"+",".join(itemdata) + "}"
         jsonstr = "{"+ ",".join(self.param[5].split("\n")) + "}"
         dicdata = None
         try:
@@ -74,14 +71,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
         jsonstr = "{" + ",".join(itemdata) + "}"
         dicdata = eval(jsonstr)
         return dicdata
-        # itemdata = []
-        # data = self.param[6]
-        # if data is not None and data != "":
-        #        itemdata = data.split("\n")
-        # f = lambda x : x.split("=")[1]
-        # lsret = list(map(f,itemdata))
-        # return lsret
-    
+
     def getPreConditions(self):
         itemdata = None
         data = self.param[3]
@@ -110,22 +100,15 @@ class ParametrizedTestCase(unittest.case.TestCase):
         return suite
 
     def id(self):
-        return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[2])
-#     return "%s.%s_%s" % (self.__interfaceName__+"--"+self.param[0],self.param[0],self.param[4]+"--"+self.param[2])
-#     def __repr__(self):
-#         return "<%s testMethod=%s>" % \
-#                (self.param[1], self.param[0])
-#     def __str__(self):
-#         return "%s (%s)" % (self.param[1], self.param[0])
+        return "%s.%s_%s" % (self.__class__.__interfaceName__+"--"+self.param[0],self.param[0],self.param[2])
+
 #####################################################
 ##-testcase
 #####################################################
 class TestOneZgr(ParametrizedTestCase):
     __interfaceName__ = "baomingzgr"
-#     def __init__(self,num):
-#         self.num = num
+
     def test_something(self):
-        #print 'param =', self.param
         self.assertEqual(1, 1)
 
     def test_something_else(self):
