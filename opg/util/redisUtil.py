@@ -12,7 +12,7 @@ class RedisOper(object):
     '''
     sign = True
     curRedis = None
-    def __init__(self,host = "steam-uat-default.mqmpgn.0001.cnn1.cache.amazonaws.com.cn",port = 6379):
+    def __init__(self,host = "steam-uat-default.s4kcls.ng.0001.cnw1.cache.amazonaws.com.cn",port = 6379):
         '''
                host ： 要解析xml文 件路径
                port: 端口
@@ -55,9 +55,18 @@ class RedisOper(object):
             print(type(code))
         return str(code,encoding = "utf-8")
 
-        
+    def getTokenDataList(self,formatStr = "STEAM_PERMISSION:TOKEN:*"):
+        tokenList = RedisOper.curRedis.keys(formatStr)
+        tokenMbID = []
+        for tokendata in tokenList:
+            token = tokendata[23:]
+            memberId = RedisOper.curRedis.get(token)
+            tokenMbID.append((token,memberId))
+        return tokenMbID
 if __name__ == '__main__':
     redisOper = RedisOper()
-    code = redisOper.getSteamVerCodeByPhone(phone="18916899938")
-    print("code = %s" % code)
+    # code = redisOper.getSteamVerCodeByPhone(phone="18916899938")
+    # print("code = %s" % code)
+    tokenList = redisOper.getTokenDataList()
+
     #PASSPORT_VERIFY_CODE:OTP:18916899938_816518

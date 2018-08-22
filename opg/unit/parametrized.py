@@ -8,7 +8,6 @@ http://blog.csdn.net/jasonwoolf/article/details/47979655
 import logging,os
 import unittest
 from opg.util.lginfo import  logger
-# from uopweixin.register.userRegService import UserRegisterService
 class ParametrizedTestCase(unittest.case.TestCase):
     """
         TestCase classes that want to be parametrized should
@@ -25,7 +24,6 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def setService(self,myservice):
         self.myservice = myservice
         self.myservice.initInterfaceData()
-        print("litaojun")
         
     def setUp(self):
 #           #后期抽奖前的个人总积分

@@ -11,9 +11,7 @@
 @file: httptools.py 
 @time: 2018/6/11 16:48 
 """
-import requests,json
-from opg.util.utils import query_json
-from opg.util.schemajson import check_rspdata
+import requests
 from opg.util.lginfo import  logger
 def httpGet(url ="" ,headers = {}):
     logger.info("http request type:GET")

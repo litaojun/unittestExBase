@@ -18,7 +18,6 @@ from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
 
 def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',title=u"Steam测试报告", description=u"用例测试情况"):
-    #moduls = getModul(path='../../../../',sign="Test")
     writeStartTestToDb(projectname = title)
     moduleabspath = os.getcwd()
     sys.path.append(moduleabspath)
@@ -81,8 +80,8 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
     casedictcls = creatTestCaseDataByFile(casefilepath)
     #print casedictcls
     suites = unittest.TestSuite()
-    #print(casedictcls)
-    casedict = casedictcls[testclse.__interfaceName__]
+    # #print(casedictcls)
+    # casedict = casedictcls[testclse.__interfaceName__]
     clsSuites = ParametrizedTestCase.parametrize(testclse, casedictcls[testclse.__interfaceName__])
     for curcase in clsSuites:
         curcaseid = curcase.getCaseid()
@@ -98,23 +97,22 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
 
 def writeStartTestToDb(projectname = ""):
     DbManager.cleanDB()
-    dbManager = DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
+    dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
 	                      user="root",
 	                      password="Bestv001!",
 	                      dbname="ltjtest",
 	                      port=3306)
     starttime = sys.argv[1]
-    #starttime = "sss"
     sqlstr = "insert into test_run_process(starttime,status,projectname) value('%s',1,'%s')" % (starttime,projectname)
     dbManager.insertData(sqlstr)
 
 def writeTestResultToDb(testResult = None,title=u"Steam测试报告", description=u"用例测试情况"):
     DbManager.cleanDB()
-    dbManager   =      DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
-                               user="root",
-                               password="Bestv001!",
-                               dbname="ltjtest",
-                               port=3306)
+    dbManager   =      DbManager(host = "steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
+                                 user = "root",
+                                 password = "Bestv001!",
+                                 dbname   = "ltjtest",
+                                 port     =  3306)
     result_list = testResult.result
     nowdatestr = getNowTime()
     plandict = {
@@ -126,8 +124,6 @@ def writeTestResultToDb(testResult = None,title=u"Steam测试报告", descriptio
     processSql = "update test_run_process set status=2,endtime = '%s' where projectname = '%s' and starttime = '%s';" %(nowdatestr,title,starttime)
     dbManager.updateData(processSql)
     plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s'); "
-    t = plansqlStr % plandict
-    print("t = %s" % t)
     dbManager.insertData(plansqlStr % plandict)
     planidStr = "select max(id) id from test_plan;"
     idrst = dbManager.queryAll(sql = planidStr)

@@ -4,7 +4,7 @@
 Created on 2017年12月29日 上午11:34:48
 @author: li.taojun
 '''
-import os
+import os,json
 from opg.util.xmlParseTool  import Xml_Parserfile
 from opg.util.dbtools import DbManager
 from inspect import ismethod
@@ -41,6 +41,7 @@ class UopService(object):
 
     """
     fmtdict = None
+    token = None
     def __init__(self,module,filename,sqlvaluedict,reqjsonfile=None,dbName = "resource"):
         """
             :param module :
@@ -48,8 +49,9 @@ class UopService(object):
             :param sqlvaluedict :
         """
         self.jsonheart = {
-                            "x-token": "admin",
-                            "memberId": sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else ""
+                            "x-token"  : "admin",
+                            "memberId" : sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else "",
+                            "token"    :  sqlvaluedict["token"] if "token" in sqlvaluedict else ""
                          }
         self.module = module
         self.filename = filename
@@ -59,7 +61,7 @@ class UopService(object):
         self.reqjsondata = ""
         self.rsp = None
         self.lsser = [self,]
-        self.dbManager = DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
+        self.dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
                                    user="root",
                                    password="Bestv001!",
                                    dbname=dbName,

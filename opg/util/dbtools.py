@@ -5,7 +5,7 @@ Created on 2017年12月16日
 http://blog.csdn.net/MemoryD/article/details/74995651
 @author: ｌｉｔａｏｊｕｎ
 '''
-import pymysql
+import pymysql,time
 class DbManager():
     sign = True
     conn = None
@@ -63,6 +63,7 @@ class DbManager():
             self.conn.rollback()
             raise e
         finally:  
+            time.sleep(1)
             #self.conn.close()
             pass
         return num
@@ -79,21 +80,21 @@ class DbManager():
                 self.conn.rollback()   
         finally:  
                 #self.conn.close()
+                time.sleep(1)
                 pass 
         return num
                 
     def updateData(self,sql_update):
         try:  
             cur = self.conn.cursor() 
-            cur.execute(sql_update)  #像sql语句传递参数  
-            #提交  
-            self.conn.commit()  
+            cur.execute(sql_update)         #像sql语句传递参数
+            self.conn.commit()              #提交
         except Exception as e:  
                 #错误回滚  
                 self.conn.rollback()   
-        finally:  
+        finally:
                 #self.conn.close()
-                pass
+                time.sleep(10)
     
     def initdata(self):
         stuls = [
