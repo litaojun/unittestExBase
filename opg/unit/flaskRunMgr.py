@@ -140,6 +140,9 @@ def queryTestPlanList(projectName = ""):
                   where projectname = "%s"   ;""" % projectName
     dataList = dbManager.queryAll(sql=querySql)
     retList  = [dict(zip(keyls,data)) for data in dataList]
+    retDict = {}
+    retDict["code"] = "000000"
+    retDict["listplan"] = retList
     return retList
 
 def queryTestPlanByInterfaceName(interfaceName = "",planId = 22,db = None):
