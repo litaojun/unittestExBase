@@ -65,6 +65,24 @@ def getNowday(formatedate = "%Y-%m-%d"):
     now = datetime.now()
     print(now.strftime(formatedate))
     return now.strftime(formatedate)
+
+def getNowTimeInt():
+    time_now = int(time.time())
+    return time_now
+
+def getTimeIntByInPut(num = 1):
+    timestamp = getNowTimeInt()
+    inputNum = num * 24 * 60 * 60
+    return (timestamp + inputNum)*1000
+
 if __name__ == '__main__':
     timestamp = getNowday()
     print(timestamp)
+    time_now = int(time.time())
+    print(time_now)
+    print(time_now*1000)
+    print(time_now + 24*60*60)
+    print(getTimeIntByInPut(1))
+    print(time_now - 24 * 60 * 60)
+    print(getTimeIntByInPut(-1))
+
