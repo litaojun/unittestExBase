@@ -16,13 +16,13 @@ from opg.util.isSystemType import splict
 from opg.util.dbtools import DbManager
 from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
-
-def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',
+import uuid,time
+def runTest(moduleabspath='',
             title=u"Steam测试报告",
             description=u"用例测试情况",
             starTime = "ssss"):
     #moduls = getModul(path='../../../../',sign="Test")
-    writeStartTestToDb(projectname = title,starTime=starTime)
+    #writeStartTestToDb(projectname = title,starTime=starTime)
     moduleabspath = os.getcwd()
     sys.path.append(moduleabspath)
     print(sys.path)
@@ -102,17 +102,96 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
     writeTestResultToDb(testResult=unitresult)
     return unitresult
 
-def writeStartTestToDb(projectname = "",starTime="sss"):
+def getDbManger():
     DbManager.cleanDB()
-    dbManager = DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
-	                      user="root",
-	                      password="Bestv001!",
-	                      dbname="ltjtest",
-	                      port=3306)
-    starttime = starTime
+    dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
+                          user="root",
+                          password="Bestv001!",
+                          dbname="ltjtest",
+                          port=3306)
+    return dbManager
+
+
+def writeStartTestToDb(projectname = "",starTime="sss"):
+    dbManager = getDbManger()
+    starttime = getNowTime()
     #starttime = "sss"
-    sqlstr = "insert into test_run_process(starttime,status,projectname) value('%s',1,'%s')" % (starttime,projectname)
+    tokenId = uuid.uuid4()
+    sqlstr = "insert into test_run_process(token,starttime,status,projectname) value('%s','%s',1,'%s')" % (tokenId,starttime,projectname)
     dbManager.insertData(sqlstr)
+    return  tokenId
+
+def queryStateByTokenPro(projectName = "",token = ""):
+    dbManager = getDbManger()
+    keyls = ["id", "starttime", "status", "endtime", "projectname"]
+    querySql = """select  id, starttime, status, endtime, projectname 
+                      from test_run_process p 
+                      where p.projectname = "%s" 
+                            and  p.token = "%s";""" % (projectName, token)
+    dataList = dbManager.queryAll(sql=querySql)
+    if dataList is not None and len(dataList) > 0:
+        return dict(zip(keyls,dataList[0]))
+
+def queryTestPlanList(projectName = ""):
+    dbManager = getDbManger()
+    keyls = ["id", "plantime", "projectname", "description"]
+    querySql = """select id, plantime, projectname, description 
+                  from test_plan p 
+                  where projectname = "%s"   ;""" % projectName
+    dataList = dbManager.queryAll(sql=querySql)
+    retList  = [dict(zip(keyls,data)) for data in dataList]
+    return retList
+
+def queryTestPlanByInterfaceName(interfaceName = "",planId = 22,db = None):
+    dbManager = getDbManger()
+    keyls = ["interfacename", "testcaseid", "testpoint", "result_sign","errordes"]
+    querySql = """select  interfacename, testcaseid, testpoint, result_sign, errordes 
+                  from test_case_record r	
+                  where r.plan_id = %s and 
+                        r.interfacename = '%s';""" % (planId,interfaceName)
+    dataList = dbManager.queryAll(sql=querySql)
+    retList  = [dict(zip(keyls,data)) for data in dataList]
+    return retList
+
+def queryTestPlanAllInterfaceName(interfaceName = "",planId = 22,db = None):
+    dbManager = getDbManger()
+    keyls = ["interfacename", "testcaseid", "testpoint", "result_sign","errordes"]
+    querySql = """select  interfacename, testcaseid, testpoint, result_sign, errordes 
+                  from test_case_record r	
+                  where r.plan_id = %s ;""" % planId
+    dataList = dbManager.queryAll(sql=querySql)
+    retList  = [dict(zip(keyls,data)) for data in dataList]
+    return retList
+
+def queryTestPlanRecord(planId = 11):
+    dbManager = getDbManger()
+    keyls = ["interfaceName", "success", "fail", "error", "total"]
+    querySql = """select  r.interfacename 'interfaceName',
+							CONVERT(sum(case r.result_sign  when '0' then 1 else 0 end) ,SIGNED )  'success',
+							CONVERT(sum(case r.result_sign  when '1' then 1 else 0 end),SIGNED )  'fail',
+							CONVERT(sum(case r.result_sign  when '2' then 1 else 0 end),SIGNED )  'error',
+			                CONVERT(sum(1),SIGNED )  'total'
+			        from test_case_record r 
+			        where r.plan_id = %s group by r.interfacename;""" % planId
+    dataList = dbManager.queryAll(sql=querySql)
+    retList = [dict(zip(keyls, data)) for data in dataList]
+    return retList
+
+
+def queryPlanDetailByInterfaceName(planId = 22):
+    planRecordList = queryTestPlanRecord(planId=planId)
+    allRecordList =queryTestPlanAllInterfaceName(planId=planId)
+    for planRecord in planRecordList:
+        interfaceName = planRecord["interfaceName"]
+        interfacePlanRecord = [record for record in allRecordList if record["interfacename"] == interfaceName]
+        planRecord["result"] = interfacePlanRecord
+    retDict = {}
+    retDict["code"] = "000000"
+    retDict["testrst"] = planRecordList
+    return  retDict
+
+
+
 
 def writeTestResultToDb(testResult = None,
                         title=u"Steam测试报告",
@@ -141,7 +220,7 @@ def writeTestResultToDb(testResult = None,
     planidStr = "select max(id) id from test_plan;"
     idrst = dbManager.queryAll(sql = planidStr)
     id = idrst[0][0]
-    #n=异常，错误，成功,
+    #n = 异常，错误，成功,
     #t = 测试用例对象 TestCase
     #o = ,
     #e = 异常信息
