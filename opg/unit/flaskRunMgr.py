@@ -143,7 +143,7 @@ def queryTestPlanList(projectName = ""):
     retDict = {}
     retDict["code"] = "000000"
     retDict["listplan"] = retList
-    return retList
+    return retDict
 
 def queryTestPlanByInterfaceName(interfaceName = "",planId = 22,db = None):
     dbManager = getDbManger()
