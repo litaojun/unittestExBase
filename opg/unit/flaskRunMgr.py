@@ -20,7 +20,7 @@ import uuid,time
 def runTest(moduleabspath='',
             title=u"Steam测试报告",
             description=u"用例测试情况",
-            starTime = "ssss"):
+            token = "ssss"):
     #moduls = getModul(path='../../../../',sign="Test")
     #writeStartTestToDb(projectname = title,starTime=starTime)
     moduleabspath = os.getcwd()
@@ -33,10 +33,10 @@ def runTest(moduleabspath='',
     cls = loadTestClassFromModules(moduls)
     #将测试类（继承了ParametrizedTestCase）转换为DICT，其中键值为对应的接口名称
     dictCls = tranListClassToDict(cls)
-    print(str(dictCls))
+    # print(str(dictCls))
     #通过文件路径获取用例数据
     casedict = creatTestCaseDataByPath(path=moduleabspath)
-    print("casedict="+str(casedict))
+    # print("casedict="+str(casedict))
     #new一个测试套件，通过测试数据和测试类组合成测试用例TestCase，加入到测试套件中
     suites = unittest.TestSuite()
     for casets in casedict:
@@ -55,7 +55,7 @@ def runTest(moduleabspath='',
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=title, description=description)
     unitresult = runner.run(suites)
     #unitresult = unittest.TextTestRunner(verbosity=2).run(suites)
-    writeTestResultToDb(testResult = unitresult,title=title,description=description,starTime=starTime)
+    writeTestResultToDb(testResult = unitresult,title=title,description=description,token=token)
     return unitresult
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
@@ -112,10 +112,9 @@ def getDbManger():
     return dbManager
 
 
-def writeStartTestToDb(projectname = "",starTime="sss"):
+def getRunTestTokenId(projectname = "",starTime="sss"):
     dbManager = getDbManger()
     starttime = getNowTime()
-    #starttime = "sss"
     tokenId = uuid.uuid4()
     sqlstr = "insert into test_run_process(token,starttime,status,projectname) value('%s','%s',1,'%s')" % (tokenId,starttime,projectname)
     dbManager.insertData(sqlstr)
@@ -199,7 +198,7 @@ def queryPlanDetailByInterfaceName(planId = 22):
 def writeTestResultToDb(testResult = None,
                         title=u"Steam测试报告",
                         description=u"用例测试情况",
-                        starTime="sss"):
+                        token="sss"):
     dbManager   =    getDbManger()
     result_list = testResult.result
     nowdatestr = getNowTime()
@@ -208,13 +207,13 @@ def writeTestResultToDb(testResult = None,
                  "projectname":title,
                  "description":description
                 }
-    starttime = starTime
-    processSql = "update test_run_process set status=2,endtime = '%s' where projectname = '%s' and starttime = '%s';" %(nowdatestr,title,starttime)
+
+    processSql = "update test_run_process set status=2,endtime = '%s' where projectname = '%s' and token = '%s';" %(nowdatestr,title,token)
     dbManager.updateData(processSql)
-    plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s'); "
-    t = plansqlStr % plandict
-    print("t = %s" % t)
-    dbManager.insertData(plansqlStr % plandict)
+    plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s') ; " % plandict
+    # t = plansqlStr % plandict
+    # print("t = %s" % t)
+    dbManager.insertData(plansqlStr)
     planidStr = "select max(id) id from test_plan;"
     idrst = dbManager.queryAll(sql = planidStr)
     id = idrst[0][0]
@@ -225,11 +224,11 @@ def writeTestResultToDb(testResult = None,
     for n, t, o, e in result_list:
         caseResultDic = {}
         caseResultDic['result_sign'] = n
-        caseResultDic['plan_id'] = id
-        caseResultDic['classname'] = t.__class__
+        caseResultDic['plan_id']      = id
+        caseResultDic['classname']    = t.__class__
         caseResultDic['interfacename'] = t.__interfaceName__
-        caseResultDic['testcaseid'] = t.getCaseid()
-        caseResultDic['testpoint'] = t.getTestPoint()
+        caseResultDic['testcaseid']     = t.getCaseid()
+        caseResultDic['testpoint']      = t.getTestPoint()
         if isinstance(o, str):
             # TODO: some problem with 'string_escape': it escape \n and mess up formating
             # uo = unicode(o.encode('string_escape'))
