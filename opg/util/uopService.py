@@ -80,7 +80,7 @@ class UopService(object):
                 cls.fmtdict[os.path.basename(cs).split(".")[0]] = cs
 
     def initReqJsonData(self,reqjsonfile = "",reqjsondata = None):
-        print(str(UopService.fmtdict))
+        #print(str(UopService.fmtdict))
         if reqjsonfile is not None and reqjsondata != "":
            if reqjsonfile.endswith(".txt"):
                jsonpath = os.getcwd() + reqjsonfile
@@ -88,7 +88,7 @@ class UopService(object):
                jsonpath = UopService.fmtdict[reqjsonfile]
            reqDataFmt = loadStrFromFile(filepath = jsonpath)
            reqdata = reqDataFmt % reqjsondata
-           print(reqdata)
+           #print(reqdata)
            try:
               self.reqjsondata = eval(reqdata)
            except SyntaxError as err:
@@ -104,11 +104,11 @@ class UopService(object):
             if ismethod(funObj)  :
                 curdoc = getattr(funObj, "__doc__")
                 if curdoc is not None:
-                    print("curdoc"+str(curdoc))
+                    #print("curdoc"+str(curdoc))
                     sign = curdoc.split("\n")[1].strip()
                     if sign.startswith("Sign"):
                        funSign = sign.split(":")[1]
-                       print("funSign = %s" % funSign)
+                       #print("funSign = %s" % funSign)
                        self.ifacedict[funSign] = funObj
 
     def initInterfaceData(self):
