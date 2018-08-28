@@ -162,6 +162,8 @@ def queryTestPlanAllInterfaceName(interfaceName = "",planId = 22,db = None):
                   from test_case_record r	
                   where r.plan_id = %s ;""" % planId
     dataList = dbManager.queryAll(sql=querySql)
+    if dataList is None:
+        dataList = []
     retList  = [dict(zip(keyls,data)) for data in dataList]
     return retList
 
@@ -177,7 +179,7 @@ def queryTestPlanRecord(planId = 11):
 			        where r.plan_id = %s group by r.interfacename;""" % planId
     dataList = dbManager.queryAll(sql=querySql)
     if dataList is None:
-        dataList = []
+       dataList = []
     retList = [dict(zip(keyls, data)) for data in dataList]
     return retList
 
