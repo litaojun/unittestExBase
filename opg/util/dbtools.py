@@ -10,7 +10,7 @@ def printSql(func):
     def _fun(*args,**kwargs):
         for key in kwargs:
             if key.startswith("sql"):
-                print("key = %,sql = %s" %(key,kwargs[key]))
+                print("key = %s,sql = %s" %(key,kwargs[key]))
                 break
         return func(*args,**kwargs)
     return _fun
