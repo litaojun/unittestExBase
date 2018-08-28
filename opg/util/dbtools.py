@@ -11,6 +11,7 @@ def printSql(func):
         for key in kwargs:
             if key.startswith("sql"):
                 print("key = %,sql = %s" %(key,kwargs[key]))
+                break
         return func(kwargs)
     return _fun
 
