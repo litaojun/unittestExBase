@@ -6,6 +6,14 @@ http://blog.csdn.net/MemoryD/article/details/74995651
 @author: ｌｉｔａｏｊｕｎ
 '''
 import pymysql,time
+def printSql(func):
+    def _fun(**kwargs):
+        for key in kwargs:
+            if key.startswith("sql"):
+                print("key = %,sql = %s" %(key,kwargs[key]))
+        return func(kwargs)
+    return _fun
+
 class DbManager():
     sign = True
     conn = None
