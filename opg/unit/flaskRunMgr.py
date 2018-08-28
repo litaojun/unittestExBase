@@ -200,12 +200,7 @@ def writeTestResultToDb(testResult = None,
                         title=u"Steam测试报告",
                         description=u"用例测试情况",
                         starTime="sss"):
-    DbManager.cleanDB()
-    dbManager   =      DbManager(host="steam-uat-default.czs6eaylfkoa.rds.cn-north-1.amazonaws.com.cn",
-                               user="root",
-                               password="Bestv001!",
-                               dbname="ltjtest",
-                               port=3306)
+    dbManager   =    getDbManger()
     result_list = testResult.result
     nowdatestr = getNowTime()
     plandict = {
