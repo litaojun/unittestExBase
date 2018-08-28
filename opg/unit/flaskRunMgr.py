@@ -209,8 +209,10 @@ def writeTestResultToDb(testResult = None,
                 }
 
     processSql = "update test_run_process set status=2,endtime = '%s' where projectname = '%s' and token = '%s';" %(nowdatestr,title,token)
+    print("proccesSql = %s" % processSql)
     dbManager.updateData(processSql)
     plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s') ; " % plandict
+    print("plansqlStr = %s" % plansqlStr)
     # t = plansqlStr % plandict
     # print("t = %s" % t)
     dbManager.insertData(plansqlStr)
