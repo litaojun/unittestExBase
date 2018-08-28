@@ -56,7 +56,7 @@ class DbManager():
                 #self.conn.close()  #关闭连接 
                 return results
     @printSql
-    def insertData(self,sql_insert):
+    def insertData(self,sql_insert=""):
         num = 0
         cur = self.conn.cursor()  
         #sql_insert ="""insert into user(id,username,password) values(4,'liu','1234')"""  

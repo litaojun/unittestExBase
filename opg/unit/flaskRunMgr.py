@@ -117,7 +117,7 @@ def getRunTestTokenId(projectname = "",starTime="sss"):
     starttime = getNowTime()
     tokenId = uuid.uuid4()
     sqlstr = "insert into test_run_process(token,starttime,status,projectname) value('%s','%s',1,'%s')" % (tokenId,starttime,projectname)
-    dbManager.insertData(sqlstr)
+    dbManager.insertData(sql_insert=sqlstr)
     return  tokenId
 
 def queryStateByTokenPro(projectName = "",token = ""):
@@ -215,7 +215,7 @@ def writeTestResultToDb(testResult = None,
     print("plansqlStr = %s" % plansqlStr)
     # t = plansqlStr % plandict
     # print("t = %s" % t)
-    dbManager.insertData(plansqlStr)
+    dbManager.insertData(sql_insert=plansqlStr)
     planidStr = "select max(id) id from test_plan;"
     idrst = dbManager.queryAll(sql = planidStr)
     id = idrst[0][0]
@@ -252,7 +252,7 @@ def writeTestResultToDb(testResult = None,
         caseResultDic['errordes'] = dbManager.conn.escape(script)
         sqlstr = "insert into test_case_record(classname,interfacename,testcaseid,testpoint,plan_id,result_sign,errordes) values(\"%(classname)s\" , '%(interfacename)s','%(testcaseid)s','%(testpoint)s','%(plan_id)s','%(result_sign)s',\"%(errordes)s\")"
         insertSql = sqlstr % caseResultDic
-        dbManager.insertData(insertSql)
+        dbManager.insertData(sql_insert=insertSql)
 
 if __name__ == '__main__':
     runTest("D:\\litaojun\\workspace\\uopweixinInterface")
