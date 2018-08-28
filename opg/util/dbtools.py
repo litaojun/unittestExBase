@@ -65,7 +65,7 @@ class DbManager():
             cur.execute(sql_insert)  
             #提交  
             self.conn.commit()  
-            num = cur.rowcount;
+            num = cur.rowcount
         except Exception as e:  
             print(e)
             #错误回滚  
@@ -85,7 +85,8 @@ class DbManager():
             self.conn.commit()  
             num = cur.rowcount
         except Exception as e:  
-                #错误回滚  
+                #错误回滚
+                num = 0
                 self.conn.rollback()   
         finally:  
                 #self.conn.close()

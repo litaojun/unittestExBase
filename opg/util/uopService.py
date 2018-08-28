@@ -147,7 +147,7 @@ class UopService(object):
                                       self.module, self.filename)
             xmlsqlfile = Xml_Parserfile(filename = xmlsqlpath)
             itsql = xmlsqlfile.parserSql()
-            a = self.inputKV
+            #a = self.inputKV
             for cursql in itsql :
                 self.sqldict[cursql[0]] = (cursql[1],cursql[2] % self.inputKV,cursql[3])
 

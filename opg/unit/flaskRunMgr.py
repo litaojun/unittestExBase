@@ -25,10 +25,10 @@ def runTest(moduleabspath='',
     #writeStartTestToDb(projectname = title,starTime=starTime)
     moduleabspath = os.getcwd()
     sys.path.append(moduleabspath)
-    print(sys.path)
+    #print(sys.path)
     #获取所有测试类模块
     moduls = getModulByabspath(path=moduleabspath,sign="Test")
-    print("moduls="+str(list(moduls)))
+    #print("moduls="+str(list(moduls)))
     #重模块中提取所有测试类（（继承了ParametrizedTestCase））
     cls = loadTestClassFromModules(moduls)
     #将测试类（继承了ParametrizedTestCase）转换为DICT，其中键值为对应的接口名称
@@ -176,6 +176,8 @@ def queryTestPlanRecord(planId = 11):
 			        from test_case_record r 
 			        where r.plan_id = %s group by r.interfacename;""" % planId
     dataList = dbManager.queryAll(sql=querySql)
+    if dataList is None:
+        dataList = []
     retList = [dict(zip(keyls, data)) for data in dataList]
     return retList
 
