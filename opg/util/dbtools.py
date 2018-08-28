@@ -7,12 +7,12 @@ http://blog.csdn.net/MemoryD/article/details/74995651
 '''
 import pymysql,time
 def printSql(func):
-    def _fun(**kwargs):
+    def _fun(*args,**kwargs):
         for key in kwargs:
             if key.startswith("sql"):
                 print("key = %,sql = %s" %(key,kwargs[key]))
                 break
-        return func(kwargs)
+        return func(*args,**kwargs)
     return _fun
 
 class DbManager():
