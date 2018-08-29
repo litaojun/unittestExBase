@@ -123,7 +123,7 @@ def getRunTestTokenId(projectname = "",starTime="sss"):
 def queryStateByTokenPro(projectName = "",token = ""):
     dbManager = getDbManger()
     keyls = ["id", "starttime", "status", "endtime", "projectname"]
-    querySql = """select  id, starttime, status, endtime, projectname 
+    querySql = """select  id, starttime, status, endtime, projectname ,HOUR(timediff(endtime , starttime)) hourtime ,minute(timediff(endtime , starttime)) mintime,SECOND(timediff(endtime , starttime)) sectime
                       from test_run_process p 
                       where p.projectname = "%s" 
                             and  p.token = "%s";""" % (projectName, token)
@@ -157,7 +157,7 @@ def queryTestPlanByInterfaceName(interfaceName = "",planId = 22,db = None):
 
 def queryTestPlanAllInterfaceName(interfaceName = "",planId = 22,db = None):
     dbManager = getDbManger()
-    keyls = ["interfacename", "testcaseid", "testpoint", "result_sign","errordes"]
+    keyls = ["interfacename", "testcaseid", "testpoint", "resultSign","errordes"]
     querySql = """select  interfacename, testcaseid, testpoint, result_sign, errordes 
                   from test_case_record r	
                   where r.plan_id = %s ;""" % planId
