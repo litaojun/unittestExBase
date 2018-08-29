@@ -122,7 +122,7 @@ def getRunTestTokenId(projectname = "",starTime="sss"):
 
 def queryStateByTokenPro(projectName = "",token = ""):
     dbManager = getDbManger()
-    keyls = ["id", "starttime", "status", "endtime", "projectname"]
+    keyls = ["id", "starttime", "status", "endtime", "projectname","hourtime","mintime","sectime"]
     querySql = """select  id, starttime, status, endtime, projectname ,HOUR(timediff(endtime , starttime)) hourtime ,minute(timediff(endtime , starttime)) mintime,SECOND(timediff(endtime , starttime)) sectime
                       from test_run_process p 
                       where p.projectname = "%s" 
