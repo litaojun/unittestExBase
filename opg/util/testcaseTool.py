@@ -19,9 +19,9 @@ def creatTestCaseDataByPath(path="../../../../"):
     filepaths = walk_dir_test(pathcase)
     #func = lambda x: csvReadToDict(x)
     func = lambda x: excelReadToDict(x)
-    funcm = lambda x: dictToInfaceDict(x)
-    casedictlist = list(map(func,filepaths))
-    infaceDict = list(map(funcm,casedictlist))
+    #funcm = lambda x: dictToInfaceDict(x)
+    infaceDict = dict(list(map(func,filepaths)))
+    #infaceDict = list(map(funcm,casedictlist))
     return infaceDict
 
 def creatTestCaseDataByFile(filepath="../../../../"):

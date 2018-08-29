@@ -45,6 +45,7 @@ def excelReadToDict(filepath):
          #reader = csv.DictReader(excelfile)
          #print "filepath=%s" % filepath
          reader = excel_table_byindex(filepath)
+         interfaceName = reader[0][casehear[1]]
          rtdict = {}
          for row in reader:
              f = lambda x : row[x]
@@ -54,7 +55,7 @@ def excelReadToDict(filepath):
              if not methodname in rtdict:
                  rtdict[methodname] = []
              rtdict[methodname].append(xcurl)
-         return rtdict
+         return interfaceName,rtdict
      
      
 #===============================================================================

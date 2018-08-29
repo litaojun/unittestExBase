@@ -16,7 +16,7 @@ from opg.util.isSystemType import splict
 from opg.util.dbtools import DbManager
 from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
-import uuid,time
+import uuid
 def runTest(moduleabspath='',
             title=u"Steam测试报告",
             description=u"用例测试情况",
@@ -39,16 +39,12 @@ def runTest(moduleabspath='',
     # print("casedict="+str(casedict))
     #new一个测试套件，通过测试数据和测试类组合成测试用例TestCase，加入到测试套件中
     suites = unittest.TestSuite()
-    for casets in casedict:
-        infaces = casets.keys()
-        for infacename in infaces:
-            #if dictCls.has_key(infacename):
+    for infacename in casedict:
             if infacename in dictCls:
                testclass = dictCls[infacename]
-               suites.addTest(ParametrizedTestCase.parametrize(testclass, casets[infacename]))
+               suites.addTest(ParametrizedTestCase.parametrize(testclass, casedict[infacename]))
             else:
                print("%s接口对应的类不存在" % infacename)
-    #print "suites.tests=",suites._tests
     HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
     fp = open(HtmlFile, "wb")
     #new一个Runner
@@ -57,6 +53,43 @@ def runTest(moduleabspath='',
     #unitresult = unittest.TextTestRunner(verbosity=2).run(suites)
     writeTestResultToDb(testResult = unitresult,title=title,description=description,token=token)
     return unitresult
+
+def initAllTestClass():
+    moduleabspath = os.getcwd()
+    sys.path.append(moduleabspath)
+    # print(sys.path)
+    # 获取所有测试类模块
+    moduls = getModulByabspath(path=moduleabspath, sign="Test")
+    # print("moduls="+str(list(moduls)))
+    # 重模块中提取所有测试类（（继承了ParametrizedTestCase））
+    cls     = loadTestClassFromModules(moduls)
+    dictCls = tranListClassToDict(cls)
+    return dictCls
+
+def genAllTestCase(allCase,allTestClass):
+    suites = unittest.TestSuite()
+    for infacename in allCase:
+        if infacename in allTestClass:
+            testclass = allTestClass[infacename]
+            suites.addTest(ParametrizedTestCase.parametrize(testclass, allCase[infacename]))
+        else:
+            print("%s接口对应的类不存在" % infacename)
+    return suites
+
+def runAllTestCase(suites = None,
+                   title = "",
+                   description = "",
+                   token = ""):
+    runner = HTMLTestRunner.HTMLTestRunner(stream=None, title=title, description=description)
+    unitresult = runner.runSteam(suites)
+    # unitresult = unittest.TextTestRunner(verbosity=2).run(suites)
+    writeTestResultToDb(testResult=unitresult, title=title, description=description, token=token)
+    return unitresult
+
+def initAllTestCase():
+    moduleabspath = os.getcwd()
+    steamTestCase = creatTestCaseDataByPath(path=moduleabspath)
+    return steamTestCase
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
     basepath = os.getcwd()
@@ -118,7 +151,7 @@ def getRunTestTokenId(projectname = "",starTime="sss"):
     tokenId = uuid.uuid4()
     sqlstr = "insert into test_run_process(token,starttime,status,projectname) value('%s','%s',1,'%s')" % (tokenId,starttime,projectname)
     dbManager.insertData(sql_insert=sqlstr)
-    return  tokenId
+    return  tokenId,starttime
 
 def queryStateByTokenPro(projectName = "",token = ""):
     dbManager = getDbManger()

@@ -641,6 +641,11 @@ class HTMLTestRunner(Template_mixin):
         print(sys.stderr, '\nTime Elapsed: %s' % (self.stopTime-self.startTime))
         return result
 
+    def runSteam(self,test):
+        result = _TestResult(self.verbosity)
+        test(result)
+        return result
+
 
     def sortResult(self, result_list):
         # unittest does not seems to run in any particular order.
