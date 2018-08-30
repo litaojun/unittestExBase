@@ -51,6 +51,7 @@ def excelReadToDict(filepath):
              f = lambda x : row[x]
              xcurl = list(map(f,casehear))
              methodname = xcurl[4]
+             xcurl.append(filepath)
              #if not rtdict.has_key(methodname) :
              if not methodname in rtdict:
                  rtdict[methodname] = []
