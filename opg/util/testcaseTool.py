@@ -26,14 +26,8 @@ def creatTestCaseDataByPath(path="../../../../"):
 
 def creatTestCaseDataByFile(filepath="../../../../"):
     #获取相对path所在的绝对路径
-    #pathcase = os.path.abspath(path+"\\"+"testcase")
-    pathcase = filepath
-    filepaths = walk_dir_test(pathcase)
-    #func = lambda x: csvReadToDict(x)
     func = lambda x: excelReadToDict(x)
-    funcm = lambda x: dictToInfaceDict(x)
-    casedict = func(filepath)
-    infaceDict = funcm(casedict)
+    infaceDict = dict([func(filepath)])
     return infaceDict
 if __name__ == '__main__':
     casedict = creatTestCaseDataByPath()

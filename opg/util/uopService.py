@@ -79,6 +79,9 @@ class UopService(object):
             for cs in a + b:
                 cls.fmtdict[os.path.basename(cs).split(".")[0]] = cs
 
+    def resetToken(self):
+        pass
+
     def initReqJsonData(self,reqjsonfile = "",reqjsondata = None):
         #print(str(UopService.fmtdict))
         if reqjsonfile is not None and reqjsondata != "":
