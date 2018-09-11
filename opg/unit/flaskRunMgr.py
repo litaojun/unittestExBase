@@ -265,7 +265,7 @@ def writeTestResultToDb(testResult = None,
         caseResultDic['result_sign'] = n
         caseResultDic['plan_id']      = id
         caseResultDic['classname']    = t.__class__
-        caseResultDic['interfacename'] = t.__interfaceName__
+        caseResultDic['interfacename'] = "https://uat-steam-api.opg.cn" + t.__interfaceName__
         caseResultDic['testcaseid']     = t.getCaseid()
         caseResultDic['testpoint']      = t.getTestPoint()
         if isinstance(o, str):
