@@ -48,8 +48,8 @@ class DbManager():
            DbManager.sign = False
     @staticmethod
     def cleanDB():
-        if not DbManager.sign :
-            DbManager.conn.close()
+        # if not DbManager.sign :
+        #     DbManager.conn.close()
         DbManager.sign = True
         DbManager.conn = None
 
