@@ -19,11 +19,11 @@ class DbManager():
     sign = True
     conn = None
     def __init__(self,
-                 host="192.168.0.103",
-                 user="root",
-                 password="123456",
-                 dbname="test",
-                 port=3306):
+                 host     = "192.168.0.103",
+                 user     = "root",
+                 password = "123456",
+                 dbname   = "test",
+                 port     =  3306):
           DbManager.cleanDB()
           DbManager.initConn(host,
                              user,
@@ -36,12 +36,22 @@ class DbManager():
     @staticmethod
     def initConn(host,user,password,dbname,port):
         if DbManager.sign:
-           DbManager.conn= pymysql.connect(host,user,  password,dbname,port,use_unicode=True, charset="utf8",connect_timeout=100,write_timeout=100)
+           DbManager.conn= pymysql.connect(host,
+                                           user,
+                                           password,
+                                           dbname,
+                                           port,
+                                           use_unicode=True,
+                                           charset="utf8",
+                                           connect_timeout=100,
+                                           write_timeout=100)
            DbManager.sign = False
     @staticmethod
     def cleanDB():
         DbManager.sign = True
+        DbManager.conn.close()
         DbManager.conn = None
+
 
     def queryAll(self,sql,param=None): 
           results = None 
