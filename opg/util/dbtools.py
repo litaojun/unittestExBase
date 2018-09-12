@@ -66,7 +66,7 @@ class DbManager():
           finally:  
                 #self.conn.close()  #关闭连接 
                 return results
-    @printSql
+    # @printSql
     def insertData(self,sql_insert=""):
         num = 0
         cur = self.conn.cursor()  
