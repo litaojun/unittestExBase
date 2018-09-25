@@ -41,10 +41,10 @@ class DbManager():
                                            password,
                                            dbname,
                                            port,
-                                           use_unicode=True,
-                                           charset="utf8",
-                                           connect_timeout=100,
-                                           write_timeout=100)
+                                           use_unicode     = True ,
+                                           charset         = "utf8",
+                                           connect_timeout = 100 ,
+                                           write_timeout   = 100 )
            DbManager.sign = False
     @staticmethod
     def cleanDB():
@@ -117,37 +117,7 @@ class DbManager():
                 #self.conn.close()
                 time.sleep(10)
     
-    def initdata(self):
-        stuls = [
-                 "insert student(sname,sage,ssex) values('litaojun',31,1);",
-                 "insert student(sname,sage,ssex) values('chenming',32,1);",
-                 "insert student(sname,sage,ssex) values('youyou',30,1);",
-                 "insert student(sname,sage,ssex) values('guohui',28,0);"
-                ]      
-        tidls = ["insert teacher(tname) values('zhongming');",
-                 "insert teacher(tname) values('chennan');"]
-        coursels = ["insert course(cname,tid) VALUES('yuwen',1);",
-                    "insert course(cname,tid) VALUES('shuxue',2);",
-                   ]
-        scls = ["insert sc(sid,cid,score) values(1,1,80);",
-                "insert sc(sid,cid,score) values(2,1,40);",
-                "insert sc(sid,cid,score) values(3,1,69);",
-                "insert sc(sid,cid,score) values(4,1,99);",
-                "insert sc(sid,cid,score) values(1,2,79);",
-                "insert sc(sid,cid,score) values(2,2,88);",
-                "insert sc(sid,cid,score) values(3,2,67);",
-                "insert sc(sid,cid,score) values(4,2,55);"]
-        #dbtest = DbManager()
-        f = lambda x : self.insertData(x)
-        a = map(f,stuls)
-        print(list(a))
-        b = map(f,tidls)
-        print(list(b))
-        c = map(f,coursels)
-        print(list(c))
-        d = map(f,scls)
-        print(list(d))
-        
+
     @staticmethod
     def getDbManager():
         return DbManager.conn

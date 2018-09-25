@@ -160,9 +160,9 @@ def queryStateByTokenPro(projectName = "",token = ""):
                       from test_run_process p 
                       where p.projectname = "%s" 
                             and  p.token = "%s";""" % (projectName, token)
-    dataList = dbManager.queryAll(sql=querySql)
+    dataList = dbManager.queryAll(sql = querySql)
     if dataList is not None and len(dataList) > 0:
-        return dict(zip(keyls,dataList[0]))
+            return dict(zip(keyls,dataList[0]))
 
 def queryTestPlanList(projectName = ""):
     dbManager = getDbManger()
@@ -244,10 +244,8 @@ def writeTestResultToDb(testResult = None,
                  "projectname":title,
                  "description":description
                 }
-
     processSql = "update test_run_process set status=2,endtime = '%s' where projectname = '%s' and token = '%s';" %(nowdatestr,title,token)
     print("proccesSql = %s" % processSql)
-    dbManager.updateData(processSql)
     plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s') ; " % plandict
     print("plansqlStr = %s" % plansqlStr)
     # t = plansqlStr % plandict
@@ -290,6 +288,7 @@ def writeTestResultToDb(testResult = None,
         sqlstr = "insert into test_case_record(classname,interfacename,testcaseid,testpoint,plan_id,result_sign,errordes) values(\"%(classname)s\" , '%(interfacename)s','%(testcaseid)s','%(testpoint)s','%(plan_id)s','%(result_sign)s',\"%(errordes)s\")"
         insertSql = sqlstr % caseResultDic
         dbManager.insertData(sql_insert=insertSql)
+    dbManager.updateData(processSql)
 
 if __name__ == '__main__':
     runTest("D:\\litaojun\\workspace\\uopweixinInterface")
