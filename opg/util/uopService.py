@@ -31,9 +31,9 @@ def loadStrFromFile(filepath = ""):
     load_str = ""
     if os.path.exists(filepath):
         with open(filepath, 'r',encoding="utf-8") as load_f:
-            lines = load_f.readlines()
-            load_str = "".join(lines)
-            load_str = load_str.replace("\n\t", "")
+             lines    = load_f.readlines()
+             load_str = "".join(lines)
+             load_str = load_str.replace("\n\t", "")
     return load_str
 
 class UopService(object):
@@ -42,7 +42,11 @@ class UopService(object):
     """
     fmtdict = None
     token = None
-    def __init__(self,module,filename,sqlvaluedict,reqjsonfile=None,dbName = "resource"):
+    def __init__(self,module       = "",
+                      filename     = "",
+                      sqlvaluedict = {},
+                      reqjsonfile  = None,
+                      dbName       = "resource"):
         """
             :param module :
             :param filename :
@@ -53,13 +57,13 @@ class UopService(object):
                             "memberId" : sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else "",
                             "token"    :  sqlvaluedict["token"] if "token" in sqlvaluedict else ""
                          }
-        self.module = module
+        self.module   = module
         self.filename = filename
-        self.inputKV = sqlvaluedict
-        self.sqldict = {}
-        self.ifacedict = {}
+        self.inputKV  = sqlvaluedict
+        self.sqldict  = {}
+        self.ifacedict   = {}
         self.reqjsondata = ""
-        self.rsp = None
+        self.rsp         = None
         self.lsser = [self,]
         self.dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
                                    user="root",
@@ -68,7 +72,8 @@ class UopService(object):
                                    port=3306)
         self.initDbOperator()
         UopService.initFmtDict()
-        self.initReqJsonData(reqjsonfile = reqjsonfile,reqjsondata = self.inputKV)
+        self.initReqJsonData(reqjsonfile = reqjsonfile,
+                             reqjsondata = self.inputKV)
 
     @classmethod
     def initFmtDict(cls):

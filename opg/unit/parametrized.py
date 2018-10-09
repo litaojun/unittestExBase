@@ -16,10 +16,12 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def __init__(self, methodName='runTest', param=None):
         super(ParametrizedTestCase, self).__init__(methodName)
         self.param = param
-        self.myservice = None
-        self.inputdata = self.getInputData()
+        self.myservice  = None
+        self.inputdata  = self.getInputData()
         self.expectdata = self.getExpectData()
-        logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始"%(self.__class__,self.__class__.__interfaceName__,self.getCaseid()))
+        logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始"%(self.__class__,
+                                                             self.__class__.__interfaceName__,
+                                                             self.getCaseid()))
         
     def setService(self,myservice):
         self.myservice = myservice

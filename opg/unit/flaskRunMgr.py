@@ -76,14 +76,18 @@ def genAllTestCase(allCase,allTestClass):
             print("%s接口对应的类不存在" % infacename)
     return suites
 
-def runAllTestCase(suites = None,
-                   title = "",
+def runAllTestCase(suites      = None,
+                   title       = "",
                    description = "",
-                   token = ""):
-    runner = HTMLTestRunner.HTMLTestRunner(stream=None, title=title, description=description)
+                   token       = ""):
+    runner = HTMLTestRunner.HTMLTestRunner(stream      = None,
+                                           title       = title,
+                                           description = description)
     unitresult = runner.runSteam(suites)
-    # unitresult = unittest.TextTestRunner(verbosity=2).run(suites)
-    writeTestResultToDb(testResult=unitresult, title=title, description=description, token=token)
+    writeTestResultToDb(testResult  = unitresult,
+                        title       = title,
+                        description = description,
+                        token       = token)
     return unitresult
 
 def initAllTestCase():
