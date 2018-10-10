@@ -56,7 +56,7 @@ class UopService(object):
                             "x-token"  : "admin",
                             "memberId" : sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else "",
                             "token"    :  sqlvaluedict["token"] if "token" in sqlvaluedict else ""
-                         }
+                          }
         self.module   = module
         self.filename = filename
         self.inputKV  = sqlvaluedict
@@ -64,12 +64,12 @@ class UopService(object):
         self.ifacedict   = {}
         self.reqjsondata = ""
         self.rsp         = None
-        self.lsser = [self,]
-        self.dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
-                                   user="root",
-                                   password="Bestv001!",
-                                   dbname=dbName,
-                                   port=3306)
+        self.lsser       = [self,]
+        self.dbManager   = DbManager(host  =  "steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
+                                     user  =  "root",
+                                     password = "Bestv001!",
+                                     dbname   = dbName,
+                                     port     = 3306)
         self.initDbOperator()
         UopService.initFmtDict()
         self.initReqJsonData(reqjsonfile = reqjsonfile,

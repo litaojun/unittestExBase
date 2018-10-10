@@ -16,6 +16,7 @@ def printSql(func):
     return _fun
 
 class DbManager():
+    connList = []
     sign = True
     conn = None
     def __init__(self,
@@ -25,12 +26,7 @@ class DbManager():
                  dbname   = "test",
                  port     =  3306):
           DbManager.cleanDB()
-          DbManager.initConn(host,
-                             user,
-                             password,
-                             dbname,
-                             port)
-          #self.conn= pymysql.connect(host,user,  password,dbname,port,connect_timeout=100,write_timeout=100)
+          DbManager.initConn(host,user,password,dbname,port)
           self.conn  = DbManager.getDbManager()
           
     @staticmethod
@@ -46,25 +42,31 @@ class DbManager():
                                            connect_timeout = 100 ,
                                            write_timeout   = 100 )
            DbManager.sign = False
+
     @staticmethod
     def cleanDB():
-        # if not DbManager.sign :
-        #     DbManager.conn.close()
+        if not DbManager.sign :
+            DbManager.connList.append(DbManager.conn)
         DbManager.sign = True
         DbManager.conn = None
 
+    @staticmethod
+    def closeDbConn():
+        for conn in DbManager.connList:
+            conn.close()
+
 
     def queryAll(self,sql,param=None): 
-          results = None 
-          try:  
+        results = None
+        try:
             cur =self.conn.cursor() 
             cur.execute(sql)    #执行sql语句  
             results = cur.fetchall()    #获取查询的所有记录  
             self.conn.commit()
-          except Exception as e:  
+        except Exception as e:
                 raise e  
-          finally:  
-                #self.conn.close()  #关闭连接 
+        finally:
+                #self.conn.close()  #关闭连接
                 return results
     # @printSql
     def insertData(self,sql_insert=""):
@@ -82,11 +84,11 @@ class DbManager():
             #错误回滚  
             self.conn.rollback()
             raise e
-        finally:  
-            time.sleep(1)
-            #self.conn.close()
+        finally:
             pass
+            #self.conn.close()
         return num
+
     def deleteData(self,sql_del):
         num = 0
         try:  
@@ -101,8 +103,7 @@ class DbManager():
                 self.conn.rollback()   
         finally:  
                 #self.conn.close()
-                time.sleep(1)
-                pass 
+                pass
         return num
                 
     def updateData(self,sql_update):
@@ -115,7 +116,7 @@ class DbManager():
                 self.conn.rollback()   
         finally:
                 #self.conn.close()
-                time.sleep(10)
+                time.sleep(1)
     
 
     @staticmethod
@@ -135,6 +136,10 @@ class DbManager():
 
 if __name__ == '__main__':
     sqlstr = "delete t.* from t_raffle_result_address t where EXISTS(select 1 from     t_raffle_result f where    t.RESULT_ID = f.id and f.MEMBER_ID = 'ab4d6667-e04c-447d-85a1-c78e9b3e42fe' and f.ACTIVITIES_ID ='1a1c0272-769a-44b1-9cc3-1b4163f537a5');"
-    db = DbManager(host="uop-uat-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",user="root",password="Bestv001!",dbname="ltjtest",port=3306)
+    db = DbManager(host  =  "uop-uat-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
+                   user  =  "root",
+                   password = "Bestv001!",
+                   dbname = "ltjtest",
+                   port = 3306)
     num = db.deleteData(sql_del = sqlstr)
     print(str(num))

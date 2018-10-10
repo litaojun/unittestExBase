@@ -293,6 +293,7 @@ def writeTestResultToDb(testResult = None,
         insertSql = sqlstr % caseResultDic
         dbManager.insertData(sql_insert=insertSql)
     dbManager.updateData(processSql)
+    DbManager.closeDbConn()
 
 if __name__ == '__main__':
     runTest("D:\\litaojun\\workspace\\uopweixinInterface")
