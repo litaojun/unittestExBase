@@ -88,23 +88,26 @@ class UopService(object):
         pass
 
     def initReqJsonData(self,reqjsonfile = "",reqjsondata = None):
-        #print(str(UopService.fmtdict))
+        self.reqjsondata = self.getReqJsonData(reqjsonfile = reqjsonfile,
+                                               reqjsondata = reqjsondata)
+
+    def getReqJsonData(self,reqjsonfile = "",reqjsondata = None):
+        jsondata = None
         if reqjsonfile is not None and reqjsondata != "":
            if reqjsonfile.endswith(".txt"):
-               jsonpath = os.getcwd() + reqjsonfile
+              jsonpath = os.getcwd() + reqjsonfile
            else:
-               jsonpath = UopService.fmtdict[reqjsonfile]
+              jsonpath = UopService.fmtdict[reqjsonfile]
            reqDataFmt = loadStrFromFile(filepath = jsonpath)
            reqdata = reqDataFmt % reqjsondata
-           #print(reqdata)
            try:
-              self.reqjsondata = eval(reqdata)
+              jsondata = eval(reqdata)
            except SyntaxError as err:
-              self.reqjsondata = reqdata
+              jsondata = reqdata
               print("SyntaxError:",err)
            except Exception as e:
-              print("Exception:", e)
               raise e
+           return jsondata
 
     def initInterfaceDict(self):
         for name in dir(self):
@@ -116,7 +119,6 @@ class UopService(object):
                     sign = curdoc.split("\n")[1].strip()
                     if sign.startswith("Sign"):
                        funSign = sign.split(":")[1]
-                       #print("funSign = %s" % funSign)
                        self.ifacedict[funSign] = funObj
 
     def initInterfaceData(self):
@@ -205,6 +207,12 @@ class UopService(object):
         return qurResult
 
     def setInPutData(self):
+        pass
+
+    def sendInterfaceUrlReq(self):
+        pass
+
+    def getRetcodeByRsp(self):
         pass
 
 if __name__ == '__main__':

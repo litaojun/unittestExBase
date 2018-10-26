@@ -23,7 +23,6 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',title=u"Steam
     sys.path.append(moduleabspath)
     #获取所有测试类模块
     moduls = getModulByabspath(path=moduleabspath,sign="Test")
-    # print("moduls="+str(list(moduls)))
     #重模块中提取所有测试类（（继承了ParametrizedTestCase））
     cls = loadTestClassFromModules(moduls)
     #将测试类（继承了ParametrizedTestCase）转换为DICT，其中键值为对应的接口名称
@@ -69,7 +68,9 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse
     #writeTestResultToDb(testResult=unitresult)
     return unitresult
 
-def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,caseids = [],moduleabspath=""):
+def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',
+                            testclse=None,
+                            caseids = []):
     """
     :param casefilepath: 用例路径
     :param testclse:测试类
@@ -77,7 +78,8 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
     :param moduleabspath:模块路径
     :return:
     """
-    casedictcls = creatTestCaseDataByFile(casefilepath)
+    basepath    = os.getcwd()
+    casedictcls = creatTestCaseDataByFile(basepath + casefilepath)
     #print casedictcls
     suites = unittest.TestSuite()
     # #print(casedictcls)
@@ -87,13 +89,21 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
         curcaseid = curcase.getCaseid()
         if curcaseid in caseids:
             suites.addTest(curcase)
-    HtmlFile = moduleabspath+splict+"testresult"+splict+"HTMLtemplate.html"
+    HtmlFile = basepath+splict+"testresult"+splict+"HTMLtemplate.html"
     fp = open(HtmlFile, "wb")
     #new一个Runner
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
     unitresult = runner.run(suites)
     writeTestResultToDb(testResult=unitresult)
     return unitresult
+
+def runTestAllCaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',
+                            testclse=None,
+                            caseids = []):
+    if len(caseids) == 0:
+       runTestOneCls(casefilepath,testclse)
+    else:
+       runTestOneTestcaseByCls(casefilepath,testclse,caseids)
 
 def writeStartTestToDb(projectname = ""):
     DbManager.cleanDB()

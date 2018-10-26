@@ -22,7 +22,6 @@ class ParametrizedTestCase(unittest.case.TestCase):
         logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始"%(self.__class__,
                                                              self.__class__.__interfaceName__,
                                                              self.getCaseid()))
-        
     def setService(self,myservice):
         self.myservice = myservice
         self.myservice.initInterfaceData()
@@ -85,7 +84,8 @@ class ParametrizedTestCase(unittest.case.TestCase):
     #根据测试类（继承了ParametrizedTestCase）和测试数据（从excel读取）构成TestCase
     #===========================================================================
     def parametrize(testcase_klass, params={}):
-        """ Create a suite containing all tests taken from the given
+        """
+            Create a suite containing all tests taken from the given
             subclass, passing them the parameter 'param'.
         """
         suite = unittest.TestSuite()
@@ -94,9 +94,9 @@ class ParametrizedTestCase(unittest.case.TestCase):
             casels = params[name]
             for onecase in casels:
                  if hasattr(testcase_klass, name):
-                     suite.addTest(testcase_klass(name,onecase))
+                    suite.addTest(testcase_klass(name,onecase))
                  else:
-                     print("%s类不存在%s方法" % (testcase_klass.__name__,name))
+                    print("%s类不存在%s方法" % (testcase_klass.__name__,name))
         return suite
 
     def id(self):

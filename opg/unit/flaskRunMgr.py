@@ -70,25 +70,61 @@ def genAllTestCase(allCase,allTestClass):
     suites = unittest.TestSuite()
     for infacename in allCase:
         if infacename in allTestClass:
-            testclass = allTestClass[infacename]
-            suites.addTest(ParametrizedTestCase.parametrize(testclass, allCase[infacename]))
+           testclass = allTestClass[infacename]
+           suites.addTest(ParametrizedTestCase.parametrize(testclass, allCase[infacename]))
         else:
             print("%s接口对应的类不存在" % infacename)
     return suites
+
+def genTestCaseByInterfaceOrCaseIds(allCase       = None,
+                                    allTestClass  = None,
+                                    interfaceName = None,
+                                    caseIds       = []):
+    suites    = unittest.TestSuite()
+    testclass = allTestClass[interfaceName]
+    testCases = allCase[interfaceName]
+    for methonName in testCases:
+        caseList = testCases[methonName]
+        for testcase in caseList:
+            if testcase[0] in caseIds:
+               suites.addTest(testclass(methonName,testcase))
+    return suites
+
+def runTestCase(suites      = None ,
+                title       = ""   ,
+                description = ""   ):
+    runner = HTMLTestRunner.HTMLTestRunner(stream      = None,
+                                           title       = title,
+                                           description = description)
+    unitresult = runner.runSteam(suites)
+    return unitresult
+
 
 def runAllTestCase(suites      = None,
                    title       = "",
                    description = "",
                    token       = ""):
-    runner = HTMLTestRunner.HTMLTestRunner(stream      = None,
-                                           title       = title,
-                                           description = description)
-    unitresult = runner.runSteam(suites)
+
+    unitresult = runTestCase(suites      = suites,
+                             title       = title,
+                             description = description)
     writeTestResultToDb(testResult  = unitresult,
                         title       = title,
                         description = description,
                         token       = token)
     return unitresult
+def runOneTestcase(suites      = None,
+                   planId      = None,
+                   token       = None,
+                   title       = None,
+                   description = None):
+    unitresult = runTestCase(suites      = suites,
+                             title       = title,
+                             description = description)
+    updateTestResultToDb(testResult  = unitresult,
+                         projectName = title,
+                         token       = token,
+                         planId      = planId)
 
 def initAllTestCase():
     moduleabspath = os.getcwd()
@@ -192,6 +228,26 @@ def queryTestPlanByInterfaceName(interfaceName = "",planId = 22,db = None):
     retList  = [dict(zip(keyls,data)) for data in dataList]
     return retList
 
+def queryAllInterfaceByProjectName(projectName = None):
+    dbManager = getDbManger()
+    keyls = ["aliasName","interfaceAddr","module","mark","reqpath","rsppath"]
+    querySql = """select inf.aliasName,inf.interfaceNameAddr,inf.module,inf.mark,inf.reqDataPath,inf.rspDataPath 
+                    from interface_mgr inf 
+                    where inf.projectname = "%s";""" % projectName
+    dataList = dbManager.queryAll(sql=querySql)
+    if dataList is None:
+        dataList = []
+    # for data in dataList:
+    #     data[4] = os.path.basename(data[4])
+    #     data[5] = os.path.basename(data[5])
+    retList = [dict(zip(keyls, data)) for data in dataList]
+    retdata = {
+                 "code":"000000",
+                 "infsList":retList
+               }
+    return retdata
+
+
 def queryTestPlanAllInterfaceName(interfaceName = "",planId = 22,db = None):
     dbManager = getDbManger()
     keyls = ["interfacename", "testcaseid", "testpoint", "resultSign","errordes"]
@@ -233,13 +289,26 @@ def queryPlanDetailByInterfaceName(planId = 22):
     retDict["testrst"] = planRecordList
     return  retDict
 
-
-
+def updateTestResultToDb(testResult  = None,
+                         projectName = None,
+                         token       = None,
+                         planId      = None):
+    dbManager = getDbManger()
+    processSql = "update test_run_process set status=2 where projectname = '%s' and token = '%s';" % ( projectName, token)
+    result_list = testResult.result
+    for n, t, o, e in result_list:
+        caseResultDic = {}
+        caseResultDic['result_sign']    = n
+        caseResultDic['testcaseid']     = t.getCaseid()
+        caseResultDic["planId"]          = planId
+        updateSql = "update test_case_record r set r.result_sign = %(result_sign)s where r.plan_id = %(planId)s and r.testcaseid = '%(testcaseid)s';" % caseResultDic
+        dbManager.updateData(sql_update=updateSql)
+    dbManager.updateData(sql_update=processSql)
 
 def writeTestResultToDb(testResult = None,
-                        title=u"Steam测试报告",
-                        description=u"用例测试情况",
-                        token="sss"):
+                        title      = u"Steam测试报告",
+                        description= u"用例测试情况",
+                        token      = "sss"):
     dbManager   =    getDbManger()
     result_list = testResult.result
     nowdatestr = getNowTime()
@@ -252,12 +321,15 @@ def writeTestResultToDb(testResult = None,
     print("proccesSql = %s" % processSql)
     plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s') ; " % plandict
     print("plansqlStr = %s" % plansqlStr)
-    # t = plansqlStr % plandict
-    # print("t = %s" % t)
+
     dbManager.insertData(sql_insert=plansqlStr)
     planidStr = "select max(id) id from test_plan;"
     idrst = dbManager.queryAll(sql = planidStr)
     id = idrst[0][0]
+
+    #更新planId到test_run_process表
+    updateProceeSql  = "update test_run_process p set p.planId = %d where p.token = '%s';" % (id ,token)
+    dbManager.updateData(sql_update=updateProceeSql)
     #n = 异常，错误，成功,
     #t = 测试用例对象 TestCase
     #o = ,

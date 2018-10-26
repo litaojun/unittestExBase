@@ -41,12 +41,13 @@ class DbManager():
                                            charset         = "utf8",
                                            connect_timeout = 100 ,
                                            write_timeout   = 100 )
+           DbManager.connList.append(DbManager.conn)
            DbManager.sign = False
 
     @staticmethod
     def cleanDB():
-        if not DbManager.sign :
-            DbManager.connList.append(DbManager.conn)
+        # if not DbManager.sign :
+        #     DbManager.connList.append(DbManager.conn)
         DbManager.sign = True
         DbManager.conn = None
 
