@@ -8,7 +8,7 @@ Created on 2017
 import unittest
 from opg.unit.parametrized import ParametrizedTestCase
 from opg.util.loadModul import getModulByabspath
-from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile
+from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile,creatTestCaseDataByYmlPath
 from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
 import sys,os
@@ -17,6 +17,7 @@ from opg.util.dbtools import DbManager
 from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
 import uuid
+
 def runTest(moduleabspath='',
             title=u"Steam测试报告",
             description=u"用例测试情况",
@@ -128,7 +129,8 @@ def runOneTestcase(suites      = None,
 
 def initAllTestCase():
     moduleabspath = os.getcwd()
-    steamTestCase = creatTestCaseDataByPath(path=moduleabspath)
+    #steamTestCase = creatTestCaseDataByPath(path=moduleabspath)
+    steamTestCase = creatTestCaseDataByYmlPath(path = moduleabspath)
     return steamTestCase
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
@@ -230,8 +232,8 @@ def queryTestPlanByInterfaceName(interfaceName = "",planId = 22,db = None):
 
 def queryAllInterfaceByProjectName(projectName = None):
     dbManager = getDbManger()
-    keyls = ["aliasName","interfaceAddr","module","mark","reqpath","rsppath"]
-    querySql = """select inf.aliasName,inf.interfaceNameAddr,inf.module,inf.mark,inf.reqDataPath,inf.rspDataPath 
+    keyls = ["aliasName","interfaceAddr","reqtype","module","mark","reqpath","rsppath"]
+    querySql = """select inf.aliasName,inf.interfaceNameAddr,inf.reqtype,inf.module,inf.mark,inf.reqDataPath,inf.rspDataPath 
                     from interface_mgr inf 
                     where inf.projectname = "%s";""" % projectName
     dataList = dbManager.queryAll(sql=querySql)
@@ -279,16 +281,17 @@ def queryTestPlanRecord(planId = 11):
 
 def queryPlanDetailByInterfaceName(planId = 22):
     planRecordList = queryTestPlanRecord(planId=planId)
-    allRecordList =queryTestPlanAllInterfaceName(planId=planId)
+    allRecordList  =  queryTestPlanAllInterfaceName(planId=planId)
     for planRecord in planRecordList:
-        interfaceName = planRecord["interfaceName"]
-        interfacePlanRecord = [record for record in allRecordList if record["interfacename"] == interfaceName]
+        interfaceName         = planRecord["interfaceName"]
+        interfacePlanRecord   = [record for record in allRecordList if record["interfacename"] == interfaceName]
         planRecord["result"] = interfacePlanRecord
     retDict = {}
     retDict["code"] = "000000"
     retDict["testrst"] = planRecordList
     return  retDict
 
+#更新指定计划的测试结果
 def updateTestResultToDb(testResult  = None,
                          projectName = None,
                          token       = None,
@@ -305,6 +308,7 @@ def updateTestResultToDb(testResult  = None,
         dbManager.updateData(sql_update=updateSql)
     dbManager.updateData(sql_update=processSql)
 
+#将新执行的测试结果写入数据库
 def writeTestResultToDb(testResult = None,
                         title      = u"Steam测试报告",
                         description= u"用例测试情况",

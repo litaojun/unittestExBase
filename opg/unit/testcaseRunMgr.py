@@ -8,7 +8,7 @@ Created on 2017
 import unittest
 from opg.unit.parametrized import ParametrizedTestCase
 from opg.util.loadModul import getModulByabspath
-from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile
+from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile,loadYmlToTestcaseByFilepath
 from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
 import sys,os
@@ -52,7 +52,8 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',title=u"Steam
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
     basepath = os.getcwd()
-    casedictcls = creatTestCaseDataByFile(basepath + casefilepath)
+    #casedictcls = creatTestCaseDataByFile(basepath + casefilepath)
+    casedictcls = loadYmlToTestcaseByFilepath(basepath + casefilepath)
     #print casedictcls
     suites = unittest.TestSuite()
     print(casedictcls)

@@ -6,9 +6,6 @@ Created on 2017年7月8日
 @author: ｌｉｔａｏｊｕｎ
 '''
 import os
-
-from .isSystemType import splict
-s = splict
 # print("s=",s)
 #===============================================================================
 #dir  搜索目录
@@ -26,8 +23,8 @@ def walk_dir_test(dir,topdown=True,sign='case',endstr='.xlsx'):
     for root, dirs, files in ts:
         #root = root.replace(dir,"")
         for name in files:
-          if name.find(sign)>0 and name.endswith(endstr) > 0 :
-              modelnm.append(root+s+name)
+          if name.count(sign)>0 and name.endswith(endstr) > 0 :
+              modelnm.append(root + os.sep + name)
     return modelnm
 
 
@@ -45,8 +42,8 @@ def walk_absdir_modul_file(dir,topdown=True,sign='con',endstr='.py'):
     for root, dirs, files in ts:
         root = root.replace(dir,"")
         for name in files:
-          if name.find(sign)>0 and name.endswith(endstr) > 0 :
-              modelnm.append(root+s+name.replace(endstr,""))
+          if name.count(sign)>0 and name.endswith(endstr) > 0 :
+              modelnm.append(root+os.sep+name.replace(endstr,""))
     return modelnm
 
 
@@ -55,5 +52,8 @@ if __name__ == '__main__':
     # print(cspath)
     # mouduls = walk_absdir_modul_file(dir='D:\\litaojun\\workspace\\jenkinsPython\\')
     # print(mouduls)
-    a = walk_dir_test(dir=os.getcwd(),str="",endstr=".txt")
-    print(str(a))
+    # a = walk_dir_test(dir=os.getcwd(),str="",endstr=".txt")
+    # print(str(a))
+    s = "steam-resourceadminproductadd-activitys.yml"
+    if s.endswith(".yml") and s.find("s"):
+       print(s)

@@ -27,15 +27,25 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.myservice.initInterfaceData()
         
     def setUp(self):
-#           #后期抽奖前的个人总积分
-#           self.preuserTotalPoint = self.personalCenterService.getPersonalSign()
-          predata = self.getPreConditions()
-          if predata is not None:
-              dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
-              interfacels = [infacename for infacename in predata if infacename.startswith("preInterface")]
-              self.myservice.handlingDb(dbsqlls)
-              self.myservice.handlingInterface(interfacels)
-              
+#       #后期抽奖前的个人总积分
+#       self.preuserTotalPoint = self.personalCenterService.getPersonalSign()
+        predata = self.getPreConditions()
+        if predata is not None:
+           dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
+           interfacels = [infacename for infacename in predata if infacename.startswith("preInterface")]
+           self.myservice.handlingDb(dbsqlls)
+           self.myservice.handlingInterface(interfacels)
+           for pre in predata:
+               if pre.startswith("setup"):
+                  if pre in self.myservice.ifacedict:
+                     preReqJsonFile  = self.myservice.ifacedict[pre][0]
+                     if  preReqJsonFile is not None:
+                         inputFormat = self.myservice.inputKV["reqjsonfile"]
+                         self.myservice.inputKV["reqjsonfile"] = self.myservice.inputKV[preReqJsonFile]
+                     self.myservice.ifacedict[pre][1]()
+                     if  preReqJsonFile is not None:
+                        self.myservice.inputKV["reqjsonfile"] = inputFormat
+
     def tearDown(self):
         predata = self.getPreConditions()
         if predata is not None:
@@ -43,20 +53,32 @@ class ParametrizedTestCase(unittest.case.TestCase):
               interfacels = [infacename for infacename in predata if infacename.startswith("tearInterface")]
               self.myservice.handlingDb(dbsqlls)
               self.myservice.handlingInterface(interfacels)
+              for pre in predata:
+                  if pre.startswith("tearDown"):
+                     if pre in self.myservice.ifacedict:
+                         preReqJsonFile = self.myservice.ifacedict[pre][0]
+                         if preReqJsonFile is not None:
+                             inputFormat = self.myservice.inputKV["reqjsonfile"]
+                             self.myservice.inputKV["reqjsonfile"] = self.myservice.inputKV[preReqJsonFile]
+                         self.myservice.ifacedict[pre][1]()
+                         if preReqJsonFile is not None:
+                            self.myservice.inputKV["reqjsonfile"] = inputFormat
         logger.info(msg="类=%s,接口=%s,用例ID=%s执行结束" % (self.__class__, self.__class__.__interfaceName__, self.getCaseid()))
+
 
     def setCleanData(self,cleandata):
         self.cleandata = cleandata
 
     def getInputData(self):
-        jsonstr = "{"+ ",".join(self.param[5].split("\n")) + "}"
-        dicdata = None
-        try:
-           dicdata =  eval(jsonstr)
-        except Exception as ex:
-            print(ex)
-            print(jsonstr)
-        return dicdata
+        # jsonstr = "{"+ ",".join(self.param[5].split("\n")) + "}"
+        # dicdata = None
+        # try:
+        #    dicdata =  eval(jsonstr)
+        # except Exception as ex:
+        #     print(ex)
+        #     print(jsonstr)
+        # return dicdata
+        return self.param[5]
     
     def getCaseid(self):
         return self.param[0]
@@ -65,18 +87,20 @@ class ParametrizedTestCase(unittest.case.TestCase):
         return self.param[2]
     
     def getExpectData(self):
-        data = self.param[6]
-        itemdata = data.split("\n")
-        jsonstr = "{" + ",".join(itemdata) + "}"
-        dicdata = eval(jsonstr)
-        return dicdata
+        # data = self.param[6]
+        # itemdata = data.split("\n")
+        # jsonstr = "{" + ",".join(itemdata) + "}"
+        # dicdata = eval(jsonstr)
+        # return dicdata
+        return self.param[6]
 
     def getPreConditions(self):
-        itemdata = None
-        data = self.param[3]
-        if data is not None and data != "":
-           itemdata = data.split("\n")
-        return itemdata
+        # itemdata = None
+        # data = self.param[3]
+        # if data is not None and data != "":
+        #    itemdata = data.split("\n")
+        # return itemdata
+        return self.param[3]
 
     @staticmethod
     #===========================================================================
@@ -98,6 +122,10 @@ class ParametrizedTestCase(unittest.case.TestCase):
                  else:
                     print("%s类不存在%s方法" % (testcase_klass.__name__,name))
         return suite
+    def compareRetcodeTest(self):
+        self.rsp     = self.myservice.sendHttpReq()
+        retcode      = self.myservice.getRetcodeByRsp(response = self.rsp)
+        self.assertTrue(retcode == self.expectdata["code"])
 
     def id(self):
         return "%s.%s_%s" % (self.__class__.__interfaceName__+"--"+self.param[0],self.param[0],self.param[2])
