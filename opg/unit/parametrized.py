@@ -118,10 +118,11 @@ class ParametrizedTestCase(unittest.case.TestCase):
             casels = params[name]
             for onecase in casels:
                  if hasattr(testcase_klass, name):
-                    suite.addTest(testcase_klass(name,onecase))
+                    suite.addTest(testcase_klass( name , onecase ))
                  else:
                     print("%s类不存在%s方法" % (testcase_klass.__name__,name))
         return suite
+
     def compareRetcodeTest(self):
         self.rsp  = self.myservice.sendHttpReq()
         retcode   = self.myservice.getRetcodeByRsp(response = self.rsp)
