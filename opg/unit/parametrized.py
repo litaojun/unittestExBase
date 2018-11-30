@@ -49,8 +49,8 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def tearDown(self):
         predata = self.getPreConditions()
         if predata is not None:
-              dbsqlls = [sql for sql in predata if  sql.startswith("tearDB")]
-              interfacels = [infacename for infacename in predata if infacename.startswith("tearInterface")]
+              dbsqlls = [ sql for sql in predata if  sql.startswith("tearDB") ]
+              interfacels = [ infacename for infacename in predata if infacename.startswith("tearInterface") ]
               self.myservice.handlingDb(dbsqlls)
               self.myservice.handlingInterface(interfacels)
               for pre in predata:
@@ -123,12 +123,12 @@ class ParametrizedTestCase(unittest.case.TestCase):
                     print("%s类不存在%s方法" % (testcase_klass.__name__,name))
         return suite
     def compareRetcodeTest(self):
-        self.rsp     = self.myservice.sendHttpReq()
-        retcode      = self.myservice.getRetcodeByRsp(response = self.rsp)
+        self.rsp  = self.myservice.sendHttpReq()
+        retcode   = self.myservice.getRetcodeByRsp(response = self.rsp)
         self.assertTrue(retcode == self.expectdata["code"])
 
     def id(self):
-        return "%s.%s_%s" % (self.__class__.__interfaceName__+"--"+self.param[0],self.param[0],self.param[2])
+        return "%s.%s_%s" % (self.__class__.__interfaceName__ + "--" + self.param[0], self.param[0], self.param[2])
 
 #####################################################
 ##-testcase
