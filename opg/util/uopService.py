@@ -27,6 +27,20 @@ def decorator(param):
         return wrapper
     return _decorator
 
+def resultData(param):
+    def _resultData(fun):
+        if not isinstance(fun, type):
+           @functools.wraps(fun)
+           def wrapper(*args, **kwargs):
+               logger.info(msg="前置调用函数%s,类%s" % (fun.__name__, str(args[0])))
+               start   = time.time()
+               rsp = fun(*args, **kwargs)
+               runtime = time.time() - start
+               return rsp
+           wrapper.__resultData__ = True
+           wrapper.__param__     = param
+        return wrapper
+    return _resultData
 def loadStrFromFile(filepath = ""):
     load_str = ""
     if os.path.exists(filepath):
@@ -62,6 +76,7 @@ class UopService(object):
         self.inputKV  = sqlvaluedict
         self.sqldict  = {}
         self.ifacedict   = {}
+        self.compareFuncDict = {}
         self.reqjsondata = ""
         self.rsp         = None
         self.lsser       = [self,]
@@ -137,6 +152,21 @@ class UopService(object):
                         for name in signName:
                             self.ifacedict[name] = [sign,funObj]
 
+    def initCompareResultFunData(self,sign = None):
+        for name in dir(self):
+            funObj = getattr(self, name)
+            #if ismethod(funObj) and (sign or (name != "sendHttpReq")):
+            if ismethod(funObj):
+               signDec  = getattr(funObj, "__resultData__",False)
+               signName = getattr(funObj, "__param__", False)
+               if signDec :
+                  if isinstance(signName,str):
+                     self.compareFuncDict[signName] = funObj
+                  else:
+                     if isinstance(signName,list):
+                        for name in signName:
+                            self.compareFuncDict[name] = funObj
+
     def initInterfaceDataT(self):
         for serv in self.lsser:
             for name in dir(serv):
@@ -180,13 +210,18 @@ class UopService(object):
             :param sqlls:
             :return:
         """
+        self.initDbOperator()
         operDict = {
                       "delete":self.dbManager.deleteData,
                       "add":self.dbManager.insertData,
                       "update":self.dbManager.updateData
                    }
-        f = lambda x:operDict[self.sqldict[x][0]](self.sqldict[x][1]) if x is not None else None
-        als = list(map(f,sqlls))
+        # f = lambda x:operDict[self.sqldict[x][0]](self.sqldict[x][1]) if x is not None else None
+        # als = list(map(f,sqlls))
+        for sqlSign in sqlls:
+            sqlOperType = self.sqldict[sqlSign][0]
+            sqlStr      = self.sqldict[sqlSign][1]
+            operDict[sqlOperType](sqlStr)
 
     def handlingInterface(self , interacels = ()):
         f = lambda x:self.ifacedict[x][1]()
