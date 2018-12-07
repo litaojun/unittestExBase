@@ -34,7 +34,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
         if predata is not None:
            dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
            # interfacels = [infacename for infacename in predata if infacename.startswith("preInterface")]
-           self.myservice.handlingDb(dbsqlls)
+           #self.myservice.handlingDb(dbsqlls)
            # self.myservice.handlingInterface(interfacels)
            for pre in predata:
                if pre.startswith("setup"):

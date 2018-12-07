@@ -16,12 +16,11 @@ from inspect import isfunction
 def loadTestClassFromModule(module, use_load_tests=True):
     """Return a suite of all tests cases contained in the given module"""
     tests = None
-    #print dir(module)
     for name in dir(module):
         obj = getattr(module, name)
         if isinstance(obj, type) and issubclass(obj, ParametrizedTestCase) and str(obj) != str(ParametrizedTestCase) and str(obj) != "<class 'uopweixin.util.parametrizedCase.ParametrizedCase'>":
-            if obj.__name__.endswith("Test"):
-                tests = obj
+           if obj.__name__.endswith("Test"):
+              tests = obj
     return tests
 #===============================================================================
 # 从模块中获取所有测试测试类（继承了ParametrizedTestCase）
