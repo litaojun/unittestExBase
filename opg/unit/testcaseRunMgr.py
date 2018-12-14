@@ -50,8 +50,9 @@ def runTest(moduleabspath='D:\\litaojun\\workspace\\jenkinsPython',title=u"Steam
     writeTestResultToDb(testResult = unitresult,title=title,description=description)
     return unitresult
 
-def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
-    basepath = os.getcwd()
+def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,basepath = None):
+    if basepath is None:
+       basepath = os.getcwd()
     #casedictcls = creatTestCaseDataByFile(basepath + casefilepath)
     casedictcls = loadYmlToTestcaseByFilepath(basepath + casefilepath)
     #print casedictcls

@@ -127,10 +127,11 @@ def runOneTestcase(suites      = None,
                          token       = token,
                          planId      = planId)
 
-def initAllTestCase():
-    moduleabspath = os.getcwd()
+def initAllTestCase(casePath = None):
+    if casePath is None:
+       casePath = os.getcwd()
     #steamTestCase = creatTestCaseDataByPath(path=moduleabspath)
-    steamTestCase = creatTestCaseDataByYmlPath(path = moduleabspath)
+    steamTestCase = creatTestCaseDataByYmlPath(path = casePath)
     return steamTestCase
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
