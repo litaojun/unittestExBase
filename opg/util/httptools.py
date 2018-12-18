@@ -48,6 +48,17 @@ def httpDelete(url ="" ,headers = {}):
     logger.info("http response data:%s" % httpRsp.text)
     return httpRsp.text
 
+def httpPutGet(url ="" ,headers = {}):
+    logger.info("http request type:GET")
+    logger.info("http request url:%s" % url)
+    httpRsp = requests.put(
+                                 url=url,
+                                 headers=headers,
+                                 verify=False
+                              )
+    logger.info("http response data:%s" % httpRsp.text)
+    return httpRsp.text
+
 def httpPostFile(url="",headers = {},file = None):
     logger.info("http request type:POST")
     logger.info("http request url:%s" % url)
