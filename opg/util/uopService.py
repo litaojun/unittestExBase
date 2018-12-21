@@ -85,7 +85,7 @@ class UopService(object):
                                      password = "Bestv001!",
                                      dbname   = dbName,
                                      port     = 3306)
-        #self.initDbOperator()
+        self.initDbOperator()
         UopService.initFmtDict()
         self.initReqJsonData( reqjsonfile = reqjsonfile ,
                               reqjsondata = self.inputKV )
@@ -191,7 +191,8 @@ class UopService(object):
             itsql = xmlsqlfile.parserSql()
             #a = self.inputKV
             for cursql in itsql :
-                self.sqldict[cursql[0]] = (cursql[1],cursql[2] % self.inputKV,cursql[3])
+                #self.sqldict[cursql[0]] = (cursql[1],cursql[2] % self.inputKV,cursql[3])
+                self.sqldict[cursql[0]] = (cursql[1], cursql[2] , cursql[3])
 
 
     def getTownList(self,predata = []):
@@ -232,16 +233,20 @@ class UopService(object):
         return self.dbManager
 
     def selectBySqlName(self,sqlname):
-        sqlstr = self.sqldict[sqlname][1]
+        sqlstr    = self.sqldict[sqlname][1] % self.inputKV
         qurResult = self.dbManager.queryAll(sqlstr)
         if qurResult is not None and len(qurResult)>0:
            return qurResult[0][0]
         return None
 
     def selectAllDataBySqlName(self,sqlname):
-        sqlstr = self.sqldict[sqlname][1]
+        sqlstr = self.sqldict[sqlname][1] % self.inputKV
         qurResult = self.dbManager.queryAll(sqlstr)
         return qurResult
+
+    def deleteBySqlName(self,sqlname):
+        sqlstr = self.sqldict[sqlname][1] % self.inputKV
+        self.dbManager.deleteData(sql_del = sqlstr)
 
     def setInPutData(self):
         pass

@@ -48,7 +48,7 @@ class RedisOper(object):
                       }
         keycodefmt = vercodeDict[scenes] % (phone,"*")
         keyls = RedisOper.curRedis.keys(keycodefmt)
-        code = None
+        code = b'ss'
         if len(keyls) > 0:
             key = keyls[0]
             code = key[-6:]
