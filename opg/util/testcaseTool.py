@@ -102,7 +102,9 @@ def tranXlsToYmlFile(casedict = None):
         print("d = " + str(d))
         dumpDataToYmlFile(filePath = filepath ,data = d)
 
+
 def loadYamlFileData(filePath = None):
+    #
     #sprint("filepath = %s " % filePath)
     with open(filePath, 'r',encoding="utf-8") as f:
         try:

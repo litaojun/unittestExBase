@@ -60,7 +60,7 @@ class UopService(object):
                       filename     = ""  ,
                       sqlvaluedict = {}  ,
                       reqjsonfile  = None ,
-                      dbName       = "resource"):
+                      dbName       = None):
         """
             :param module :
             :param filename :
@@ -80,11 +80,14 @@ class UopService(object):
         self.reqjsondata = ""
         self.rsp         = None
         self.lsser       = [self,]
-        self.dbManager   = DbManager(host  =  "steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
-                                     user  =  "root",
-                                     password = "Bestv001!",
-                                     dbname   = dbName,
-                                     port     = 3306)
+        self.dbName = dbName
+        # self.dbManager = None
+        # if dbName is not None:
+        #    self.dbManager   = DbManager(host     =  "steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
+        #                                  user     =  "root",
+        #                                  password = "Bestv001!",
+        #                                  dbname   = dbName,
+        #                                  port     = 3306)
         self.initDbOperator()
         UopService.initFmtDict()
         self.initReqJsonData( reqjsonfile = reqjsonfile ,
@@ -128,14 +131,14 @@ class UopService(object):
     def initInterfaceDict(self):
         for name in dir(self):
             funObj = getattr(self, name)
-            if ismethod(funObj)  :
+            if ismethod(funObj):
                 curdoc = getattr(funObj , "__doc__")
                 if curdoc is not None:
                     #print("curdoc"+str(curdoc))
-                    sign = curdoc.split("\n")[1].strip()
-                    if sign.startswith("Sign"):
-                       funSign = sign.split(":")[1]
-                       self.ifacedict[funSign] = funObj
+                   sign = curdoc.split("\n")[1].strip()
+                   if sign.startswith("Sign"):
+                      funSign = sign.split(":")[1]
+                      self.ifacedict[funSign] = funObj
 
     def initInterfaceData(self,sign = None):
         for name in dir(self):
@@ -211,18 +214,24 @@ class UopService(object):
             :param sqlls:
             :return:
         """
-        self.initDbOperator()
-        operDict = {
-                      "delete":self.dbManager.deleteData,
-                      "add":self.dbManager.insertData,
-                      "update":self.dbManager.updateData
+        if self.dbName is not None:
+           # self.initDbOperator()
+           dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
+                                                                   user     =  "root",
+                                                                   password = "Bestv001!",
+                                                                   dbname   = self.dbName,
+                                                                   port     = 3306)
+           operDict = {
+                      "delete":dbManager.deleteData,
+                      "add":dbManager.insertData,
+                      "update":dbManager.updateData
                    }
-        # f = lambda x:operDict[self.sqldict[x][0]](self.sqldict[x][1]) if x is not None else None
-        # als = list(map(f,sqlls))
-        for sqlSign in sqlls:
-            sqlOperType = self.sqldict[sqlSign][0]
-            sqlStr      = self.sqldict[sqlSign][1]
-            operDict[sqlOperType](sqlStr)
+           for sqlSign in sqlls:
+               sqlOperType = self.sqldict[sqlSign][0]
+               sqlStr      = self.sqldict[sqlSign][1] % self.inputKV
+               operDict[sqlOperType](sqlStr)
+           dbManager.closeDbConn()
+
 
     def handlingInterface(self , interacels = ()):
         f = lambda x:self.ifacedict[x][1]()

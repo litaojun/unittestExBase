@@ -50,10 +50,8 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def tearDown(self):
         predata = self.getPreConditions()
         if predata is not None:
-              dbsqlls = [ sql for sql in predata if  sql.startswith("tearDB") ]
-              # interfacels = [ infacename for infacename in predata if infacename.startswith("tearInterface") ]
+              dbsqlls = [ sql   for sql in predata if  sql.startswith("tearDB") ]
               self.myservice.handlingDb(dbsqlls)
-              # self.myservice.handlingInterface(interfacels)
               for pre in predata:
                   if pre.startswith("tearDown"):
                      if pre in self.myservice.ifacedict:
