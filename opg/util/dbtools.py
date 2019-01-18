@@ -5,7 +5,17 @@ Created on 2017年12月16日
 http://blog.csdn.net/MemoryD/article/details/74995651
 @author: ｌｉｔａｏｊｕｎ
 '''
-import pymysql,time
+import pymysql,time,os
+from DBUtils.PooledDB import PooledDB
+import configparser
+config_path = os.path.join(os.getcwd(),'config', 'dbConfig.ini')
+config = configparser.ConfigParser()#调用配置文件读取
+config.read(config_path, encoding='utf-8')
+class ReadConfig():
+    def get_mysql(self,base, name):
+        value = config.get(base, name)  # 通过config.get拿到配置文件中DATABASE的name的对应值
+        return value
+
 def printSql(func):
     def _fun(*args,**kwargs):
         for key in kwargs:
@@ -135,12 +145,115 @@ class DbManager():
         res = dbtest.queryAll(sql = sqlquery)
         print(res)
 
+class Database:
+    sign = True
+    def __init__(self):
+        self.dbDict = {}
+        if Database.sign:
+           self._CreatePool()
+           Database.sign = False
+    def _CreatePool(self):
+        for dbName in config.sections():
+            self.dbDict[dbName] = PooledDB(    creator        = pymysql,
+                                               mincached      = 2,
+                                               maxcached      = 5,
+                                               maxshared      = 3,
+                                               maxconnections = 6,
+                                               blocking       = True ,
+                                               host     = config.get(dbName,"host"),
+                                               port     = int(config.get(dbName,"port")),
+                                               user     = config.get(dbName,"user"),
+                                               password = config.get(dbName,"password"),
+                                               database = config.get(dbName,"database"),
+                                               charset  = "utf8" )
+    def _Getconnect(self,dbName):
+        self.conn=self.dbDict[dbName].connection()
+        cur=self.conn.cursor()
+        if not cur:
+            raise("数据库连接不上")
+        else:
+            return cur
+    #查询sql
+    def ExecQuery(self,sql):
+        cur=self._Getconnect()
+        cur.execute(sql)
+        relist=cur.fetchall()
+        cur.close()
+        self.conn.close()
+        return relist
+    #非查询的sql
+    def ExecNoQuery(self,sql):
+        cur=self._Getconnect()
+        cur.execute(sql)
+        self.conn.commit()
+        cur.close()
+        self.conn.close()
+
+    def insertData(self, sql="",dbName=""):
+        num = 0
+        cur = self._Getconnect(dbName)
+        # sql_insert ="""insert into user(id,username,password) values(4,'liu','1234')"""
+        try:
+            cur.execute(sql)
+            # 提交
+            self.conn.commit()
+            num = cur.rowcount
+        except Exception as e:
+            print(e)
+            # 错误回滚
+            self.conn.rollback()
+            raise e
+        finally:
+            cur.close()
+            self.conn.close()
+        return num
+
+    def deleteData(self, sql="",dbName=""):
+        num = 0
+        cur = self._Getconnect(dbName)
+        try:
+            cur.execute(sql)  # 像sql语句传递参数
+            # 提交
+            self.conn.commit()
+            num = cur.rowcount
+        except Exception as e:
+            # 错误回滚
+            num = 0
+            self.conn.rollback()
+        finally:
+            cur.close()
+            self.conn.close()
+        return num
+
+    def updateData(self, sql="",dbName=""):
+        cur = self._Getconnect(dbName)
+        try:
+            cur.execute(sql)  # 像sql语句传递参数
+            self.conn.commit()  # 提交
+        except Exception as e:
+            # 错误回滚
+            self.conn.rollback()
+        finally:
+            cur.close()
+            self.conn.close()
+
+    def queryAll(self,sql,param=None,dbName = ""):
+        results = None
+        cur = self._Getconnect(dbName)
+        try:
+            # cur =self.conn.cursor()
+            cur.execute(sql)    #执行sql语句
+            results = cur.fetchall()    #获取查询的所有记录
+            self.conn.commit()
+        except Exception as e:
+                raise e
+        finally:
+            cur.close()
+            self.conn.close()
+            return results
+
 if __name__ == '__main__':
-    sqlstr = "delete t.* from t_raffle_result_address t where EXISTS(select 1 from     t_raffle_result f where    t.RESULT_ID = f.id and f.MEMBER_ID = 'ab4d6667-e04c-447d-85a1-c78e9b3e42fe' and f.ACTIVITIES_ID ='1a1c0272-769a-44b1-9cc3-1b4163f537a5');"
-    db = DbManager(host  =  "uop-uat-wx.cmcutmukkzyn.rds.cn-north-1.amazonaws.com.cn",
-                   user  =  "root",
-                   password = "Bestv001!",
-                   dbname = "ltjtest",
-                   port = 3306)
-    num = db.deleteData(sql_del = sqlstr)
+    sqlstr = "delete o.* from tb_order o where o.id = '11111fffffff'"
+    db = Database()
+    num = db.deleteData(sql=sqlstr,dbName= "allin")
     print(str(num))

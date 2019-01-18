@@ -55,42 +55,31 @@ class ParametrizedTestCase(unittest.case.TestCase):
               for pre in predata:
                   if pre.startswith("tearDown"):
                      if pre in self.myservice.ifacedict:
-                         preReqJsonFile = self.myservice.ifacedict[pre][0]
-                         if preReqJsonFile is not None:
-                             inputFormat = self.myservice.inputKV["reqjsonfile"]
-                             self.myservice.inputKV["reqjsonfile"] = self.myservice.inputKV[preReqJsonFile]
-                         self.myservice.ifacedict[pre][1]()
-                         if preReqJsonFile is not None:
-                            self.myservice.inputKV["reqjsonfile"] = inputFormat
+                        preReqJsonFile = self.myservice.ifacedict[pre][0]
+                        if preReqJsonFile is not None:
+                           inputFormat = self.myservice.inputKV["reqjsonfile"]
+                           self.myservice.inputKV["reqjsonfile"] = self.myservice.inputKV[preReqJsonFile]
+                        self.myservice.ifacedict[pre][1]()
+                        if preReqJsonFile is not None:
+                           self.myservice.inputKV["reqjsonfile"] = inputFormat
         logger.info(msg="类=%s,接口=%s,用例ID=%s执行结束" % (self.__class__, self.__class__.__interfaceName__, self.getCaseid()))
-
 
     def setCleanData(self,cleandata):
         self.cleandata = cleandata
 
     def getInputData(self):
         return self.param[5]
-    
+
     def getCaseid(self):
         return self.param[0]
-    
+
     def getTestPoint(self):
         return self.param[2]
-    
+
     def getExpectData(self):
-        # data = self.param[6]
-        # itemdata = data.split("\n")
-        # jsonstr = "{" + ",".join(itemdata) + "}"
-        # dicdata = eval(jsonstr)
-        # return dicdata
         return self.param[6]
 
     def getPreConditions(self):
-        # itemdata = None
-        # data = self.param[3]
-        # if data is not None and data != "":
-        #    itemdata = data.split("\n")
-        # return itemdata
         return self.param[3]
 
     @staticmethod

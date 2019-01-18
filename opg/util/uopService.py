@@ -49,7 +49,7 @@ def loadStrFromFile(filepath = ""):
              load_str = "".join(lines)
              load_str = load_str.replace("\n\t", "")
     return load_str
-
+from opg.util.dbtools import Database
 class UopService(object):
     """
 
@@ -81,17 +81,11 @@ class UopService(object):
         self.rsp         = None
         self.lsser       = [self,]
         self.dbName = dbName
-        # self.dbManager = None
-        # if dbName is not None:
-        #    self.dbManager   = DbManager(host     =  "steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
-        #                                  user     =  "root",
-        #                                  password = "Bestv001!",
-        #                                  dbname   = dbName,
-        #                                  port     = 3306)
         self.initDbOperator()
         UopService.initFmtDict()
         self.initReqJsonData( reqjsonfile = reqjsonfile ,
                               reqjsondata = self.inputKV )
+        self.dbManager = Database()
 
     @classmethod
     def initFmtDict(cls):
@@ -216,22 +210,16 @@ class UopService(object):
         """
         if self.dbName is not None:
            # self.initDbOperator()
-           dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
-                                                                   user     =  "root",
-                                                                   password = "Bestv001!",
-                                                                   dbname   = self.dbName,
-                                                                   port     = 3306)
+           # dbManager = Database()
            operDict = {
-                      "delete":dbManager.deleteData,
-                      "add":dbManager.insertData,
-                      "update":dbManager.updateData
+                      "delete":self.dbManager.deleteData,
+                      "add":self.dbManager.insertData,
+                      "update":self.dbManager.updateData
                    }
            for sqlSign in sqlls:
                sqlOperType = self.sqldict[sqlSign][0]
                sqlStr      = self.sqldict[sqlSign][1] % self.inputKV
-               operDict[sqlOperType](sqlStr)
-           dbManager.closeDbConn()
-
+               operDict[sqlOperType](sqlStr,self.dbName)
 
     def handlingInterface(self , interacels = ()):
         f = lambda x:self.ifacedict[x][1]()
@@ -250,22 +238,18 @@ class UopService(object):
 
     def selectAllDataBySqlName(self,sqlname):
         sqlstr = self.sqldict[sqlname][1] % self.inputKV
-        qurResult = self.dbManager.queryAll(sqlstr)
+        qurResult = self.dbManager.queryAll(sqlstr,self.dbName)
         return qurResult
 
     def deleteBySqlName(self,sqlname):
         sqlstr = self.sqldict[sqlname][1] % self.inputKV
-        self.dbManager.deleteData(sql_del = sqlstr)
+        self.dbManager.deleteData(sql = sqlstr,dbName=self.dbName)
 
     def setInPutData(self):
         pass
 
     def sendInterfaceUrlReq(self):
         pass
-
-    # def getRetcodeByRsp(response=None,
-    #                     format="code"):
-    #     pass
 
 if __name__ == '__main__':
   pt  = os.path.abspath(os.path.join(os.getcwd(), "../.."))
