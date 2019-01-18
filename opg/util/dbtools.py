@@ -147,14 +147,17 @@ class DbManager():
 
 class Database:
     sign = True
+    dbDict = {}
     def __init__(self):
-        self.dbDict = {}
         if Database.sign:
-           self._CreatePool()
+           # self.dbDict = {}
+           Database._CreatePool()
            Database.sign = False
+
+    @classmethod
     def _CreatePool(self):
         for dbName in config.sections():
-            self.dbDict[dbName] = PooledDB(    creator        = pymysql,
+            Database.dbDict[dbName] = PooledDB(    creator        = pymysql,
                                                mincached      = 2,
                                                maxcached      = 5,
                                                maxshared      = 3,
@@ -167,7 +170,7 @@ class Database:
                                                database = config.get(dbName,"database"),
                                                charset  = "utf8" )
     def _Getconnect(self,dbName):
-        self.conn=self.dbDict[dbName].connection()
+        self.conn=Database.dbDict[dbName].connection()
         cur=self.conn.cursor()
         if not cur:
             raise("数据库连接不上")
@@ -214,7 +217,7 @@ class Database:
         try:
             cur.execute(sql)  # 像sql语句传递参数
             # 提交
-            self.conn.commit()
+            # self.conn.commit()
             num = cur.rowcount
         except Exception as e:
             # 错误回滚
@@ -237,7 +240,7 @@ class Database:
             cur.close()
             self.conn.close()
 
-    def queryAll(self,sql,param=None,dbName = ""):
+    def queryAll(self,sql,dbName = ""):
         results = None
         cur = self._Getconnect(dbName)
         try:
