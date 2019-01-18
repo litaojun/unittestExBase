@@ -217,7 +217,7 @@ class Database:
         try:
             cur.execute(sql)  # 像sql语句传递参数
             # 提交
-            # self.conn.commit()
+            self.conn.commit()
             num = cur.rowcount
         except Exception as e:
             # 错误回滚
