@@ -13,7 +13,7 @@ from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToD
 from opg.unit import HTMLTestRunner
 import sys,os
 from opg.util.isSystemType import splict
-from opg.util.dbtools import DbManager
+from opg.util.dbtools import DbManager,Database
 from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
 import uuid
@@ -179,13 +179,13 @@ def runTestOneTestcaseByCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython
     return unitresult
 
 def getDbManger():
-    DbManager.cleanDB()
-    dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
-                          user="root",
-                          password="Bestv001!",
-                          dbname="ltjtest",
-                          port=3306)
-    return dbManager
+    # DbManager.cleanDB()
+    # dbManager = DbManager(host="steam-uat-default.crbcfaeazoqe.rds.cn-northwest-1.amazonaws.com.cn",
+    #                       user="root",
+    #                       password="Bestv001!",
+    #                       dbname="ltjtest",
+    #                       port=3306)
+    return Database()
 
 
 def getRunTestTokenId(projectname = "",starTime="sss"):
@@ -193,7 +193,7 @@ def getRunTestTokenId(projectname = "",starTime="sss"):
     starttime = getNowTime()
     tokenId = uuid.uuid4()
     sqlstr = "insert into test_run_process(token,starttime,status,projectname) value('%s','%s',1,'%s')" % (tokenId,starttime,projectname)
-    dbManager.insertData(sql_insert=sqlstr)
+    dbManager.insertData(sql=sqlstr,dbName="ltjtest")
     return  tokenId,starttime
 
 def queryStateByTokenPro(projectName = "",token = ""):
@@ -203,7 +203,7 @@ def queryStateByTokenPro(projectName = "",token = ""):
                       from test_run_process p 
                       where p.projectname = "%s" 
                             and  p.token = "%s";""" % (projectName, token)
-    dataList = dbManager.queryAll(sql = querySql)
+    dataList = dbManager.queryAll(sql = querySql,dbName="ltjtest")
     if dataList is not None and len(dataList) > 0:
             return dict(zip(keyls,dataList[0]))
 
@@ -213,7 +213,7 @@ def queryTestPlanList(projectName = ""):
     querySql = """select id, plantime, projectname, description 
                   from test_plan p 
                   where projectname = "%s"   ;""" % projectName
-    dataList = dbManager.queryAll(sql=querySql)
+    dataList = dbManager.queryAll(sql=querySql,dbName="ltjtest")
     retList  = [dict(zip(keyls,data)) for data in dataList]
     retDict = {}
     retDict["code"] = "000000"
@@ -227,7 +227,7 @@ def queryTestPlanByInterfaceName(interfaceName = "",planId = 22,db = None):
                   from test_case_record r	
                   where r.plan_id = %s and 
                         r.interfacename = '%s';""" % (planId,interfaceName)
-    dataList = dbManager.queryAll(sql=querySql)
+    dataList = dbManager.queryAll(sql=querySql,dbName="ltjtest")
     retList  = [dict(zip(keyls,data)) for data in dataList]
     return retList
 
@@ -237,7 +237,7 @@ def queryAllInterfaceByProjectName(projectName = None):
     querySql = """select inf.aliasName,inf.interfaceNameAddr,inf.reqtype,inf.module,inf.mark,inf.reqDataPath,inf.rspDataPath 
                     from interface_mgr inf 
                     where inf.projectname = "%s";""" % projectName
-    dataList = dbManager.queryAll(sql=querySql)
+    dataList = dbManager.queryAll(sql=querySql,dbName="ltjtest")
     if dataList is None:
         dataList = []
     # for data in dataList:
@@ -257,7 +257,7 @@ def queryTestPlanAllInterfaceName(interfaceName = "",planId = 22,db = None):
     querySql = """select  interfacename, testcaseid, testpoint, result_sign, errordes 
                   from test_case_record r	
                   where r.plan_id = %s ;""" % planId
-    dataList = dbManager.queryAll(sql=querySql)
+    dataList = dbManager.queryAll(sql=querySql,dbName="ltjtest")
     if dataList is None:
         dataList = []
     retList  = [dict(zip(keyls,data)) for data in dataList]
@@ -273,7 +273,7 @@ def queryTestPlanRecord(planId = 11):
 			                CONVERT(sum(1),SIGNED )  'total'
 			        from test_case_record r 
 			        where r.plan_id = %s group by r.interfacename;""" % planId
-    dataList = dbManager.queryAll(sql=querySql)
+    dataList = dbManager.queryAll(sql=querySql,dbName="ltjtest")
     if dataList is None:
        dataList = []
     retList = [dict(zip(keyls, data)) for data in dataList]
@@ -306,8 +306,8 @@ def updateTestResultToDb(testResult  = None,
         caseResultDic['testcaseid']     = t.getCaseid()
         caseResultDic["planId"]          = planId
         updateSql = "update test_case_record r set r.result_sign = %(result_sign)s where r.plan_id = %(planId)s and r.testcaseid = '%(testcaseid)s';" % caseResultDic
-        dbManager.updateData(sql_update=updateSql)
-    dbManager.updateData(sql_update=processSql)
+        dbManager.updateData(sql=updateSql,dbName="ltjtest")
+    dbManager.updateData(sql=processSql,dbName="ltjtest")
 
 #将新执行的测试结果写入数据库
 def writeTestResultToDb(testResult = None,
@@ -327,14 +327,14 @@ def writeTestResultToDb(testResult = None,
     plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s') ; " % plandict
     print("plansqlStr = %s" % plansqlStr)
 
-    dbManager.insertData(sql_insert=plansqlStr)
+    dbManager.insertData(sql=plansqlStr,dbName="ltjtest")
     planidStr = "select max(id) id from test_plan;"
-    idrst = dbManager.queryAll(sql = planidStr)
+    idrst = dbManager.queryAll(sql = planidStr,dbName="ltjtest")
     id = idrst[0][0]
 
     #更新planId到test_run_process表
     updateProceeSql  = "update test_run_process p set p.planId = %d where p.token = '%s';" % (id ,token)
-    dbManager.updateData(sql_update=updateProceeSql)
+    dbManager.updateData(sql=updateProceeSql,dbName="ltjtest")
     #n = 异常，错误，成功,
     #t = 测试用例对象 TestCase
     #o = ,
@@ -368,9 +368,9 @@ def writeTestResultToDb(testResult = None,
         caseResultDic['errordes'] = dbManager.conn.escape(script)
         sqlstr = "insert into test_case_record(classname,interfacename,testcaseid,testpoint,plan_id,result_sign,errordes) values(\"%(classname)s\" , '%(interfacename)s','%(testcaseid)s','%(testpoint)s','%(plan_id)s','%(result_sign)s',\"%(errordes)s\")"
         insertSql = sqlstr % caseResultDic
-        dbManager.insertData(sql_insert=insertSql)
-    dbManager.updateData(processSql)
-    DbManager.closeDbConn()
+        dbManager.insertData(sql=insertSql,dbName="ltjtest")
+    dbManager.updateData(sql=processSql,dbName="ltjtest")
+    # DbManager.closeDbConn()
 
 if __name__ == '__main__':
     runTest("D:\\litaojun\\workspace\\uopweixinInterface")
