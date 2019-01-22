@@ -149,6 +149,7 @@ class Database:
     sign = True
     dbDict = {}
     def __init__(self):
+        print("Database.sign = %s" % str(Database.sign))
         if Database.sign:
            # self.dbDict = {}
            Database._CreatePool()
@@ -157,6 +158,7 @@ class Database:
     @classmethod
     def _CreatePool(self):
         for dbName in config.sections():
+            print("init PooledDB()")
             Database.dbDict[dbName] = PooledDB(    creator        = pymysql,
                                                mincached      = 2,
                                                maxcached      = 5,

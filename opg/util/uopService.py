@@ -66,21 +66,21 @@ class UopService(object):
             :param filename :
             :param sqlvaluedict :
         """
-        self.jsonheart = {
-                            "x-token"  : "admin" ,
-                            "memberId" : sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else "" ,
-                            "token"    :  sqlvaluedict["token"] if "token" in sqlvaluedict else ""
-                          }
+        # self.jsonheart = {
+        #                     "x-token"  : "admin" ,
+        #                     "memberId" : sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else "" ,
+        #                     "token"    :  sqlvaluedict["token"] if "token" in sqlvaluedict else ""
+        #                   }
         self.module   = module
         self.filename = filename
         self.inputKV  = sqlvaluedict
         self.sqldict  = {}
-        self.ifacedict   = {}
+        self.ifacedict       = {}
         self.compareFuncDict = {}
         self.reqjsondata = ""
         self.rsp         = None
         self.lsser       = [self,]
-        self.dbName = dbName
+        self.dbName      = dbName
         self.initDbOperator()
         UopService.initFmtDict()
         self.initReqJsonData( reqjsonfile = reqjsonfile ,
@@ -181,16 +181,15 @@ class UopService(object):
 
     def initDbOperator(self):
         if self.filename is not None and self.filename != "" :
-            xmlsqlpath = os.path.join(os.getcwd(),
-                                      'steamdb',
+           xmlsqlpath = os.path.join(os.getcwd(),
+                                     'steamdb',
                                       self.module, self.filename)
-            xmlsqlfile = Xml_Parserfile(filename = xmlsqlpath)
-            itsql = xmlsqlfile.parserSql()
+           xmlsqlfile = Xml_Parserfile(filename = xmlsqlpath)
+           itsql = xmlsqlfile.parserSql()
             #a = self.inputKV
-            for cursql in itsql :
+           for cursql in itsql :
                 #self.sqldict[cursql[0]] = (cursql[1],cursql[2] % self.inputKV,cursql[3])
                 self.sqldict[cursql[0]] = (cursql[1], cursql[2] , cursql[3])
-
 
     def getTownList(self,predata = []):
         """
@@ -212,10 +211,10 @@ class UopService(object):
            # self.initDbOperator()
            # dbManager = Database()
            operDict = {
-                      "delete":self.dbManager.deleteData,
-                      "add":self.dbManager.insertData,
-                      "update":self.dbManager.updateData
-                   }
+                         "delete" : self.dbManager.deleteData,
+                         "add":      self.dbManager.insertData,
+                         "update":  self.dbManager.updateData
+                      }
            for sqlSign in sqlls:
                sqlOperType = self.sqldict[sqlSign][0]
                sqlStr      = self.sqldict[sqlSign][1] % self.inputKV
