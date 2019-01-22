@@ -11,6 +11,7 @@ from opg.util.loadModul import getModulByabspath
 from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile,creatTestCaseDataByYmlPath
 from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToDict
 from opg.unit import HTMLTestRunner
+import pymysql
 import sys,os
 from opg.util.isSystemType import splict
 from opg.util.dbtools import DbManager,Database
@@ -365,7 +366,8 @@ def writeTestResultToDb(testResult = None,
         script = "%(output)s" % dict(
                                           output=saxutils.escape(uo + ue),
                                        )
-        caseResultDic['errordes'] = dbManager.conn.escape(script)
+        # caseResultDic['errordes'] = dbManager.conn.escape(script)
+        caseResultDic['errordes'] = pymysql.escape_string(script)
         sqlstr = "insert into test_case_record(classname,interfacename,testcaseid,testpoint,plan_id,result_sign,errordes) values(\"%(classname)s\" , '%(interfacename)s','%(testcaseid)s','%(testpoint)s','%(plan_id)s','%(result_sign)s',\"%(errordes)s\")"
         insertSql = sqlstr % caseResultDic
         dbManager.insertData(sql=insertSql,dbName="ltjtest")
