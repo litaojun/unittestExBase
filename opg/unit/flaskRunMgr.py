@@ -8,11 +8,11 @@ Created on 2017
 import unittest
 from opg.unit.parametrized import ParametrizedTestCase
 from opg.util.loadModul import getModulByabspath
-from opg.util.testcaseTool import  creatTestCaseDataByPath,creatTestCaseDataByFile,creatTestCaseDataByYmlPath
-from opg.unit.testLoadFromModul import loadTestClassFromModules,tranListClassToDict
+from opg.util.testcaseTool import  creatTestCaseDataByPath , creatTestCaseDataByFile , creatTestCaseDataByYmlPath
+from opg.unit.testLoadFromModul import loadTestClassFromModules , tranListClassToDict
 from opg.unit import HTMLTestRunner
 import pymysql
-import sys,os
+import sys ,os
 from opg.util.isSystemType import splict
 from opg.util.dbtools import DbManager,Database
 from xml.sax import saxutils

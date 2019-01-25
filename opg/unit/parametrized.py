@@ -5,7 +5,6 @@ Created on
 http://blog.csdn.net/jasonwoolf/article/details/47979655
 @author: li.taojun
 '''
-import logging,os
 import unittest
 from opg.util.lginfo import  logger
 class ParametrizedTestCase(unittest.case.TestCase):
@@ -27,15 +26,9 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.myservice.initInterfaceData()
         
     def setUp(self):
-#       #后期抽奖前的个人总积分
-#       self.preuserTotalPoint = self.personalCenterService.getPersonalSign()
-        self.getInputDataInit()
         predata = self.getPreConditions()
         if predata is not None:
            dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
-           # interfacels = [infacename for infacename in predata if infacename.startswith("preInterface")]
-           #self.myservice.handlingDb(dbsqlls)
-           # self.myservice.handlingInterface(interfacels)
            for pre in predata:
                if pre.startswith("setup"):
                   if pre in self.myservice.ifacedict:
