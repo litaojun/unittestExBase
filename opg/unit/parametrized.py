@@ -43,8 +43,8 @@ class ParametrizedTestCase(unittest.case.TestCase):
     def tearDown(self):
         predata = self.getPreConditions()
         if predata is not None:
-              dbsqlls = [ sql   for sql in predata if  sql.startswith("tearDB") ]
-              self.myservice.handlingDb(dbsqlls)
+              # dbsqlls = [ sql   for sql in predata if  sql.startswith("tearDB") ]
+              # self.myservice.handlingDb(dbsqlls)
               for pre in predata:
                   if pre.startswith("tearDown"):
                      if pre in self.myservice.ifacedict:
@@ -55,6 +55,8 @@ class ParametrizedTestCase(unittest.case.TestCase):
                         self.myservice.ifacedict[pre][1]()
                         if preReqJsonFile is not None:
                            self.myservice.inputKV["reqjsonfile"] = inputFormat
+                  if pre.startswith("tearDB"):
+                     self.myservice.handlingOneDb(pre)
         logger.info(msg="类=%s,接口=%s,用例ID=%s执行结束" % (self.__class__, self.__class__.__interfaceName__, self.getCaseid()))
 
     def setCleanData(self,cleandata):

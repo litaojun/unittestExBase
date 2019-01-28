@@ -66,11 +66,6 @@ class UopService(object):
             :param filename :
             :param sqlvaluedict :
         """
-        # self.jsonheart = {
-        #                     "x-token"  : "admin" ,
-        #                     "memberId" : sqlvaluedict["memberId"] if "memberId" in sqlvaluedict else "" ,
-        #                     "token"    :  sqlvaluedict["token"] if "token" in sqlvaluedict else ""
-        #                   }
         self.module   = module
         self.filename = filename
         self.inputKV  = sqlvaluedict
@@ -219,6 +214,24 @@ class UopService(object):
                sqlOperType = self.sqldict[sqlSign][0]
                sqlStr      = self.sqldict[sqlSign][1] % self.inputKV
                operDict[sqlOperType](sqlStr,self.dbName)
+
+
+    def handlingOneDb(self,sqlstr = ""):
+        """
+            :param sqlls:
+            :return:
+        """
+        if self.dbName is not None:
+           # self.initDbOperator()
+           # dbManager = Database()
+           operDict = {
+                         "delete" : self.dbManager.deleteData,
+                         "add":      self.dbManager.insertData,
+                         "update":  self.dbManager.updateData
+                      }
+           sqlOperType = self.sqldict[sqlstr][0]
+           sqlStr      = self.sqldict[sqlstr][1] % self.inputKV
+           operDict[sqlOperType](sqlStr,self.dbName)
 
     def handlingInterface(self , interacels = ()):
         f = lambda x:self.ifacedict[x][1]()
