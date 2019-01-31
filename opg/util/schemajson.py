@@ -13,10 +13,9 @@ from opg.util.uopService import UopService
 #from jsonschema import validators 
 #from jsonschema import validate
 from jsonschema import Draft4Validator
-from functools import wraps
 from jsonschema import FormatChecker
 from jsonschema import ValidationError
-import os,sys
+import os
 from opg.util.lginfo import logger
 class Validator(object):
     def __init__(self, schemaformat):
@@ -40,6 +39,7 @@ class Validator(object):
         finally:
             print("vaild end")
 
+
 def loadJsonFile(filepath = ""):
     load_dict = None
     if os.path.exists(filepath):
@@ -48,6 +48,7 @@ def loadJsonFile(filepath = ""):
     else:
         print("文件%s不存在" % filepath)
     return load_dict
+
 
 def loadStrFromFile(filepath = ""):
     load_str = ""
@@ -60,7 +61,7 @@ def loadStrFromFile(filepath = ""):
 
 
 ##validator.py
-#https://cloud.tencent.com/developer/article/1005810
+#https://cloud.tencent.com/d    eveloper/article/1005810
 #https://spacetelescope.github.io/understanding-json-schema/index.html
 def check_rspdata(filepath):
     def decorated(f):
