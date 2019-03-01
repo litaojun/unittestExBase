@@ -44,7 +44,8 @@ class RedisOper(object):
         #PASSPORT_VERIFY_CODE:MLN:18516099509_235934
         vercodeDict = {
                           "OTP":"PASSPORT_VERIFY_CODE:OTP:%s%s",
-                          "MP": "PASSPORT_VERIFY_CODE:MLN:%s%s"
+                          "MP": "PASSPORT_VERIFY_CODE:MLN:%s%s",
+                          "MER":"steam-merchant:SMS:%s_%s"
                       }
         keycodefmt = vercodeDict[scenes] % (phone,"*")
         keyls = RedisOper.curRedis.keys(keycodefmt)

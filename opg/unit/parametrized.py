@@ -102,7 +102,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.rsp  = self.myservice.sendHttpReq()
         retcode   = self.myservice.getRetcodeByRsp(response = self.rsp)
         self.assertTrue(retcode == self.expectdata["code"],
-                         msg    = "expect code is %s,actual code is %s" % (self.expectdata["code"],retcode))
+                         msg    = "expect code is %s,actual code is %s,rsp is %s" % (self.expectdata["code"],retcode,self.rsp))
         compareDataList = self.expectdata.get("compare",[])
         for compareData in compareDataList:
             testPoint  = compareData["comparePoint"]
@@ -126,11 +126,6 @@ class ParametrizedTestCase(unittest.case.TestCase):
         compareFun = funDict[typeof(actualData)] if compareFun is None else compareFun
         compareFun(expectData,actualData,"testPoint is %s,expectData is %s,actualData is %s" %
                            (testPoint,str(expectData),str(actualData)))
-
-
-
-
-
 
 
     def id(self):

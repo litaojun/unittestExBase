@@ -1,25 +1,22 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-'''
-Created on 2017年12月29日 上午11:34:48
-@author: li.taojun
-'''
 import os
 from opg.util.xmlParseTool  import Xml_Parserfile
-from opg.util.dbtools import DbManager
 from inspect import ismethod
 # from opg.util.schemajson import loadStrFromFile
 import time,functools
 from opg.util.fileOper import walk_dir_test
 from opg.util.lginfo import logger
-def decorator(param):
+def decorator(param,userType = None):
     def _decorator(fun):
         if not isinstance(fun, type):
            @functools.wraps(fun)
            def wrapper(*args, **kwargs):
                logger.info(msg="前置调用函数%s,类%s" % (fun.__name__, str(args[0])))
                start   = time.time()
+               if userType is not None:
+                  args[0].inputKV["userType"] = userType
                rsp = fun(*args, **kwargs)
+               if userType is not None:
+                  del args[0].inputKV["userType"]
                runtime = time.time() - start
                return rsp
            wrapper.__decorator__ = True
