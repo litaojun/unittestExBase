@@ -6,7 +6,7 @@ http://blog.csdn.net/jasonwoolf/article/details/47979655
 @author: li.taojun
 '''
 import unittest
-from opg.util.lginfo import  logger
+from opg.util.lginfo import  writeDir,logger,selectFh
 class ParametrizedTestCase(unittest.case.TestCase):
     """
         TestCase classes that want to be parametrized should
@@ -18,14 +18,18 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.myservice  = None
         self.inputdata = self.getInputData()
         self.expectdata = self.getExpectData()
-        logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始"%(self.__class__,
-                                                             self.__class__.__interfaceName__,
-                                                             self.getCaseid()))
+        self.fh = writeDir(interfaceSign=self.__class__.__interfaceName__,
+                           className=self.__class__,
+                           caseId=self.getCaseid())
     def setService(self,myservice):
         self.myservice = myservice
         self.myservice.initInterfaceData()
         
     def setUp(self):
+        selectFh(fh=self.fh)
+        logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始" % (self.__class__,
+                                                               self.__interfaceName__,
+                                                               self.getCaseid()))
         predata = self.getPreConditions()
         if predata is not None:
            dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
