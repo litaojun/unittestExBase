@@ -15,7 +15,8 @@ def jsonFmtPrint(jsondata=None):
         jsdt = jsondata
     finally:
         if isinstance(jsdt, dict):
-            return json.dumps(jsdt, indent=3)
+            jstr = json.dumps(jsdt, indent=3, ensure_ascii=False)
+            return jstr
         elif isinstance(jsdt, str):
             return jsdt
 
@@ -27,7 +28,10 @@ def httpGet(url="", headers={}):
     httpRsp = requests.get(url=url,
                            headers=headers,
                            verify=False)
-    logger.info("http response data:%s" % jsonFmtPrint(httpRsp.text))
+    a = "{'a':'测试'}"
+    logger.info("测试http response data:%s" % jsonFmtPrint(a))
+    print("李涛军---" + httpRsp.text)
+    logger.info("测试http response data:%s" % jsonFmtPrint(httpRsp.text))
     return httpRsp.text
 
 

@@ -1,12 +1,11 @@
 from opg.unit import HTMLTestRunner
 import pymysql
-import sys ,os
-from opg.util.isSystemType import splict
-from opg.util.dbtools import DbManager,Database
+import os
+import unittest
+from opg.util.dbtools import Database
 from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
-import uuid
-from opg.util.lginfo import  logger, selectFh ,writeLog,genDir
+from opg.util.lginfo import  writeLog,genDir
 def runAllTestCase(suites      = None,
                    title       = "",
                    description = "",
@@ -33,6 +32,16 @@ def runTestCase(suites      = None ,
                                            title       = title,
                                            description = description)
     unitresult = runner.runSteam(suites)
+    return unitresult
+
+def runTestOneCls(suites,basepath):
+    global writeDir
+    logDir = genDir()
+    writeDir = writeLog(wtrDir=logDir)
+    HtmlFile = basepath + os.sep  + "testresult" + os.sep + "HTMLtemplate.html"
+    fp = open(HtmlFile, "wb")
+    runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
+    unitresult = runner.run(suites)
     return unitresult
 
 #将新执行的测试结果写入数据库

@@ -71,10 +71,25 @@ def genTestCaseByInterfaceOrCaseIds(allCase       = None,
     for methonName in testCases:
         caseList = testCases[methonName]
         for testcase in caseList:
-            if testcase[0] in caseIds:
-               suites.addTest(testclass(methonName,testcase))
+            if caseIds is not None and len(caseIds)>=1:
+               if testcase[0] in caseIds:
+                  suites.addTest(testclass(methonName,testcase))
+            else:
+                suites.addTest(testclass(methonName, testcase))
     return suites
-# writeDir = None
+
+# def genTestCaseByInterface(allCase       = None,
+#                            allTestClass  = None,
+#                            interfaceName = None,
+#                            caseIds       = []):
+#     suites = unittest.TestSuite()
+#     testclass = allTestClass[interfaceName]
+#     testCases = allCase[interfaceName]
+#     for methonName in testCases:
+#         caseList = testCases[methonName]
+#         for testcase in caseList:
+#             suites.addTest(testclass(methonName, testcase))
+
 def runTestCase(suites      = None ,
                 title       = ""   ,
                 description = ""   ):

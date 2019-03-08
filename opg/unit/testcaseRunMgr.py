@@ -65,10 +65,7 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',
 	casedict = casedictcls[testclse.__interfaceName__]
 	suites.addTest(ParametrizedTestCase.parametrize(testclse, casedictcls[testclse.__interfaceName__]))
 	HtmlFile = basepath + splict + "testresult" + splict + "HTMLtemplate.html"
-	# print "HtmlFile = %s" % HtmlFile
-	# print HtmlFile
 	fp = open(HtmlFile, "wb")
-	# new一个Runner
 	runner = HTMLTestRunner.HTMLTestRunner(stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
 	unitresult = runner.run(suites)
 	# writeTestResultToDb(testResult=unitresult)
