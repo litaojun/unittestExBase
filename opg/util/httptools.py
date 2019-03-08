@@ -7,7 +7,7 @@ def jsonFmtPrint(jsondata=None):
     jsdt = None
     try:
         if isinstance(jsondata, str):
-            jsdt = json.loads(jsondata)
+            jsdt = json.loads(jsondata,encoding="utf-8")
         elif isinstance(jsondata, dict):
             jsdt = jsondata
     except Exception as e:
