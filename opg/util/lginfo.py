@@ -43,11 +43,15 @@ logger.setLevel(logging.INFO)  # Log等级总开关
 # logger.warning('this is a logger warning message')
 # logger.error('this is a logger error message')
 # logger.critical('this is a logger critical message')
-rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-log_path = os.getcwd() + os.sep + 'Logs' + os.sep
-log_name = log_path + rq
-logDir = log_name
-os.mkdir(logDir)
+def genDir():
+    rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
+    log_path = os.getcwd() + os.sep + 'Logs' + os.sep
+    log_name = log_path + rq
+    logDir = log_name
+    os.mkdir(logDir)
+    return logDir
+# logDir = genDir()
+
 def writeLog(wtrDir=None):
     ifsDict = {}
     def createLogFile(interfaceSign = None,className=None,caseId=None):
@@ -55,9 +59,9 @@ def writeLog(wtrDir=None):
         :param interfaceSign:  None:创建目录，否则创建日志文件
         :return:
         """
-        if logger.hasHandlers():
-            for curHandle in logger.handlers:
-                logger.removeHandler(curHandle)
+        # if logger.hasHandlers():
+        #     for curHandle in logger.handlers:
+        #         logger.removeHandler(curHandle)
         # log_path = os.getcwd() + os.sep + 'Logs' + os.sep + wtrDir + os.sep
         logfile = wtrDir + os.sep + interfaceSign.replace("/","-")[1:-1]  + '.log'
         if interfaceSign not in ifsDict:
@@ -70,19 +74,28 @@ def writeLog(wtrDir=None):
         else:
            fh=ifsDict[interfaceSign]
         # 第四步，将logger添加到handler里面
-        logger.addHandler(fh)
-        logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始"%(className,
-                                                             interfaceSign,
-                                                             caseId))
+        # logger.addHandler(fh)
+        # logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始"%(className,
+        #                                                      interfaceSign,
+        #                                                      caseId))
         return fh
     return createLogFile
 
-def selectFh(fh=None):
-    if logger.hasHandlers():
-        for curHandle in logger.handlers:
-            logger.removeHandler(curHandle)
-    logger.addHandler(fh)
-writeDir = writeLog(wtrDir=logDir)
+def selectFh(fh=None,sign=True):
+    """
+    :param fh:  日志输出handle
+    :param sign: True 增加handle;   False 移除handle;
+    :return:
+    """
+    # if logger.hasHandlers():
+    #     for curHandle in logger.handlers:
+    #         logger.removeHandler(curHandle)
+    if sign:
+       logger.addHandler(fh)
+    else:
+        logger.removeHandler(fh)
+writeDir = None
+# writeDir = writeLog(wtrDir=logDir)
 
 if __name__ == "__main__":
     def a(sign):

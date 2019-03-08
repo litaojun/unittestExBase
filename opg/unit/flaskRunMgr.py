@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-'''
-Created on 2017
-
-@author: li.taojun
-'''
 import unittest
 from opg.unit.parametrized import ParametrizedTestCase
 from opg.util.loadModul import getModulByabspath
@@ -18,13 +11,11 @@ from opg.util.dbtools import DbManager,Database
 from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
 import uuid
-
+from opg.util.lginfo import  logger, selectFh ,writeLog,genDir,writeDir
 def runTest(moduleabspath='',
             title=u"Steam测试报告",
             description=u"用例测试情况",
             token = "ssss"):
-    #moduls = getModul(path='../../../../',sign="Test")
-    #writeStartTestToDb(projectname = title,starTime=starTime)
     moduleabspath = os.getcwd()
     sys.path.append(moduleabspath)
     #print(sys.path)
@@ -68,15 +59,7 @@ def initAllTestClass():
     dictCls = tranListClassToDict(cls)
     return dictCls
 
-def genAllTestCase(allCase,allTestClass):
-    suites = unittest.TestSuite()
-    for infacename in allCase:
-        if infacename in allTestClass:
-           testclass = allTestClass[infacename]
-           suites.addTest(ParametrizedTestCase.parametrize(testclass, allCase[infacename]))
-        else:
-            print("%s接口对应的类不存在" % infacename)
-    return suites
+
 
 def genTestCaseByInterfaceOrCaseIds(allCase       = None,
                                     allTestClass  = None,
@@ -91,10 +74,13 @@ def genTestCaseByInterfaceOrCaseIds(allCase       = None,
             if testcase[0] in caseIds:
                suites.addTest(testclass(methonName,testcase))
     return suites
-
+# writeDir = None
 def runTestCase(suites      = None ,
                 title       = ""   ,
                 description = ""   ):
+    global writeDir
+    logDir = genDir()
+    writeDir = writeLog(wtrDir=logDir)
     runner = HTMLTestRunner.HTMLTestRunner(stream      = None,
                                            title       = title,
                                            description = description)
@@ -134,6 +120,16 @@ def initAllTestCase(casePath = None):
     #steamTestCase = creatTestCaseDataByPath(path=moduleabspath)
     steamTestCase = creatTestCaseDataByYmlPath(path = casePath)
     return steamTestCase
+
+def genAllTestCase(allCase,allTestClass):
+    suites = unittest.TestSuite()
+    for infacename in allCase:
+        if infacename in allTestClass:
+           testclass = allTestClass[infacename]
+           suites.addTest(ParametrizedTestCase.parametrize(testclass, allCase[infacename]))
+        else:
+            print("%s接口对应的类不存在" % infacename)
+    return suites
 
 def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',testclse=None,moduleabspath=""):
     basepath = os.getcwd()

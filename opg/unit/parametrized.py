@@ -6,7 +6,8 @@ http://blog.csdn.net/jasonwoolf/article/details/47979655
 @author: li.taojun
 '''
 import unittest
-from opg.util.lginfo import  writeDir,logger,selectFh
+from opg.util.lginfo import  logger,selectFh
+
 class ParametrizedTestCase(unittest.case.TestCase):
     """
         TestCase classes that want to be parametrized should
@@ -18,14 +19,14 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.myservice  = None
         self.inputdata = self.getInputData()
         self.expectdata = self.getExpectData()
-        self.fh = writeDir(interfaceSign=self.__class__.__interfaceName__,
-                           className=self.__class__,
-                           caseId=self.getCaseid())
+
     def setService(self,myservice):
         self.myservice = myservice
         self.myservice.initInterfaceData()
         
     def setUp(self):
+        from opg.unit.loadTestcase import writeDir
+        self.fh = writeDir(interfaceSign=self.__class__.__interfaceName__)
         selectFh(fh=self.fh)
         logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始" % (self.__class__,
                                                                self.__interfaceName__,
@@ -62,6 +63,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
                   if pre.startswith("tearDB"):
                      self.myservice.handlingOneDb(pre)
         logger.info(msg="类=%s,接口=%s,用例ID=%s执行结束" % (self.__class__, self.__class__.__interfaceName__, self.getCaseid()))
+        selectFh(fh=self.fh,sign=False)
 
     def setCleanData(self,cleandata):
         self.cleandata = cleandata
