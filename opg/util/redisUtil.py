@@ -65,9 +65,4 @@ class RedisOper(object):
             tokenMbID.append((token,memberId))
         return tokenMbID
 if __name__ == '__main__':
-    redisOper = RedisOper()
-    # code = redisOper.getSteamVerCodeByPhone(phone="18916899938")
-    # print("code = %s" % code)
-    tokenList = redisOper.getTokenDataList()
-
-    #PASSPORT_VERIFY_CODE:OTP:18916899938_816518
+   pass

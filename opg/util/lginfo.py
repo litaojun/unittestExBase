@@ -1,23 +1,7 @@
-#!/usr/bin/env python  
-# encoding: utf-8  
-
-""" 
-@version: v1.0 
-@author: Lieb 
-@license: Apache Licence  
-@contact: 2750416737@qq.com 
-@site: http://blog.csdn.net/hqzxsc2006 
-@software: PyCharm 
-@file: lginfo.py 
-@time: 2018/6/11 15:33 
-"""
 import logging  # 引入logging模块
 import os.path,os
 import time
-#from steam.util.reqFormatPath  import  fxt
-#from opg.unit.parametrized import ParametrizedTestCase
-# from steam.user.login.userLoginService import WeixinUserLoginService
-# from steam.user.verfiycode.userVerfiyCodeService import WeixinUserVerfiyCodeService
+
 # 第一步，创建一个logger
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)  # Log等级总开关
@@ -87,15 +71,11 @@ def selectFh(fh=None,sign=True):
     :param sign: True 增加handle;   False 移除handle;
     :return:
     """
-    # if logger.hasHandlers():
-    #     for curHandle in logger.handlers:
-    #         logger.removeHandler(curHandle)
     if sign:
        logger.addHandler(fh)
     else:
         logger.removeHandler(fh)
 writeDir = None
-# writeDir = writeLog(wtrDir=logDir)
 
 if __name__ == "__main__":
     def a(sign):

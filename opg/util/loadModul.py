@@ -1,15 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-'''
-Created on 2017年7月9日
-
-@author: ｌｉｔａｏｊｕｎ
-'''
 import os
 
-from .dynload import Dynload
-from .fileOper import walk_absdir_modul_file
-from .isSystemType import splict
+from opg.util.dynload import Dynload
+from opg.util.fileOper import walk_absdir_modul_file
+from opg.util.isSystemType import splict
 #===============================================================================
 # getModul
 # path  相对当前目录
@@ -22,8 +15,8 @@ s = splict
 #print "s=",s
 def getModul(path='../../../',sign="load"):
     #定义lambda函数，将com\\bestv\\kafka\\kafkacon转换为(.com.bestv.kafka,.kafkacon)
-    lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(s,"."))) 
-    mfunc = lambda  x : x.replace(s,".")
+    lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(os.sep,".")))
+    # mfunc = lambda  x : x.replace(s,".")
     #定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
     nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject()
     #print os.getcwd()
@@ -47,8 +40,8 @@ def getModul(path='../../../',sign="load"):
 #===============================================================================
 def getModulByabspath(path='',sign="load"):
     #定义lambda函数，将com\\bestv\\kafka\\kafkacon转换为(.com.bestv.kafka,.kafkacon)
-    lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(s,"."))) 
-    mfunc = lambda  x : x.replace(s,".")
+    lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(os.sep,".")))
+    # mfunc = lambda  x : x.replace(s,".")
     #定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
     nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject()
     #通过相对路径获取绝对路径
