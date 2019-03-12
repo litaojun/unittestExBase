@@ -36,9 +36,9 @@ class ParametrizedTestCase(unittest.case.TestCase):
                         if preReqJsonFile is not None:
                             inputFormat = self.myservice.inputKV["reqjsonfile"]
                             self.myservice.inputKV["reqjsonfile"] = self.myservice.inputKV[preReqJsonFile]
-                        logger.info(msg="前置条件%s开始执行")
+                        logger.info(msg="前置条件%s开始执行" % pre)
                         self.myservice.ifacedict[pre][1]()
-                        logger.info(msg="前置条件%s结束执行")
+                        logger.info(msg="前置条件%s结束执行" % pre)
                         if preReqJsonFile is not None:
                             self.myservice.inputKV["reqjsonfile"] = inputFormat
 
@@ -54,9 +54,9 @@ class ParametrizedTestCase(unittest.case.TestCase):
                         if preReqJsonFile is not None:
                             inputFormat = self.myservice.inputKV["reqjsonfile"]
                             self.myservice.inputKV["reqjsonfile"] = self.myservice.inputKV[preReqJsonFile]
-                        logger.info(msg="后置步骤%s开始执行")
+                        logger.info(msg="后置步骤%s开始执行" % pre)
                         self.myservice.ifacedict[pre][1]()
-                        logger.info(msg="后置步骤%s结束执行")
+                        logger.info(msg="后置步骤%s结束执行" % pre)
                         if preReqJsonFile is not None:
                             self.myservice.inputKV["reqjsonfile"] = inputFormat
                 if pre.startswith("tearDB"):
@@ -66,7 +66,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
             (self.__class__,
              self.__class__.__interfaceName__,
              self.getCaseid()))
-        selectFh(fh=self.fh, sign=False)
+        # selectFh(fh=self.fh, sign=False)
 
     def setCleanData(self, cleandata):
         self.cleandata = cleandata
