@@ -14,18 +14,18 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.myservice = None
         self.inputdata = self.getInputData()
         self.expectdata = self.getExpectData()
+        # self.selectFh()
 
     def setService(self, myservice):
         self.myservice = myservice
         self.myservice.initInterfaceData()
 
+
+
     def setUp(self):
-        from opg.unit.loadTestcase import writeDir
-        self.fh = writeDir(interfaceSign=self.__class__.__interfaceName__)
-        selectFh(fh=self.fh)
         logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始" % (self.__class__,
-                                                               self.__interfaceName__,
-                                                               self.getCaseid()))
+                                                    self.__interfaceName__,
+                                                    self.getCaseid()))
         predata = self.getPreConditions()
         if predata is not None:
             # dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
@@ -36,7 +36,9 @@ class ParametrizedTestCase(unittest.case.TestCase):
                         if preReqJsonFile is not None:
                             inputFormat = self.myservice.inputKV["reqjsonfile"]
                             self.myservice.inputKV["reqjsonfile"] = self.myservice.inputKV[preReqJsonFile]
+                        logger.info(msg="前置条件%s开始执行")
                         self.myservice.ifacedict[pre][1]()
+                        logger.info(msg="前置条件%s结束执行")
                         if preReqJsonFile is not None:
                             self.myservice.inputKV["reqjsonfile"] = inputFormat
 
@@ -52,7 +54,9 @@ class ParametrizedTestCase(unittest.case.TestCase):
                         if preReqJsonFile is not None:
                             inputFormat = self.myservice.inputKV["reqjsonfile"]
                             self.myservice.inputKV["reqjsonfile"] = self.myservice.inputKV[preReqJsonFile]
+                        logger.info(msg="后置步骤%s开始执行")
                         self.myservice.ifacedict[pre][1]()
+                        logger.info(msg="后置步骤%s结束执行")
                         if preReqJsonFile is not None:
                             self.myservice.inputKV["reqjsonfile"] = inputFormat
                 if pre.startswith("tearDB"):
@@ -104,6 +108,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
         return suite
 
     def compareRetcodeTest(self):
+        logger.info(msg="")
         self.rsp = self.myservice.sendHttpReq()
         retcode = self.myservice.getRetcodeByRsp(response=self.rsp)
         self.assertTrue(

@@ -1,8 +1,7 @@
 import os
-
 from opg.util.dynload import Dynload
 from opg.util.fileOper import walk_absdir_modul_file
-from opg.util.isSystemType import splict
+from opg.bak.isSystemType import splict
 #===============================================================================
 # getModul
 # path  相对当前目录

@@ -1,17 +1,19 @@
 import unittest
 from opg.unit.parametrized import ParametrizedTestCase
-from opg.util.loadModul import getModulByabspath
-from opg.util.testcaseTool import  creatTestCaseDataByPath , creatTestCaseDataByFile , creatTestCaseDataByYmlPath
-from opg.unit.testLoadFromModul import loadTestClassFromModules , tranListClassToDict
+from opg.bak.loadModul import getModulByabspath
+from opg.bak.testcaseTool import  creatTestCaseDataByPath , creatTestCaseDataByFile , creatTestCaseDataByYmlPath
+from opg.bak.testLoadFromModul import loadTestClassFromModules , tranListClassToDict
 from opg.unit import HTMLTestRunner
 import pymysql
 import sys ,os
-from opg.util.isSystemType import splict
-from opg.util.dbtools import DbManager,Database
+from opg.bak.isSystemType import splict
+from opg.util.dbtools import Database
 from xml.sax import saxutils
 from opg.util.timeTool import getNowTime
 import uuid
-from opg.util.lginfo import  logger, selectFh ,writeLog,genDir,writeDir
+from opg.util.lginfo import writeLog,genDir
+
+
 def runTest(moduleabspath='',
             title=u"Steam测试报告",
             description=u"用例测试情况",

@@ -8,13 +8,13 @@ import redis
 
 class RedisOper(object):
     '''
-       xml 文件解析
+       reids
     '''
     sign = True
     curRedis = None
     def __init__(self,host = "steam-uat-default.s4kcls.ng.0001.cnw1.cache.amazonaws.com.cn",port = 6379):
         '''
-               host ： 要解析xml文 件路径
+               host ： ip地址
                port: 端口
                
         '''

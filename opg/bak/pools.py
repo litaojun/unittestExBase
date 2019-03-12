@@ -3,8 +3,8 @@
 
 import pymysql
 import time
-from .connection import Connection
-from .tx import Transaction
+from opg.bak.connection import Connection
+from opg.bak.tx import Transaction
 
 
 class Pool(object):

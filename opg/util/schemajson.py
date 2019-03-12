@@ -1,15 +1,5 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-'''
-Created on 2017
-
-https://blog.csdn.net/a_finder/article/details/46746559
-#http://json-schema.org/latest/json-schema-validation.html#anchor94
-https://jsonschema.net/#/home
-@author: li.taojun
-'''
 import json
-from opg.util.uopService import UopService
+from opg.bak.uopService import UopService
 #from jsonschema import validators 
 #from jsonschema import validate
 from jsonschema import Draft4Validator
@@ -59,10 +49,6 @@ def loadStrFromFile(filepath = ""):
             load_str = load_str.replace("\n\t", "")
     return load_str
 
-
-##validator.py
-#https://cloud.tencent.com/d    eveloper/article/1005810
-#https://spacetelescope.github.io/understanding-json-schema/index.html
 def check_rspdata(filepath):
     def decorated(f):
 #         @wraps(f)
