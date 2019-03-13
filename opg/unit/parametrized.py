@@ -1,5 +1,5 @@
 import unittest
-from opg.util.lginfo import logger, selectFh
+from opg.util.lginfo import logger
 
 
 class ParametrizedTestCase(unittest.case.TestCase):
@@ -14,7 +14,6 @@ class ParametrizedTestCase(unittest.case.TestCase):
         self.myservice = None
         self.inputdata = self.getInputData()
         self.expectdata = self.getExpectData()
-        # self.selectFh()
 
     def setService(self, myservice):
         self.myservice = myservice
@@ -24,8 +23,8 @@ class ParametrizedTestCase(unittest.case.TestCase):
 
     def setUp(self):
         logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始" % (self.__class__,
-                                                    self.__interfaceName__,
-                                                    self.getCaseid()))
+                                                               self.__interfaceName__,
+                                                               self.getCaseid()))
         predata = self.getPreConditions()
         if predata is not None:
             # dbsqlls = [sql for sql in predata if  sql.startswith("preDB")]
