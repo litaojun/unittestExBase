@@ -169,6 +169,7 @@ def genTestCaseByInterfaceOrCaseIds(allCase=None,
                                     allTestClass=None,
                                     interfaceName=None,
                                     caseIds=[]):
+    genAllTestCase(allCase=allCase,allTestClass=allTestClass)
     suites = unittest.TestSuite()
     testclass = allTestClass[interfaceName]
     testCases = allCase[interfaceName]

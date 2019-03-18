@@ -69,3 +69,23 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',
     unitresult = runner.run(suites)
     # writeTestResultToDb(testResult=unitresult)
     return unitresult
+
+
+def runOneCls(suites=None,
+                  basepath=None):
+    # if basepath is None:
+    #     basepath = os.getcwd()
+    # casedictcls = loadYmlToTestcaseByFilepath(basepath + casefilepath)
+    # # print casedictcls
+    # suites = unittest.TestSuite()
+    # print(casedictcls)
+    # # casedict = casedictcls[testclse.__interfaceName__]
+    # suites.addTest(ParametrizedTestCase.parametrize(
+    #     testclse, casedictcls[testclse.__interfaceName__]))
+    HtmlFile = basepath + os.sep + "testresult" + os.sep + "HTMLtemplate.html"
+    fp = open(HtmlFile, "wb")
+    runner = HTMLTestRunner.HTMLTestRunner(
+        stream=fp, title=u"小红巢测试报告", description=u"用例测试情况")
+    unitresult = runner.run(suites)
+    # writeTestResultToDb(testResult=unitresult)
+    return unitresult
