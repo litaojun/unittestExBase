@@ -294,7 +294,6 @@ def queryTestPlanRecord(planId = 11):
     retList = [dict(zip(keyls, data)) for data in dataList]
     return retList
 
-
 def queryPlanDetailByInterfaceName(planId = 22):
     planRecordList = queryTestPlanRecord(planId=planId)
     allRecordList  =  queryTestPlanAllInterfaceName(planId=planId)
