@@ -63,6 +63,12 @@ def getNowTime(formatedate="%Y-%m-%d %H:%M:%S"):
     # print(dt)
     return dt
 
+def getTwoFmtTime(formatedate="%Y-%m-%d %H:%M:%S",twofmtdate="%Y%m%d%H%M"):
+    time_local = time.localtime(time.time())
+    a = time.strftime(formatedate, time_local)
+    b = time.strftime(twofmtdate, time_local)
+    return a,b
+
 
 def getYesterday(formatedate="%Y-%m-%d", delta=-1):
     '''

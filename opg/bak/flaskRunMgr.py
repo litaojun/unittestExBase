@@ -9,7 +9,7 @@ import sys ,os
 from opg.bak.isSystemType import splict
 from opg.util.dbtools import Database
 from xml.sax import saxutils
-from opg.util.timeTool import getNowTime
+from opg.util.timeTool import getNowTime,getTwoFmtTime
 import uuid
 from opg.util.lginfo import writeLog,genDir
 
@@ -79,18 +79,6 @@ def genTestCaseByInterfaceOrCaseIds(allCase       = None,
             else:
                 suites.addTest(testclass(methonName, testcase))
     return suites
-
-# def genTestCaseByInterface(allCase       = None,
-#                            allTestClass  = None,
-#                            interfaceName = None,
-#                            caseIds       = []):
-#     suites = unittest.TestSuite()
-#     testclass = allTestClass[interfaceName]
-#     testCases = allCase[interfaceName]
-#     for methonName in testCases:
-#         caseList = testCases[methonName]
-#         for testcase in caseList:
-#             suites.addTest(testclass(methonName, testcase))
 
 def runTestCase(suites      = None ,
                 title       = ""   ,
@@ -205,11 +193,21 @@ def getDbManger():
 
 def getRunTestTokenId(projectname = "",starTime="sss"):
     dbManager = getDbManger()
-    starttime = getNowTime()
+    starttime,logtime = getTwoFmtTime()
     tokenId = uuid.uuid4()
+    plandict = {
+                    "plantime":starttime,
+                    "projectname":projectname,
+                    "description":"description",
+                    "token":tokenId,
+                    "logdir":logtime
+                }
+    plansqlStr = "insert into test_plan(plantime,projectname,description,token,logdir) values('%(plantime)s','%(projectname)s','%(description)s','%(token)s','%(logdir)s') ; " % plandict
+    print("plansqlStr = %s" % plansqlStr)
+    dbManager.insertData(sql=plansqlStr, dbName="ltjtest")
     sqlstr = "insert into test_run_process(token,starttime,status,projectname) value('%s','%s',1,'%s')" % (tokenId,starttime,projectname)
     dbManager.insertData(sql=sqlstr,dbName="ltjtest")
-    return  tokenId,starttime
+    return  tokenId,starttime,logtime
 
 def queryStateByTokenPro(projectName = "",token = ""):
     dbManager = getDbManger()

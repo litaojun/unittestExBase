@@ -45,10 +45,10 @@ def writeTestResultToDb(testResult=None,
     processSql = "update test_run_process set status=2,endtime = '%s' where projectname = '%s' and token = '%s';" % (
         nowdatestr, title, token)
     print("proccesSql = %s" % processSql)
-    plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s') ; " % plandict
-    print("plansqlStr = %s" % plansqlStr)
-
-    dbManager.insertData(sql=plansqlStr, dbName="ltjtest")
+    # plansqlStr = "insert into test_plan(plantime,projectname,description) values('%(plantime)s','%(projectname)s','%(description)s') ; " % plandict
+    # print("plansqlStr = %s" % plansqlStr)
+    #
+    # dbManager.insertData(sql=plansqlStr, dbName="ltjtest")
     planidStr = "select max(id) id from test_plan;"
     idrst = dbManager.queryAll(sql=planidStr, dbName="ltjtest")
     id = idrst[0][0]

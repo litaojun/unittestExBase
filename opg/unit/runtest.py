@@ -39,7 +39,6 @@ def runAllTestCase(suites=None,
                    title="",
                    description="",
                    token=""):
-
     unitresult = runTestCase(suites=suites,
                              title=title,
                              description=description)

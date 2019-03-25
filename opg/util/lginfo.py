@@ -30,19 +30,15 @@ logger.setLevel(logging.INFO)  # Log等级总开关
 # logger.critical('this is a logger critical message')
 
 
-def genDir():
-    rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-    log_path = os.getcwd() + os.sep + 'Logs' + os.sep
-    log_name = log_path + rq
-    logDir = log_name
-    os.mkdir(logDir)
-    return logDir
+def genDir(logtime):
+    logdir = os.sep.join([os.getcwd(),'Logs',logtime])
+    os.mkdir(logdir)
+    return logdir
 # logDir = genDir()
 
 
 def writeLog(wtrDir=None):
     ifsDict = {}
-
     def createLogFile(interfaceSign=None, className=None, caseId=None):
         """
         :param interfaceSign:  None:创建目录，否则创建日志文件
