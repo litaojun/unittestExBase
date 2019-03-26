@@ -34,37 +34,25 @@ def genDir(logtime):
     logdir = os.sep.join([os.getcwd(),'Logs',logtime])
     os.mkdir(logdir)
     return logdir
-# logDir = genDir()
-
 
 def writeLog(wtrDir=None):
     ifsDict = {}
-    def createLogFile(interfaceSign=None, className=None, caseId=None):
+    def createLogFile(interfaceSign=None):
         """
         :param interfaceSign:  None:创建目录，否则创建日志文件
         :return:
         """
-        # if logger.hasHandlers():
-        #     for curHandle in logger.handlers:
-        #         logger.removeHandler(curHandle)
-        # log_path = os.getcwd() + os.sep + 'Logs' + os.sep + wtrDir + os.sep
         logfile = wtrDir + os.sep + \
-            interfaceSign.replace("/", "-")[1:-1] + '.log'
+            interfaceSign.replace("/", "-")[1:] + '.log'
         if interfaceSign not in ifsDict:
             fh = logging.FileHandler(logfile, mode='w', encoding="utf-8")
             ifsDict[interfaceSign] = fh
             fh.setLevel(logging.DEBUG)  # 输出到file的log等级的开关
             # 第三步，定义handler的输出格式
-            formatter = logging.Formatter(
-                "%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+            formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
             fh.setFormatter(formatter)
         else:
             fh = ifsDict[interfaceSign]
-        # 第四步，将logger添加到handler里面
-        # logger.addHandler(fh)
-        # logger.info(msg="类=%s,接口=%s,用例ID=%s执行开始"%(className,
-        #                                                      interfaceSign,
-        #                                                      caseId))
         return fh
     return createLogFile
 
