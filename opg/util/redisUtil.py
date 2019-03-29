@@ -14,10 +14,9 @@ class RedisOper(object):
     sign = True
     curRedis = None
 
-    def __init__(
-            self,
-            host="steam-uat-default.s4kcls.ng.0001.cnw1.cache.amazonaws.com.cn",
-            port=6379):
+    def __init__(self,
+                 host="steam-uat-default.s4kcls.ng.0001.cnw1.cache.amazonaws.com.cn",
+                 port=6379):
         '''
                host ： ip地址
                port: 端口

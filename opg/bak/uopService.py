@@ -1,7 +1,6 @@
 import os
 from opg.util.xmlParseTool  import Xml_Parserfile
 from inspect import ismethod
-# from opg.util.schemajson import loadStrFromFile
 import time,functools
 from opg.util.fileOper import walk_dir_test
 from opg.util.lginfo import logger
@@ -48,9 +47,6 @@ def loadStrFromFile(filepath = ""):
     return load_str
 from opg.util.dbtools import Database
 class UopService(object):
-    """
-
-    """
     fmtdict = None
     token = None
     def __init__(self,module       = ""  ,
@@ -165,7 +161,7 @@ class UopService(object):
                     signName = getattr(funObj, "__param__", False)
                     if signDec :
                         if isinstance(signName,str):
-                            self.ifacedict[signName] = funObj
+                           self.ifacedict[signName] = funObj
                         else:
                             if isinstance(signName,list):
                                for name in signName:
@@ -180,8 +176,7 @@ class UopService(object):
            itsql = xmlsqlfile.parserSql()
             #a = self.inputKV
            for cursql in itsql :
-                #self.sqldict[cursql[0]] = (cursql[1],cursql[2] % self.inputKV,cursql[3])
-                self.sqldict[cursql[0]] = (cursql[1], cursql[2] , cursql[3])
+               self.sqldict[cursql[0]] = (cursql[1], cursql[2] , cursql[3])
 
     def getTownList(self,predata = []):
         """
@@ -211,7 +206,6 @@ class UopService(object):
                sqlOperType = self.sqldict[sqlSign][0]
                sqlStr      = self.sqldict[sqlSign][1] % self.inputKV
                operDict[sqlOperType](sqlStr,self.dbName)
-
 
     def handlingOneDb(self,sqlstr = ""):
         """
