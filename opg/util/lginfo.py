@@ -32,12 +32,14 @@ logger.setLevel(logging.INFO)  # Log等级总开关
 
 def genDir(logtime):
     logdir = os.sep.join([os.getcwd(),'Logs',logtime])
-    os.mkdir(logdir)
+    if not os.path.exists(logdir):
+       os.mkdir(logdir)
     return logdir
 
-def writeLog(wtrDir=None):
+def writeLog(wtrDir=None,logtag="testcase"):
     ifsDict = {}
-    def createLogFile(interfaceSign=None):
+    #用例日志文件
+    def createTscsLogFile(interfaceSign=None):
         """
         :param interfaceSign:  None:创建目录，否则创建日志文件
         :return:
@@ -54,7 +56,19 @@ def writeLog(wtrDir=None):
         else:
             fh = ifsDict[interfaceSign]
         return fh
-    return createLogFile
+    def creatTokenLogFile():
+        logfile = wtrDir + os.sep + "token.log"
+        fh = logging.FileHandler(logfile, mode='w', encoding="utf-8")
+        fh.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+        fh.setFormatter(formatter)
+        ifsDict["tokenlog"] = fh
+        return fh
+    if logtag == "testcase":
+       return createTscsLogFile
+    elif logtag == "tokenlog":
+       return creatTokenLogFile
+
 
 
 def selectFh(fh=None, sign=True):
