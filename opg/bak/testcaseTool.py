@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-'''
-Created on 2017年7月9日
-
-@author: ｌｉｔａｏｊｕｎ
-'''
 import os
 from ruamel import yaml
 import collections
