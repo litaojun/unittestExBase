@@ -1,7 +1,34 @@
 import requests
 import json
+import os
 from opg.util.lginfo import logger
 
+def httpReqSend(url="", headers={}, reqJson={},fileName="a.jpg",method="POST"):
+    rsp = {}
+    if method in ("get", "delete",  "put-get"):
+        reqjsondata = "&".join([ "%s=%s" % (k,v) for k,v in reqJson.items()])
+        url+=reqjsondata
+        if method == "get":
+            rsp = httpGet(url=url,headers= headers)
+        elif method == "delete":
+            rsp = httpDelete(url=url,headers=headers)
+        elif method == "file":
+            filepath = os.getcwd() + os.path.sep + "steamcase" + os.path.sep + "%s"
+            files = {'file': open(fileName, 'rb')}
+            rsp = httpPostFile(url=url, headers=headers, file=files)
+        elif method == "put-get":
+            rsp = httpPutGet(url=url + reqjsondata,headers=headers)
+    else:
+        try:
+            # if type(reqdata) == str:
+            #     self.reqjsondata = eval(reqdata)
+            if method == "post":
+                rsp = httpPost(url=url,headers=headers,reqJsonData=reqJson)
+            elif method == "put":
+                rsp = httpDelete(url=url)
+        except Exception as e:
+            raise e
+    return rsp
 
 def jsonFmtPrint(jsondata=None):
     jsdt = None
@@ -19,7 +46,6 @@ def jsonFmtPrint(jsondata=None):
             return jstr
         elif isinstance(jsdt, str):
             return jsdt
-
 
 def httpGet(url="", headers={}):
     logger.info("http request type:GET")
