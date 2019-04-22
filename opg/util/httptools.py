@@ -6,7 +6,7 @@ from opg.util.lginfo import logger
 def httpReqSend(url="", headers={}, reqJson={},fileName="a.jpg",method="POST"):
     rsp = {}
     if method in ("get", "delete",  "put-get"):
-        reqjsondata = "&".join([ "%s=%s" % (k,v) for k,v in reqJson.items()])
+        reqjsondata = "&".join([ "%s=%s" % (k,v) for k,v in reqJson.items() if v is not None])
         url+=reqjsondata
         if method == "get":
             rsp = httpGet(url=url,headers= headers)

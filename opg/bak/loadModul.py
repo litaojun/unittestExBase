@@ -17,7 +17,7 @@ def getModul(path='../../../',sign="load"):
     lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(os.sep,".")))
     # mfunc = lambda  x : x.replace(s,".")
     #定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
-    nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject()
+    nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject
     #print os.getcwd()
     #通过相对路径获取绝对路径
     curpath =  os.path.abspath(path)
@@ -42,7 +42,7 @@ def getModulByabspath(path='',sign="load"):
     lfunc = lambda  x : os.path.splitext(os.path.basename(x.replace(os.sep,".")))
     # mfunc = lambda  x : x.replace(s,".")
     #定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
-    nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject()
+    nfunc = lambda  x,y : Dynload(x,imp_list=y).getobject
     #通过相对路径获取绝对路径
     #curpath =  os.path.abspath(path)
     curpath = path

@@ -26,15 +26,16 @@ class Dynload():
     # self.package = "com.bestv.aws.ec2.ec2info"
     # self.imp = ['com.bestv.aws.ec2',]
     # =============================================================================
+    @property
     def getobject(self):
         # print sys.path
         return __import__(self.package, globals(), locals(), self.imp)
 
     def getClassInstance(self, classstr, *args):
-        return getattr(self.getobject(), classstr)(*args)
+        return getattr(self.getobject, classstr)(*args)
 
     def execfunc(self, method, *args):
-        return getattr(self.getobject(), method)(*args)
+        return getattr(self.getobject, method)(*args)
 
     def execMegetattrthod(self, instance, method, *args):
         return (instance, method)(*args)

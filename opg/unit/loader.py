@@ -38,6 +38,8 @@ def loadYmlToTestcaseByFilepath(filePath=None):
             operationSteps = case["operationSteps"]
             expectedResult = case["expectedResult"]
             for data in case["testData"]:
+                if "testPoint" not in data:
+                    print("filePath=%s" % filePath)
                 testPoint = data["testPoint"]
                 caseid = data["caseid"]
                 tdict[interfaceName][operationSteps].append(
@@ -75,7 +77,8 @@ def getModulByabspath(path='', sign="load"):
         os.path.basename(x.replace(os.sep, ".")))
     # mfunc = lambda  x : x.replace(s,".")
     # 定义lambda函数，将(x="com.bestv.kafka.kafkacon",y=[com.bestv.kafka,])加载为模块
-    def nfunc(x, y): return Dynload(x, imp_list=y).getobject()
+    def nfunc(x, y): return Dynload(x, imp_list=y).getobject
+
     # 通过相对路径获取绝对路径
     #curpath =  os.path.abspath(path)
     curpath = path
