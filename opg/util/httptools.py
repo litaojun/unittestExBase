@@ -6,18 +6,18 @@ from opg.util.lginfo import logger
 def httpReqSend(url="", headers={}, reqJson={},fileName="a.jpg",method="POST"):
     rsp = {}
     if method in ("get", "delete",  "put-get"):
-        reqjsondata = "&".join([ "%s=%s" % (k,v) for k,v in reqJson.items() if v is not None])
+        print("reqJson = %s" % reqJson)
+        reqjsondata = "?" + "&".join([ "%s=%s" % (k,v) for k,v in reqJson.items() if v is not None])
         url+=reqjsondata
         if method == "get":
             rsp = httpGet(url=url,headers= headers)
         elif method == "delete":
             rsp = httpDelete(url=url,headers=headers)
         elif method == "file":
-            filepath = os.getcwd() + os.path.sep + "steamcase" + os.path.sep + "%s"
             files = {'file': open(fileName, 'rb')}
             rsp = httpPostFile(url=url, headers=headers, file=files)
         elif method == "put-get":
-            rsp = httpPutGet(url=url + reqjsondata,headers=headers)
+            rsp = httpPutGet(url=url ,headers=headers)
     else:
         try:
             # if type(reqdata) == str:

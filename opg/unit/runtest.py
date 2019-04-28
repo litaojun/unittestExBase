@@ -72,15 +72,6 @@ def runTestOneCls(casefilepath='D:\\litaojun\\workspace\\jenkinsPython',
 
 def runOneCls(suites=None,
                   basepath=None):
-    # if basepath is None:
-    #     basepath = os.getcwd()
-    # casedictcls = loadYmlToTestcaseByFilepath(basepath + casefilepath)
-    # # print casedictcls
-    # suites = unittest.TestSuite()
-    # print(casedictcls)
-    # # casedict = casedictcls[testclse.__interfaceName__]
-    # suites.addTest(ParametrizedTestCase.parametrize(
-    #     testclse, casedictcls[testclse.__interfaceName__]))
     HtmlFile = basepath + os.sep + "testresult" + os.sep + "HTMLtemplate.html"
     fp = open(HtmlFile, "wb")
     runner = HTMLTestRunner.HTMLTestRunner(
