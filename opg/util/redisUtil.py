@@ -47,8 +47,8 @@ class RedisOper(object):
     def getSteamVerCodeByPhone(self, phone='18916899938', scenes="QTP"):
         # PASSPORT_VERIFY_CODE:MLN:18516099509_235934
         vercodeDict = {
-            "OTP": "steam-passport:PASSPORT_VERIFY_CODE:OTP:%s%s",
-            "MP": "PASSPORT_VERIFY_CODE:MLN:%s%s",
+            "OTP": "steam-passport:PASSPORT_VERIFY_CODE:OTP:%s_%s",
+            "MP": "steam-passport:PASSPORT_VERIFY_CODE:MLN:%s_%s",
             "MER": "steam-merchant:SMS:%s_%s"
         }
         keycodefmt = vercodeDict[scenes] % (phone, "*")
