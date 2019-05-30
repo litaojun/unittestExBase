@@ -13,9 +13,6 @@ def httpReqSend(url="", headers={}, reqJson={},fileName="a.jpg",method="POST"):
             rsp = httpGet(url=url,headers= headers)
         elif method == "delete":
             rsp = httpDelete(url=url,headers=headers)
-        elif method == "file":
-            files = {'file': open(fileName, 'rb')}
-            rsp = httpPostFile(url=url, headers=headers, file=files)
         elif method == "put-get":
             rsp = httpPutGet(url=url ,headers=headers)
     else:
@@ -26,6 +23,9 @@ def httpReqSend(url="", headers={}, reqJson={},fileName="a.jpg",method="POST"):
                 rsp = httpPost(url=url,headers=headers,reqJsonData=reqJson)
             elif method == "put":
                 rsp = httpDelete(url=url)
+            elif method == "file":
+                files = {'file': open(fileName, 'rb')}
+                rsp = httpPostFile(url=url, headers=headers, file=files)
         except Exception as e:
             raise e
     return rsp
@@ -107,10 +107,11 @@ def httpPostFile(url="", headers={}, file=None):
     logger.info("http request url:%s" % url)
     logger.info("http request headers:%s" % jsonFmtPrint(jsondata=headers))
     httpRsp = requests.post(
-        url=url,
-        files=file,
-        headers=headers,
-        verify=False
-    )
+                                url=url,
+                                data={'enctype': 'multipart/form-data', 'name': 'wang'},
+                                files=file,
+                                headers=headers,
+                                verify=False
+                            )
     logger.info("http response data:%s" % jsonFmtPrint(httpRsp.text))
     return httpRsp.text
