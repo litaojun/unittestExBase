@@ -4,10 +4,7 @@ from opg.unit.loader import loadYmlToTestcaseByFilepath
 import os
 import unittest
 from opg.unit import HTMLTestRunner
-from opg.util.lginfo import genDir, writeLog
 writeDir = None
-
-
 def runOneTestcase(suites=None,
                    planId=None,
                    token=None,
