@@ -32,7 +32,7 @@ class ParametrizedTestCase(unittest.case.TestCase):
                         self.myservice.ifacedict[pre][1]()
                         logger.info(msg="前置条件%s结束执行" % pre)
                         if preReqJsonFile is not None:
-                            self.myservice.inputKV["reqjsonfile"] = inputFormat
+                           self.myservice.inputKV["reqjsonfile"] = inputFormat
 
     def tearDown(self):
         predata = self.getPreConditions()
